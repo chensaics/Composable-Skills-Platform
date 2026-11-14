@@ -60,6 +60,8 @@ anti_rationalizations:
   "ROADMAP 写完就可以开发了，不用补齐 PRD 和 Spec": "ROADMAP 只是 Layer 1——规划阶段必须四层全部完成才能进入执行。缺一层即硬阻塞。"
   "Planning PRD 已经有了，engineering PRD 边写代码边补": "Engineering PRD 在代码开始前必须是完整态。事后补 = 代码没有契约基线。"
   "Spec 太复杂了，先写代码后面再补文档": "Spec 是代码的前置契约。没有 Spec 的代码 = 没有验收标准的实现。代码写完再写 Spec = 文档追认代码，不是设计先行。"
+  "Tag 已经打了，lifecycle 状态后面再更新": "Tag 和 lifecycle-state 是双真相源——不一致即漂移。tag 优先于状态记录，状态记录不能落后于 tag。"
+  "ruff 0/0 了，不用再跑一遍验证": "门控声明必须附带命令+exit code 证据。06 gate 必须实测验证声明值——声称值 vs 实测值，漂移则阻断。"
 role: specialist
 ---
 
@@ -630,6 +632,45 @@ routing_rules:
       signal: planning_depth_gate_passed
       handoff: S5                                        # 允许进入执行阶段
     skip_if: mode == lightweight                         # 轻量模式无规划阶段
+
+  # ★ 运行时完整性 Gate（V-01, V-02, V-03 — 防状态漂移与门控腐化）★
+  integrity_gates:
+    # V-01 双真相源对账：git tag ↔ lifecycle-state.json
+    tag_state_reconciliation:
+      trigger: at_every_gate              # S1-S7 每个 gate 都跑
+      rule: >
+        git tag -l 'v*' 列表 vs lifecycle-state.json 交叉验证：
+        - tag 存在 + state 未标记 done → 以 tag 为准，回写 state（代码已发布优先于状态记录滞后）
+        - state 标记 done + tag 不存在 → BLOCKED（声明完成但无对应 tag，禁止继续）
+        - tag 存在 + state 标记 planned → state 升为 done（遗漏更新）
+      on_mismatch: log_and_reconcile
+
+    # V-02 产物完整性检查
+    artifact_completeness:
+      trigger: gate_S3_gate_S4_gate_S6    # 03/04/06 gate 时各跑一次
+      rules:
+        - gate: S3_Spec
+          check: .csp/specs/{version}/ 目录非空（至少 1 个 spec 文件）
+          on_fail: BLOCKED — "Spec 目录为空，代码却在 05 执行——回到 03 补齐"
+        - gate: S4_Task
+          check: .csp/tasks/{version}/ 目录非空（至少 1 个 task 文件）
+          on_fail: BLOCKED — "Task 目录为空，回到 04 补齐"
+        - gate: S6_Release
+          check: .csp/artifacts/verify/evidence/ 含本版本 gate 证据文件
+          on_fail: BLOCKED — "无 gate 证据，禁止打 tag"
+
+    # V-03 门控声明证据链：声称值 vs 实测值
+    gate_evidence_chain:
+      trigger: gate_S6_Release            # 发布前强制重跑验证
+      rule: >
+        对上一版门控的每条 "X violations → 0" 类声明，用当前 HEAD 重跑同命令：
+        - ruff check --statistics → 实测 count
+        - mypy <src> → 实测 errors
+        - pytest --maxfail=0 → 实测 exit code
+        - vitest run → 实测 exit code
+        - tsc --noEmit → 实测 exit code
+        任一声称值与实测值不一致 → BLOCKED（"门控腐化：{cmd} 声称 {claimed}，实测 {actual}"）
+      evidence_required: "ran: <cmd> exit <code>" 格式，禁止裸声明 "X→0"
   # 三个 living baseline 说明书：每个阶段读对应说明书再产出，ship/变更后写回 delta。
   # 详见 csp-workflow/references/module-spec-lifecycle-norms.md
   module_spec_governance:

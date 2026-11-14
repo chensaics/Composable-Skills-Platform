@@ -102,6 +102,17 @@ Layer 4: Spec (technical)    ← 03 产出: .csp/planning/spec.md + .csp/tech-de
 循环收敛：06 未过按根因回 05/03 修 delta 重验，循环到全绿；超 5 轮再报我。跨版本熔断：连续 3 个版本因同一根因失败，暂停并报我，附根因证据链。
 
 06 done 硬定义（由 [[workflow:csp-release-manager]] 执行全流程，详见 prompts/06-verify-ship.md，任一不满足即 06 未过）：
+- **G-11 Tag 前置门控**（打 annotated tag 前必须五项全绿，缺一项禁止打 tag）：
+  ```
+  ruff check --statistics    → exit 0, 0 violations
+  mypy <src>                 → exit 0
+  pytest --maxfail=0         → exit 0
+  vitest run                 → exit 0
+  tsc --noEmit               → exit 0
+  ```
+  五项全部 exit 0 → 允许 `git tag -a vX.Y.Z`。任一项 non-zero → BLOCKED，修到全绿再 tag。
+  V-03 证据链：每条门控声明必须附带 `ran: <cmd> exit <code>` 格式证据。06 gate 实测验证声明值——声称"ruff 16→0"但实测 1472 条 → BLOCKED。
+
 - S6 质量门控全 ran（附命令+exit code 证据，禁止 not-run 降级）：
   Check 1: 测试 → [[workflow:csp-verify-phase]] Check 1
   Check 1.5: 有后端 API 变更时跑项目实际的 API/集成测试套件（从测试配置定位，不假定 `tests/backend/api/` 存在），附命令/exit；无此类变更注明依据

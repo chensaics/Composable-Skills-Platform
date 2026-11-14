@@ -389,6 +389,36 @@ types/market.types.ts         # camelCase with .types suffix
 - **历史不改**：存量系统中已存在按版本命名的文件，已有 import/reference 依赖链；不强制批量重命名（风险不可控）
 - **新增禁用**：任何新建文件（含新模块、新项目）绝对禁止在文件名或目录名中嵌入版本号；Code Review 时此类命名视为 **BLOCKING 级发现**，必须改名后才能合并
 
+### Module Lifecycle — Rename/Delete Must Cascade Test References (CRITICAL)
+
+**模块 rename/delete 时，必须扫描并同步修复所有测试引用。** 这是 G-09（禁版本号命名）的补充——G-09 管"命名"，G-10 管"改名后的副作用范围"。
+
+| 操作 | 必须执行的检查 | 门禁 |
+|------|-------------|------|
+| `git mv` / rename .py/.ts/.tsx | `grep -r <old_import_path> tests/`，命中项全部修复 | `pytest --collect-only` exit 0 / `vitest run` exit 0 |
+| `git rm` 文件 | `grep -r <deleted_module_name> tests/`，断裂 import 必须修复或删除对应测试 | 同上 |
+| ORM `__tablename__` 变更 | `grep -r <old_tablename> tests/`，测试中断言 `__tablename__` 的地方同步更新 | `pytest --collect-only` exit 0 |
+| Sidebar config / route registry 条目数变更 | `grep -r "expect.*<N>" tests/`（N 为旧条目数），所有计数断言同步更新 | `vitest run` exit 0 |
+
+**红线：**
+- **禁止留下 import 断裂的测试文件**。测试文件 import 已删除的模块 → BLOCKED，必须先修复测试再提交。
+- **禁止测试断言滞后于代码结构**。sidebar sections 从 6 改为 5，测试中 `expect(sections).toHaveLength(6)` → BLOCKED。
+- **CI 门禁**：`pytest --collect-only` exit ≠0 或 `vitest run` exit ≠0 → 阻断 merge。
+
+### Client-Side Persistence Symmetry（客户端持久化对称性）
+
+**保存路径和加载路径必须对称。** 这是数据完整性的最低保障——save 用了哪些存储介质，load 必须覆盖相同的回退链。
+
+| 模式 | 说明 | 示例 |
+|------|------|------|
+| **回退链对称** | save 路径有 N 个降级目标，load 路径必须有相同的 N 个回退源 | save: API → IndexedDB → localStorage; load: IndexedDB → localStorage（❌ 缺 localStorage 回退） |
+| **写入后读回** | 任何持久化操作后，立即从存储介质读回并断言数据一致 | `save(doc)` → `load(doc.id)` → `assert loaded == doc` |
+| **降级触发条件一致** | save 降级到 localStorage 的条件，load 也必须知道"什么时候该读 localStorage" | save 在 API 失败后降级到 localStorage; load 必须在 IndexedDB 为空或失败时回退到 localStorage |
+
+**红线**：
+- **新增 save 降级目标 → 必须同步新增 load 回退源**。save 加了 localStorage fallback，load 不加 → BLOCKED。
+- **写后验证**：任何 persist 操作后，必须有对应的 read-back 测试断言。测试仅 mock response 不算——必须经过真实的序列化/反序列化链路。
+
 ### File Naming — Anti-Pattern: Timestamp / Date Prefix (CRITICAL)
 
 **文件绝对禁止以时间戳、日期开头。** 时间信息属于 Git，不属于文件名。
