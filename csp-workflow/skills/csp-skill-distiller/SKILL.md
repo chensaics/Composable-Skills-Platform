@@ -305,3 +305,45 @@ completion_signal:
 
 **影响评估**: 防止代码结构变更后测试腐败，所有 C1-C6 类问题被覆盖。
 ```
+
+---
+
+## Auto-Discovery Loop（自动发现循环）
+
+> 本能力支持无需 URL 自动从 skills.sh 热榜 / GitHub trending 发现 Agent Skills 仓库，质量筛选后执行深度挖掘。提供循环模式：每次 CSP 能力增强后，用新能力发现之前挖不到的仓库。
+
+### 自动发现流程
+
+| Step | 活动 | 工具 |
+|------|------|------|
+| D1 | 多路搜索热门 Agent Skills | `WebSearch("skills.sh trending agent skills")` + `WebSearch("GitHub awesome agent skills 2026")` + `WebSearch("GitHub claude code skills 热门")` |
+| D2 | 去重过滤 — 与 `csp-router/registry.json` + `federation.yaml` 对照 | 本地文件比对 |
+| D3 | 质量初筛 — Star>50 / 30天内有更新 / README≥500字 / 许可证兼容 | WebFetch(README.md) |
+| D4 | 候选列表 — Top-10，附评分 + 入选理由 + 预计 CSP domain | 输出，等用户确认 |
+| D5 | 对确认候选执行完整挖掘（Steps 1-5） | 按挖掘流程 |
+
+### 循环迭代模型
+
+```
+06 done (发布后) → CSP 多了新技能 → 
+  Auto-Discovery → 新技能触发新的搜索关键词 → 
+    发现之前挖不到的新仓库 → 挖掘 → CSP 化 → 
+      CSP 更完善 → 下次发布 → 发现更多 →
+        正反馈循环: "越挖越多，越多越好挖"
+```
+
+### 质量门控（防污染）
+
+| 门控 | 不通过 → |
+|------|---------|
+| 许可证: MIT/Apache/BSD | 只蒸馏模式思路，不复制内容 |
+| CSP v3: `validate-skill-v3.mjs --strict` pass | 不合并，标 Draft |
+| 去重: 与已有技能不重复 | 合并或声明差异化 |
+| 领域归属: 匹配 federation.yaml 中的 domain | 标为新包候选 |
+| 多源验证: 相同模式被 ≥2 个外部仓库独立实现 | 模式可靠性更高 |
+
+### 红线
+
+- **每次自动发现后必须经用户确认**才能进入深度挖掘
+- **不连续自动挖掘** — 防止无限循环消耗 tokens
+- **不自动 commit/PR** — 所有产出需人工审查

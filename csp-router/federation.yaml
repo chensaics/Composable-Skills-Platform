@@ -186,22 +186,170 @@ packages:
         keywords: ["装修", "租房", "搬家", "收纳", "整理", "家居", "智能家居"]
         weight: 55
 
-    layers:
-      - name: "L1 Life Meta"
-        path: "life-meta/"
-        description: "生活方法论：GTD、原子习惯、第二大脑"
-      - name: "L2 Life Workflow"
-        path: "life-workflow/"
-        description: "生活流水线：capture → organize → plan → execute → reflect"
-      - name: "L3 Life Patterns"
-        path: "life-patterns/"
-        description: "工具链：Notion/Obsidian、Todoist/Things、Apple Health/Strava"
-      - name: "L4 Life Runtime"
-        path: "life-runtime/"
-        description: "自动排程、习惯追踪、健康监测报告"
-
     skill_count: 0  # 待建设
     token_budget: ~500
+
+  # ── Education: 教育/教学 ──
+  - id: csp-edu
+    name: "CSP Edu — AI 教育工具箱"
+    description: "课程设计/在线教学/辅导答疑/学习评估：从内容到交付的完整教育技能"
+    package_name: "@csp/edu"
+    repo: "maythyai/csp-edu"
+    install_commands:
+      npx: "npx skills add maythyai/csp-edu"
+      claude: "/plugin marketplace add maythyai/csp-edu"
+
+    domains:
+      teaching:
+        keywords: ["教学", "课程", "教案", "课件", "在线教育", "MOOC", "网课", "翻转课堂"]
+        weight: 85
+      tutoring:
+        keywords: ["辅导", "答疑", "1对1", "家教", "补习", "作业", "题目"]
+        weight: 80
+      assessment:
+        keywords: ["考试", "测验", "题库", "出题", "评分", "评估", "成绩", "测评"]
+        weight: 75
+      curriculum:
+        keywords: ["课程设计", "大纲", "教学计划", "课标", "知识点", "知识图谱"]
+        weight: 70
+
+    skill_count: 0
+    token_budget: ~400
+
+  # ── Research: 学术研究 ──
+  - id: csp-research
+    name: "CSP Research — AI 学术研究助手"
+    description: "文献综述/实验设计/数据分析/论文写作：完整的学术研究技能链"
+    package_name: "@csp/research"
+    repo: "maythyai/csp-research"
+    install_commands:
+      npx: "npx skills add maythyai/csp-research"
+      claude: "/plugin marketplace add maythyai/csp-research"
+
+    domains:
+      literature:
+        keywords: ["文献", "论文", "综述", "引用", "参考文献", "BibTeX", "Zotero", "PubMed", "arXiv"]
+        weight: 85
+      experiment:
+        keywords: ["实验设计", "A/B测试", "对照组", "统计显著", "p值", "效应量", "样本量"]
+        weight: 80
+      writing:
+        keywords: ["论文写作", "Abstract", "Method", "Discussion", "LaTeX", "投稿", "审稿"]
+        weight: 75
+      data:
+        keywords: ["数据收集", "数据清洗", "统计分析", "SPSS", "R语言", "Stata", "可视化"]
+        weight: 70
+
+    skill_count: 0
+    token_budget: ~400
+
+  # ── Design: 设计/创意 ──
+  - id: csp-design
+    name: "CSP Design — AI 设计工作室"
+    description: "UI/UX/品牌/印刷/3D：完整的设计技能链"
+    package_name: "@csp/design"
+    repo: "maythyai/csp-design"
+    install_commands:
+      npx: "npx skills add maythyai/csp-design"
+      claude: "/plugin marketplace add maythyai/csp-design"
+
+    domains:
+      ui_ux:
+        keywords: ["UI设计", "UX设计", "原型", "线框", "Figma", "Sketch", "交互设计", "用户研究"]
+        weight: 85
+      brand:
+        keywords: ["品牌设计", "Logo", "VI", "视觉识别", "品牌手册", "色彩系统"]
+        weight: 80
+      print:
+        keywords: ["印刷", "海报", "名片", "画册", "包装设计", "排版", "InDesign"]
+        weight: 65
+      three_d:
+        keywords: ["3D建模", "Blender", "渲染", "动画", "三维", "C4D"]
+        weight: 55
+
+    skill_count: 0
+    token_budget: ~400
+
+  # ── Writing: 写作/出版 ──
+  - id: csp-write
+    name: "CSP Write — AI 写作工坊"
+    description: "图书/博客/通讯/翻译：从大纲到出版的完整写作技能"
+    package_name: "@csp/write"
+    repo: "maythyai/csp-write"
+    install_commands:
+      npx: "npx skills add maythyai/csp-write"
+      claude: "/plugin marketplace add maythyai/csp-write"
+
+    domains:
+      book:
+        keywords: ["写书", "出版", "电子书", "自出版", "章节", "校对", "排版", "ISBN"]
+        weight: 85
+      blog:
+        keywords: ["博客", "公众号", "专栏", "Newsletter", "Substack", "内容创作"]
+        weight: 80
+      translation:
+        keywords: ["翻译", "本地化", "中译英", "英译中", "多语言", "i18n"]
+        weight: 70
+      copywriting:
+        keywords: ["文案", "广告语", "slogan", "营销文案", "landing page", "转化文案"]
+        weight: 75
+
+    skill_count: 0
+    token_budget: ~400
+
+  # ── Finance: 财务/投资 ──
+  - id: csp-finance
+    name: "CSP Finance — AI 财务管家"
+    description: "个人财务/投资分析/税务筹划/保险规划：一人公司的财务技能"
+    package_name: "@csp/finance"
+    repo: "maythyai/csp-finance"
+    install_commands:
+      npx: "npx skills add maythyai/csp-finance"
+      claude: "/plugin marketplace add maythyai/csp-finance"
+
+    domains:
+      personal_finance:
+        keywords: ["记账", "预算", "理财", "存钱", "开支", "消费", "省钱"]
+        weight: 85
+      investment:
+        keywords: ["投资", "股票", "基金", "加密货币", "量化", "定投", "资产配置"]
+        weight: 80
+      tax:
+        keywords: ["税务", "报税", "个税", "增值税", "抵扣", "发票"]
+        weight: 75
+      insurance:
+        keywords: ["保险", "社保", "医保", "商业保险", "理赔", "重疾险"]
+        weight: 65
+
+    skill_count: 0
+    token_budget: ~400
+
+  # ── Legal: 法律/合规 ──
+  - id: csp-legal
+    name: "CSP Legal — AI 法律助手"
+    description: "合同起草/合规审查/IP保护/公司注册：一人公司的法律工具箱"
+    package_name: "@csp/legal"
+    repo: "maythyai/csp-legal"
+    install_commands:
+      npx: "npx skills add maythyai/csp-legal"
+      claude: "/plugin marketplace add maythyai/csp-legal"
+
+    domains:
+      contract:
+        keywords: ["合同", "协议", "NDA", "服务条款", "隐私政策", "SaaS协议"]
+        weight: 85
+      compliance:
+        keywords: ["合规", "GDPR", "个人信息保护", "数据安全法", "网安法", "监管"]
+        weight: 80
+      ip:
+        keywords: ["知识产权", "商标", "专利", "著作权", "版权", "开源许可证", "MIT", "GPL"]
+        weight: 75
+      company:
+        keywords: ["公司注册", "工商", "股权", "章程", "年报", "变更", "注销"]
+        weight: 70
+
+    skill_count: 0
+    token_budget: ~400
 
 # ── 联邦路由决策矩阵 ──────────────────────────────────────────
 decision_matrix:
