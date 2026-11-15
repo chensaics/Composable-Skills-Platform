@@ -695,6 +695,15 @@ routing_rules:
       write_back_at: [S10, S12, S13]    # 增量用例 + 事件回归 + delta
       gate: requirement_coverage_gap == 0
     routing_principle: "治理旁路不阻塞主链；门控失败时，先查对应说明书是否陈旧（CMS 未 align / TMS 缺口）"
+
+  # ★ 技能蒸馏（01-07 每阶段 gate 通过后自动触发）★
+  skill_distillation:
+    trigger: post_gate                     # 每阶段 gate 通过后
+    skill: csp-skill-distiller
+    output: .csp/skill-improvements/SKILL-DISTILL-{phase}-{date}.md
+    p0_action: auto_apply                  # P0 提案立即执行修改
+    skip_if: mode == lightweight           # 轻量模式跳过
+    relationship: "蒸馏≠复盘：复盘分析项目问题，蒸馏分析技能缺口"
 ```
 
 ## 迭代管理

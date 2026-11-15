@@ -141,6 +141,7 @@ Layer 4: Spec (technical)    ← 03 产出: .csp/planning/spec.md + .csp/tech-de
   （工具链不可用 = BLOCKED，不得用 grep/review 替代动态门控）
 - 运行环境先探测实际服务/启动命令、端口身份和可用凭据；按项目授权启动并探活，不默认 Compose、npm 或固定重试次数。视觉/性能/API 文档动态检查工具不可用时标未执行及解除条件，不能用静态 grep 冒充动态验证。
 - S7 审查无 CRITICAL → [[workflow:csp-code-review]] + [[pattern:csp-santa-method]]（关键模块双审）
+- 每阶段完成后技能蒸馏 → [[workflow:csp-skill-distiller]]（收集执行观察，识别技能缺口，产出具象改进提案到 `.csp/skill-improvements/`）
 - 跨层集成验证 → [[pattern:csp-integration-review]]（11 场景全栈契约审查）
 - 7.6 对账 reconciled=true（含 findings 闭合闸门 exit 0）
   → `python3 prompts/scripts/findings_closure_check.py --baseline .csp/findings-baseline.json`
@@ -184,6 +185,8 @@ findings 回写契约：仅对"本版本真实修复且已验证"的 findings �
 每版本 checkpoint 落盘：更新 .csp/lifecycle-state.json + DEV-LOG 追加本轮决策摘要，保证会话中断可无损续跑。
 
 gate 即授权，全自动推进。打断条件（仅 6 类）：战略根本模糊 / PRD Rejected / 真破坏操作 / 多 tag 不明 / 无法 auto-resolve 的报错 / deferred 堆积（单版本 >3 条或同项跨 2 版本 deferred）。07 复盘默认自动触发（[[pattern:csp-retro]]），lessons 并入下一版本 01 入口清单。质量自评可选用 [[pattern:csp-agent-self-evaluation]] 做 5 轴结构性复盘。
+
+**每阶段完成后技能蒸馏**：01-07 每阶段 gate 通过后，自动触发 `[[workflow:csp-skill-distiller]]` — 收集本阶段的执行观察（失败的 gate/修复性 commit/用户纠正），识别 CSP 技能体系的规则缺失/门禁缺失/技能空白，产出具象改进提案到 `.csp/skill-improvements/`。P0 提案立即执行修改。蒸馏不是复盘——复盘分析项目问题，蒸馏分析技能缺口。
 
 **缺口报告**：执行过程中若发现本说明未覆盖的维度、或引用的 CSP skill 不包含所需方法论（功能缺失/深度不足），**立即指出缺口**——不跳过、不假装覆盖、不用「可以了」糊过。
 
@@ -256,6 +259,7 @@ gate 即授权，全自动推进。打断条件（仅 6 类）：战略根本模
 | Git 规范 | `[[pattern:csp-git-conventions]]` |
 | 版本管理 | prompts/version-management.md（规则参考文档） |
 | 复盘（S10） | `[[pattern:csp-retro]]` |
+| 技能蒸馏（01-07 每阶段后） | `[[workflow:csp-skill-distiller]]`（执行观察→技能缺口→改进提案，`.csp/skill-improvements/`） |
 | 重构策略 | `[[skill:csp-refactoring-strategies]]`（Strangler Fig/Branch by Abstraction/并行运行，大规模架构演进） |
 | 代码整洁 | `[[skill:csp-code-simplification]]`（死代码清理/简化 AI 冗余/移除未使用依赖） |
 | 文档治理 | `[[workflow:csp-documentation-governance]]` |
