@@ -1,23 +1,30 @@
 ---
-name: csp-devops-seed
+name: csp-devops
 description: >
-  Use when deploying, configuring CI/CD, managing containers/K8s, or setting
-  up monitoring. Covers GitHub Actions, Docker, K8s, AWS/GCP/阿里云 CLI.
-  Keywords: deploy, CI/CD, Docker, K8s, kubectl, GitHub Actions, 部署, 运维.
+  DevOps entry hub — routes CI/CD, container/K8s, cloud deployment, and monitoring
+  requests to the correct sub-skill. Use when deploying, configuring CI/CD, managing
+  Docker/K8s, or setting up cloud monitoring.
+  Keywords: deploy, CI/CD, Docker, K8s, kubectl, GitHub Actions, cloud, 部署, 运维.
 version: "0.1.0"
 layer: 3
 category: patterns
-type: technique
+type: workflow
 phase: build
 domain: devops
-role: specialist
+role: orchestrator
 scope: implementation
 tools: [Read, Write, Edit, Bash, Glob, Grep]
+related_skills:
+  - csp-cicd-pipelines
+  - csp-deployment
+  - csp-docker-patterns
+  - csp-kubernetes-patterns
+  - csp-monitoring-alerting
 ---
 
-# DevOps Seed
+# csp-devops · DevOps 入口
 
-部署和运维的入口 — 快速路由到正确的 devops 子技能。
+部署和运维的入口 hub — 根据用户意图分发到正确的 devops 子技能。
 
 ## When to Use
 

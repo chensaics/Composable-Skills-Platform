@@ -1,23 +1,27 @@
 ---
-name: csp-workspace-seed
+name: csp-workspace
 description: >
-  Use when connecting to Notion, Linear, Feishu, WeChat, or managing knowledge
-  bases, project tasks, IM integrations, or productivity workflows.
+  Workspace entry hub — routes knowledge base, project management, IM integration,
+  and productivity requests to the correct sub-skill or external product connector.
+  Skills link to Notion/Linear/飞书/WeChat APIs, not build them from scratch.
   Keywords: Notion, Linear, 飞书, 企业微信, knowledge base, 知识库, 项目管理, IM.
 version: "0.1.0"
 layer: 3
 category: patterns
-type: technique
+type: workflow
 phase: build
 domain: other
-role: specialist
+role: orchestrator
 scope: implementation
 tools: [Read, Write, Edit, Bash, Glob, Grep, WebFetch]
+related_skills:
+  - csp-knowledge-hub
+  - csp-automation
 ---
 
-# Workspace Seed
+# csp-workspace · 工作套件入口
 
-工作套件的入口 — 链接 Notion/Linear/飞书/微信，不是构建它们。
+工作套件的入口 hub — 链接 Notion/Linear/飞书/微信，不构建它们。
 
 ## Principle
 

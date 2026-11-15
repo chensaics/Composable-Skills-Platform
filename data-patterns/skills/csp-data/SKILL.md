@@ -1,23 +1,28 @@
 ---
-name: csp-data-seed
+name: csp-data
 description: >
-  Use when writing SQL queries, doing data analysis (pandas/scikit-learn),
-  building BI dashboards (Tableau/Metabase/Superset), or running ETL pipelines.
+  Data entry hub — routes SQL queries, data analysis (pandas/scikit-learn),
+  BI dashboards, and ETL pipeline requests to the correct sub-skill.
   Keywords: SQL, data science, pandas, BI, ETL, BigQuery, dbt, 数据分析, 查询.
 version: "0.1.0"
 layer: 3
 category: patterns
-type: technique
+type: workflow
 phase: build
 domain: patterns
-role: specialist
+role: orchestrator
 scope: implementation
 tools: [Read, Write, Edit, Bash, Glob, Grep]
+related_skills:
+  - csp-data-analysis
+  - csp-sql-reviewer
+  - csp-db-performance
+  - csp-data-pipeline-patterns
 ---
 
-# Data Seed
+# csp-data · 数据入口
 
-数据分析的入口 — 快速路由到正确的 data 子技能。
+数据分析的入口 hub — 根据用户意图分发到正确的 data 子技能。
 
 ## When to Use
 

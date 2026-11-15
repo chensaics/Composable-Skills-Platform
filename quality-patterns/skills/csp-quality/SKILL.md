@@ -1,23 +1,29 @@
 ---
-name: csp-quality-seed
+name: csp-quality
 description: >
-  Use when running tests, security audits, or code reviews. Covers pytest/vitest
-  execution patterns, SonarQube/Snyk integration, and CR checklists.
-  Keywords: test, testing, pytest, vitest, security, audit, code review, QA.
+  Quality entry hub — routes testing/security/code-review requests to the correct 
+  sub-skill. Use when running tests (pytest/vitest/playwright), security audits 
+  (SonarQube/Snyk), or code reviews (CR checklists/lint). 
+  Keywords: test, testing, pytest, vitest, security, audit, code review, QA, quality.
 version: "0.1.0"
 layer: 3
 category: patterns
-type: technique
+type: workflow
 phase: build
 domain: testing
-role: specialist
-scope: implementation
+role: orchestrator
+scope: review
 tools: [Read, Write, Edit, Bash, Glob, Grep]
+related_skills:
+  - csp-test-methodology
+  - csp-security-review
+  - csp-code-review
+  - csp-coding-standards
 ---
 
-# Quality Seed
+# csp-quality · 质量入口
 
-测试/安全/CR 的质量入口 — 快速路由到正确的 quality 子技能。
+测试/安全/CR 的质量路由 hub — 根据用户意图分发到正确的 quality 子技能。
 
 ## When to Use
 
