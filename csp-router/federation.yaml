@@ -24,49 +24,124 @@ routing:
 
 # ── 联邦子包注册 ──────────────────────────────────────────────
 packages:
-  # ── Core: 编程全链路（当前 CSP 本体）──
-  - id: csp-core
-    name: "CSP Core — 编程全链路"
-    description: "从需求到上线的完整编程技能体系：设计/规划/开发/测试/发布"
-    package_name: "@csp/core"        # npm 包名（未来）
-    repo: "maythyai/code-skills-package"  # GitHub 仓库
+  # ── Meta: 联邦核心引擎（必装，所有包共享）──
+  - id: csp-meta
+    name: "CSP Meta — 联邦核心引擎"
+    description: "路由器 + 生命周期编排 + 技能蒸馏 + SKPG。所有子包共享的基础设施。**安装任何 CSP 子包时自动安装。**"
+    package_name: "@csp/meta"
+    repo: "maythyai/code-skills-package"   # 与 csp-code 同仓库，路由层共享
     install_commands:
       npx: "npx skills add maythyai/code-skills-package"
       claude: "/plugin marketplace add maythyai/code-skills-package"
       manual: "git clone https://github.com/maythyai/code-skills-package.git"
+    auto_install: true  # 安装任何其他子包时自动安装
 
-    # 领域触发词
     domains:
-      programming:
-        keywords: ["代码", "开发", "编程", "debug", "TDD", "API", "数据库", "前端", "后端"]
-        weight: 100  # core 是默认包，权重最高
-      devops:
-        keywords: ["部署", "CI/CD", "K8s", "Docker", "服务器", "运维"]
-        weight: 80
-      architecture:
-        keywords: ["架构", "设计模式", "系统设计", "微服务", "重构"]
-        weight: 70
+      meta:
+        keywords: ["skill", "技能", "路由", "编排", "lifecycle", "蒸馏", "distill"]
+        weight: 50  # 不高权重——meta 不抢路由，靠 auto_install 保证存在
 
-    # 内部五层结构（给联邦路由参考，不改变内部路由逻辑）
     layers:
       - name: "L0 Router"
         path: "csp-router/"
-        description: "任务分类 + skill 自动路由"
+        description: "任务分类 + skill 自动路由 + 联邦路由"
+      - name: "L0 Federation"
+        path: "csp-router/federation.yaml"
+        description: "联邦路由注册表"
+      - name: "L0 SKPG"
+        path: "csp-router/skpg/"
+        description: "技能知识图谱"
+
+    skill_count: 5  # router + federation + distiller 等核心部件
+    token_budget: ~2000
+
+  # ── Code: 编程全链路 ──
+  - id: csp-code
+    name: "CSP Code — 编程全链路"
+    description: "从需求到上线的完整编程技能：语言/框架模式、reviewers、测试、安全、DevOps。**纯编程技能——不含产品管理和设计技能。**"
+    package_name: "@csp/code"
+    repo: "maythyai/code-skills-package"
+    install_commands:
+      npx: "npx skills add maythyai/code-skills-package"
+      claude: "/plugin marketplace add maythyai/code-skills-package"
+      manual: "git clone https://github.com/maythyai/code-skills-package.git"
+    # csp-code 是当前 CSP 仓库的直接延续
+    # 与 csp-meta 同仓库（router 共享），未来可拆出独立仓库
+
+    domains:
+      programming:
+        keywords: ["代码", "开发", "编程", "debug", "TDD", "API", "数据库", "前端", "后端",
+                   "Python", "JavaScript", "TypeScript", "Go", "Rust", "Java", "React", "Vue"]
+        weight: 100
+      devops:
+        keywords: ["部署", "CI/CD", "K8s", "Docker", "服务器", "运维", "监控", "日志"]
+        weight: 80
+      security:
+        keywords: ["安全", "漏洞", "渗透", "注入", "XSS", "CSRF", "加密", "认证"]
+        weight: 75
+      testing:
+        keywords: ["测试", "单测", "E2E", "pytest", "vitest", "覆盖率", "mock"]
+        weight: 85
+      architecture:
+        keywords: ["架构", "设计模式", "系统设计", "微服务", "重构", "DDD"]
+        weight: 70
+
+    layers:
       - name: "L1 Methodology"
         path: "csp-meta/"
-        description: "方法论：brainstorming, TDD, debugging, spec-driven"
+        description: "TDD, debugging, brainstorming, spec-driven"
       - name: "L2 Workflow"
         path: "csp-workflow/"
         description: "项目生命周期：plan → execute → verify → ship"
       - name: "L3 Patterns"
         path: "csp-patterns/"
-        description: "语言/框架模式、reviewers、build-resolvers"
+        description: "语言/框架/DB 模式、reviewers、build-resolvers"
       - name: "L4 Runtime"
         path: "csp-runtime/"
-        description: "运行时：autopilot, wiki, remember, self-improve"
+        description: "autopilot, wiki, remember, self-improve"
 
-    skill_count: 716
+    skill_count: 600  # 约 716 - 产品/设计相关技能
     token_budget: ~2000
+
+  # ── Product: 产品管理 ──
+  - id: csp-product
+    name: "CSP Product — 产品管理引擎"
+    description: "PRD 生成/路线图/需求拆解/Spec 契约/产品说明书。从想法到可执行需求的产品管理全链路。**从 csp-code 中拆分出来的独立包。**"
+    package_name: "@csp/product"
+    repo: "maythyai/csp-product"
+    install_commands:
+      npx: "npx skills add maythyai/csp-product"
+      claude: "/plugin marketplace add maythyai/csp-product"
+    # 来源：从 csp-code（原 csp-core）中提取 product/PRD/roadmap/spec 相关技能
+
+    domains:
+      product_mgmt:
+        keywords: ["PRD", "产品需求", "需求文档", "产品规划", "路线图", "roadmap", "产品管理",
+                   "需求拆解", "用户故事", "优先级", "产品说明书", "PMS"]
+        weight: 90
+      spec:
+        keywords: ["Spec", "技术规格", "contract", "契约", "FR", "AC", "验收标准", "Given/When/Then"]
+        weight: 85
+      requirements:
+        keywords: ["需求分析", "需求拆解", "feature", "用户旅程", "user journey", "功能清单"]
+        weight: 80
+
+    layers:
+      - name: "L1 Product Meta"
+        path: "product-meta/"
+        description: "产品方法论：RICE, Kano, 用户故事映射, 优先级框架"
+      - name: "L2 Product Workflow"
+        path: "product-workflow/"
+        description: "产品流水线：ROADMAP → PRD → Spec → Decomposition"
+      - name: "L3 Product Patterns"
+        path: "product-patterns/"
+        description: "产品模板：8 段 PRD, Spec Contract, PMS 说明书"
+      - name: "L4 Product Runtime"
+        path: "product-runtime/"
+        description: "自动 PRD 生成、需求追溯、变更影响分析"
+
+    skill_count: 0  # 从 csp-code 拆分中迁移
+    token_budget: ~600
 
   # ── Creator: 创作者工具 ──
   - id: csp-creator
@@ -355,15 +430,21 @@ packages:
 decision_matrix:
   # 多包匹配时的优先级
   resolution:
-    - when: "programming domain > 0.7"
-      route_to: "csp-core"
-      reason: "编程类任务由 core 处理"
+    - when: "programming + testing + security domain > 0.7"
+      route_to: "csp-code"
+      reason: "编程类任务由 code 处理"
+    - when: "product_mgmt + spec + requirements domain > 0.5"
+      route_to: "csp-product"
+      reason: "产品管理类任务由 product 处理"
     - when: "video + image domain > 0.5"
       route_to: "csp-creator"
       reason: "创作类任务由 creator 处理"
     - when: "marketing + business domain > 0.5"
       route_to: "csp-business"
       reason: "商业类任务由 business 处理"
+    - when: "ui_ux + brand + print domain > 0.5"
+      route_to: "csp-design"
+      reason: "设计类任务由 design 处理"
     - when: "productivity + health domain > 0.5"
       route_to: "csp-life"
       reason: "生活类任务由 life 处理"
@@ -371,31 +452,43 @@ decision_matrix:
       route_to: "ask_user"
       reason: "多领域交叉，让用户选择"
     - when: "no domain > 0.3"
-      route_to: "csp-core"
-      reason: "无法判定时默认回退到 core"
+      route_to: "csp-code"
+      reason: "无法判定时默认回退到 code"
 
 # ── 跨包能力发现 ──────────────────────────────────────────────
 capability_discovery:
   # 当一个包无法覆盖用户意图时，检查其他包的能力
   # 例如：用户在 core 中写代码，但提到了"SEO优化" → 提示 business 包
   cross_suggest:
-    - from: "csp-core"
+    - from: "csp-code"
       triggers: ["SEO", "推广", "变现", "营销"]
       suggest: "csp-business"
-    - from: "csp-core"
+    - from: "csp-code"
       triggers: ["短视频", "封面图", "海报"]
       suggest: "csp-creator"
+    - from: "csp-code"
+      triggers: ["PRD", "需求文档", "用户故事"]
+      suggest: "csp-product"
     - from: "csp-business"
       triggers: ["自动化脚本", "爬虫", "API 开发"]
-      suggest: "csp-core"
+      suggest: "csp-code"
+    - from: "csp-product"
+      triggers: ["技术方案", "接口设计", "数据库"]
+      suggest: "csp-code"
 
 # ── 版本兼容性 ────────────────────────────────────────────────
 compatibility:
-  # csp-router 最低版本要求（联邦路由需要路由器的联邦模式支持）
   min_router_version: "1.0.0"
-  # 各包之间的依赖关系
   package_dependencies:
-    csp-core: []
-    csp-creator: []
-    csp-business: []
-    csp-life: []
+    csp-meta: []        # 元层无依赖，是所有其他包的依赖
+    csp-code: ["csp-meta"]
+    csp-product: ["csp-meta"]
+    csp-creator: ["csp-meta"]
+    csp-business: ["csp-meta"]
+    csp-life: ["csp-meta"]
+    csp-edu: ["csp-meta"]
+    csp-research: ["csp-meta"]
+    csp-design: ["csp-meta"]
+    csp-write: ["csp-meta"]
+    csp-finance: ["csp-meta"]
+    csp-legal: ["csp-meta"]

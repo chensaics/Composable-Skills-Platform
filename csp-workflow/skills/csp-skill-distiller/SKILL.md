@@ -316,34 +316,65 @@ completion_signal:
 
 | Step | 活动 | 工具 |
 |------|------|------|
-| D1 | 多路搜索热门 Agent Skills | `WebSearch("skills.sh trending agent skills")` + `WebSearch("GitHub awesome agent skills 2026")` + `WebSearch("GitHub claude code skills 热门")` |
-| D2 | 去重过滤 — 与 `csp-router/registry.json` + `federation.yaml` 对照 | 本地文件比对 |
-| D3 | 质量初筛 — Star>50 / 30天内有更新 / README≥500字 / 许可证兼容 | WebFetch(README.md) |
-| D4 | 候选列表 — Top-10，附评分 + 入选理由 + 预计 CSP domain | 输出，等用户确认 |
-| D5 | 对确认候选执行完整挖掘（Steps 1-5） | 按挖掘流程 |
+| D1 | 多路搜索热门 Agent Skills — 每轮注入随机搜索词增加多样性 | `WebSearch("skills.sh trending agent skills")` + `WebSearch("GitHub awesome agent skills")` + `WebSearch("GitHub claude code skills 热门")` + 每轮随机化关键词 |
+| D2 | **去重过滤** — 与 `registry.json` + `federation.yaml` + `.csp/skill-improvements/MINED-REPOS.yaml`（已挖掘黑名单）对照 | 本地文件比对 |
+| D3 | 质量初筛 — Star>50 / 近 90 天有更新 / 许可证兼容（MIT/Apache/BSD）。**不设 README 字数下限** — 短 README 可能是好工具 | WebFetch(README.md) |
+| D4 | 候选列表 — **Top-30**，附评分（Star×0.3 + 更新频率×0.3 + 多源引用×0.2 + 许可证×0.2）+ 入选理由。每次 ≤10 条分批确认 | 输出 |
+| D5 | 对确认候选执行完整挖掘（Steps 1-5）。挖掘完成后**写入 MINED-REPOS.yaml** 黑名单 | 按挖掘流程 |
 
-### 循环迭代模型
+### 持久黑名单：MINED-REPOS.yaml
+
+`.csp/skill-improvements/MINED-REPOS.yaml`：
+```yaml
+mined_repos:
+  - repo: "mvanhorn/last30days-skill"
+    mined_at: "2026-11-15"
+    last_commit_mined: "abc1234"
+    rating: "high"
+    notes: "多源搜索聚合模式。重新挖掘条件：v4.0 or 6个月后"
+last_round: 3
+total_mined: 15
+```
+- 每轮 D2 自动排除黑名单中的仓库 → 第二轮发现的 Top-30 = 纯新增，不重复
+
+### 已挖掘仓库的更新检测
+
+当搜索结果中出现已在 MINED-REPOS 中的仓库时，检查是否值得重新挖掘：
+
+| 检测项 | 方法 | 决策 |
+|--------|------|------|
+| 新 commits | `git log --since=<mined_at>` 或查最近 release | >10 new commits → 标记 `[UPDATE]` |
+| 新 skills | Read 新增的 SKILL.md | 有新 skill → `[UPDATE]` |
+| 大版本号 | v2→v3 或 major bump | `[UPDATE]` |
+| 距离上次挖掘 | >6 个月 | `[UPDATE]` |
+| Rating="high" | 上次评为高质量 | 缩短间隔到 3 个月 |
+
+`[UPDATE]` 标记的仓库在候选列表中单独显示，提醒用户这是增量挖掘而非重复。
+
+### 自动循环模式（`--max-rounds N`）
 
 ```
-06 done (发布后) → CSP 多了新技能 → 
-  Auto-Discovery → 新技能触发新的搜索关键词 → 
-    发现之前挖不到的新仓库 → 挖掘 → CSP 化 → 
-      CSP 更完善 → 下次发布 → 发现更多 →
-        正反馈循环: "越挖越多，越多越好挖"
+round = 1, MAX_ROUNDS = 参数 or 默认 5, 上限 20
+while round <= MAX_ROUNDS:
+    D1: 搜索（每轮随机化搜索词）
+    D2: 去重（对 MINED-REPOS + registry + federation）
+    
+    if 本轮新候选数 == 0: 停止
+    
+    D3: 质量初筛
+    D4: Top-30 → 分批展示 (≤10/批)，等用户确认
+    
+    if 用户停止: break
+    
+    D5: 深度挖掘 → 写入 MINED-REPOS
+    round += 1
+
+输出: "{round-1} 轮，挖掘 {count} 个新仓库，{pattern_count} 个可复用模式。"
 ```
-
-### 质量门控（防污染）
-
-| 门控 | 不通过 → |
-|------|---------|
-| 许可证: MIT/Apache/BSD | 只蒸馏模式思路，不复制内容 |
-| CSP v3: `validate-skill-v3.mjs --strict` pass | 不合并，标 Draft |
-| 去重: 与已有技能不重复 | 合并或声明差异化 |
-| 领域归属: 匹配 federation.yaml 中的 domain | 标为新包候选 |
-| 多源验证: 相同模式被 ≥2 个外部仓库独立实现 | 模式可靠性更高 |
 
 ### 红线
 
-- **每次自动发现后必须经用户确认**才能进入深度挖掘
-- **不连续自动挖掘** — 防止无限循环消耗 tokens
+- **每轮必须用户确认** — 分批确认、不连续自动
+- **MAX_ROUNDS 默认 5，上限 20** — 防止 tokens 耗尽
+- **同一会话累计候选 ≤50** — 超过后提示 review 后再继续
 - **不自动 commit/PR** — 所有产出需人工审查
