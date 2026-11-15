@@ -1,8 +1,7 @@
-# CSP Federation Registry — 联邦路由注册表 v0.2.0
+# CSP Federation Registry — Composable Skills Platform v0.2.0
 #
-# 本文件定义 CSP 联邦体系中的所有子包，每个子包可独立安装。
-# csp-router 作为联邦路由层，根据用户意图自动探测 → 路由到对应子包 →
-# 子包缺失时提示安装。
+# CSP (Composable Skills Platform) — 可组合技能平台
+# 面向一人公司与超级个体的 AI 技能操作系统。
 #
 # CSP Skills 系统包 — Agent 的知识库与工具连接器。
 # 不专门强调"不构建产品"，这是基本前提。

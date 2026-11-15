@@ -43,6 +43,40 @@ npm run audit:coverage -- --covered 0.6 --partial 0.3   # retune the bands
 Company- or tool-specific skills (an internal wiki connector, a single vendor's SDK) show up as
 `GAP` and are legitimately out of scope for a general-purpose MIT package — read before acting.
 
+## Upstream reference projects
+
+[`sync-reference-projects.sh`](sync-reference-projects.sh) keeps the external projects catalogued in
+[`docs/reference/UPSTREAM-PROJECTS.md`](../docs/reference/UPSTREAM-PROJECTS.md) available under
+`开源项目参考/`. It is idempotent: missing repositories are shallow-cloned, clean existing repositories
+are updated with fast-forward-only pulls, and repositories with local changes are left untouched.
+
+```bash
+# Clone missing projects and update clean existing clones
+./scripts/sync-reference-projects.sh
+
+# Clone only; never pull an existing repository
+./scripts/sync-reference-projects.sh --clone-only
+
+# Inspect local state without fetching or pulling
+./scripts/sync-reference-projects.sh --status
+
+# Choose a destination (useful on a new machine)
+./scripts/sync-reference-projects.sh --target "$HOME/csp-reference-projects" --clone-only
+```
+
+The script can also be run without first cloning CSP:
+
+```bash
+curl -fsSL \
+  https://raw.githubusercontent.com/maythyai/code-skills-package/master/scripts/sync-reference-projects.sh \
+  | bash -s -- --target "$HOME/csp-reference-projects" --clone-only
+```
+
+The private `coding-skill-orchestrator` source uses a GitHub SSH URL and therefore requires SSH access.
+Failures are reported per project and produce a non-zero final exit status without removing successful
+clones. The root README's historical source links and their current canonical locations are documented
+in `UPSTREAM-PROJECTS.md`.
+
 ## One-off / maintenance scripts
 
 | Script | Purpose |

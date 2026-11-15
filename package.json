@@ -1,7 +1,8 @@
 {
   "name": "code-skills-package",
   "version": "0.12.0",
-  "description": "Unified AI programming skills for 18 coding platforms — auto-routing, lazy loading, spec-driven workflows",
+  "description": "CSP — Composable Skills Platform. The AI capability operating system for one-person companies and independent builders. Federal routing + 5-layer architecture + 12-domain coverage.",
+  "fullName": "Composable Skills Platform (CSP)",
   "bin": {
     "csp-install": "./install.sh",
     "csp-sdk": "./bin/csp-sdk.mjs"

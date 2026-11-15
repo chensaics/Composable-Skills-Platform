@@ -1,6 +1,6 @@
-# CSP — Code Skills Package v0.12.0
+# CSP — Composable Skills Platform v0.12.0
 
-Unified AI coding skills from multiple open-source projects with auto-routing, lazy loading, and spec-driven workflows. MIT licensed.
+面向一人公司与超级个体的 AI 技能操作系统。可组合的多领域 AI 技能平台，联邦路由 + 五层架构 + 技能蒸馏。
 
 ## Architecture
 

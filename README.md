@@ -1,13 +1,19 @@
-# CSP — Code Skills Package
+# CSP — Composable Skills Platform
 
 <div align="center">
 
-<img src="./assets/hero-banner.png" alt="CSP - Unified AI Programming Skills for 22+ Platforms" width="100%" />
+<img src="./assets/hero-banner.png" alt="CSP - Composable Skills Platform" width="100%" />
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![npm](https://img.shields.io/npm/v/code-skills-package)](https://www.npmjs.com/package/code-skills-package)
 [![v0.12.0](https://img.shields.io/badge/version-0.12.0-green)](./CHANGELOG.md)
-[![Registry: 710](https://img.shields.io/badge/entries-710-orange)](./docs/reference/SKILL-INDEX.md)
+[![Registry: 716](https://img.shields.io/badge/entries-716-orange)](./docs/reference/SKILL-INDEX.md)
+
+<br>
+
+**面向一人公司与超级个体的 AI 技能操作系统。可组合的多领域技能平台。**
+
+**The AI capability operating system for one-person companies and independent builders.**
 [![Platforms: 22+](https://img.shields.io/badge/platforms-22+-brightgreen)](./docs/guides/INSTALL.md)
 
 **Unified AI Programming Skills · 22+ Platforms · 15+ Languages · 358 Skills + 116 Agents + 154 Commands + 36 Workflows**

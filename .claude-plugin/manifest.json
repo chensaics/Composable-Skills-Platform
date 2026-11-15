@@ -1,7 +1,8 @@
 {
   "name": "csp-core",
   "version": "0.12.0",
-  "description": "CSP Core — 编程全链路 AI 技能包。联邦路由 + 5 层架构 + 716 skills。",
+  "description": "CSP — Composable Skills Platform. The AI capability operating system for one-person companies and independent builders. Federal routing + 5-layer architecture + 12-domain coverage.",
+  "fullName": "Composable Skills Platform (CSP)",
   "author": "maythyai",
   "repository": "https://github.com/maythyai/code-skills-package",
   "homepage": "https://maythyai.github.io/code-skills-package/",
