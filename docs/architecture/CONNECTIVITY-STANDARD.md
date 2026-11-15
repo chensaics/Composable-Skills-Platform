@@ -236,7 +236,7 @@
 
 ## 七、引用关系
 
-- 本文件被 `csp-patterns/chain-protocol.md` 引用（交接字段标准）
-- 本文件被 `csp-workflow/references/lifecycle-contract.json` 引用（阶段别名 + 桥接路径）
+- 本文件被 `packages/csp-code/csp-patterns/chain-protocol.md` 引用（交接字段标准）
+- 本文件被 `packages/csp-code/csp-workflow/references/lifecycle-contract.json` 引用（阶段别名 + 桥接路径）
 - 本文件被 `docs/CSP-SYSTEM-MAP.md` 引用（模块连接矩阵）
 - 所有 SKILL.md 的 Entry/Exit Conditions 以此为格式标准

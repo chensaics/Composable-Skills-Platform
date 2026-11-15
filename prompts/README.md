@@ -87,7 +87,7 @@
 - **S5 实施** → `05-implementation.md`。
 - **S6/S7/S8/S9 质量门控/审查/发布/运维** → `06-verify-ship.md`（本阶段内部子步骤，非管线 stage）。
 
-> 旧 S0-S9 是 CSP `lifecycle-contract.json` 的机器 id 别名，映射见 `csp-workflow/references/lifecycle-contract.json` 的 `stage_id_aliases`；00-07 为正典。
+> 旧 S0-S9 是 CSP `lifecycle-contract.json` 的机器 id 别名，映射见 `packages/csp-code/csp-workflow/references/lifecycle-contract.json` 的 `stage_id_aliases`；00-07 为正典。
 
 ## 三说明书（living baseline）
 

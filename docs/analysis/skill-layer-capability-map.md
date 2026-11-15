@@ -47,7 +47,7 @@ vs「运行时强制」的缝。**
 
 | 缺什么 | 现状 | 补法 |
 |---|---|---|
-| 机器可读的 stage/gate 契约 | 只在 skill 散文里 | 新建 `csp-workflow/references/lifecycle-contract.json`：S0-S9 + 每阶段 `skill`/`gate.artifacts`/`gate.commands`/`mode_in`/`skip_if`/`max_retries`/`next` + `governance`（PMS/CMS/TMS 的 `gate_at`/`gate_spec`） |
+| 机器可读的 stage/gate 契约 | 只在 skill 散文里 | 新建 `packages/csp-code/csp-workflow/references/lifecycle-contract.json`：S0-S9 + 每阶段 `skill`/`gate.artifacts`/`gate.commands`/`mode_in`/`skip_if`/`max_retries`/`next` + `governance`（PMS/CMS/TMS 的 `gate_at`/`gate_spec`） |
 | 运行时状态机 | 无 lifecycle state 文件 | 新建 `.csp/lifecycle-state.json`（`current_stage` + 每阶段 `status`/`retries` + `gate_overrides`）+ `csp-sdk drive.*` 读写 |
 | 强制推进 | agent 自觉写 state | `drive.advance` **gate 不过则拒推进** + 重试计数 + 重指向当前 skill |
 | 依赖加载 | router 建议「csp-tdd 依赖 csp-spec-contract」但不强制加载 | `drive.next` 从 `registry.json skills[].deps` 解析**传递闭包**，输出 `load_order` |
@@ -169,8 +169,8 @@ TMS 缺口阻塞/无缺口通过、PMS 无模块阻塞/有模块通过、CMS dri
 
 ## 关联文件
 
-- `csp-workflow/references/lifecycle-contract.json` — 状态机契约（S0-S9 + 治理旁路 gate_at）
+- `packages/csp-code/csp-workflow/references/lifecycle-contract.json` — 状态机契约（S0-S9 + 治理旁路 gate_at）
 - `bin/csp-sdk.mjs` — `drive.*` 子命令实现（`drive.init/status/next/gate/advance/plan/goto/contract`）+ PMS/CMS/TMS 治理 gate 检查器 + S6 技术栈预填
 - `test/csp-invariants.test.mjs` — 12 项 drive 契约测试（基础 5 + 治理/预填 7）
-- `csp-workflow/references/spec-driven-playbook.md` — SDD 方法论 playbook（前序工作）
-- `csp-workflow/templates/change-artifacts/constitution.md` — 项目宪法模板（前序工作）
+- `packages/csp-code/csp-workflow/references/spec-driven-playbook.md` — SDD 方法论 playbook（前序工作）
+- `packages/csp-code/csp-workflow/templates/change-artifacts/constitution.md` — 项目宪法模板（前序工作）

@@ -19,7 +19,7 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly PROJECT_DIR="$(pwd)"
 
 # CSP 五层架构源目录
-readonly CSP_LAYERS="csp-router csp-meta csp-workflow csp-patterns csp-runtime"
+readonly CSP_LAYERS="csp-router packages/csp-code/csp-meta packages/csp-code/csp-workflow packages/csp-code/csp-patterns packages/csp-code/csp-runtime"
 
 # ─── Remote Bootstrap ──────────────────────────────────────────────
 # Auto-detect: if layer dirs are missing, download full repo and re-exec.

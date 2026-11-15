@@ -571,4 +571,4 @@ Label: blocking/suggestion/nit/question/praise
 
 ---
 
-*来源：本提示词综合提炼自 code-skills-package 仓库的 `csp-patterns/skills/csp-python-reviewer`（含 references：python-coding-standards / python-security-checklist / python-project-structure）、`csp-patterns/skills/csp-code-review`（六维方法论）、`csp-patterns/skills/csp-ruff-fixer`、`csp-patterns/skills/python-testing`、`csp-patterns/agents/csp-python-reviewer.md`、`csp-patterns/commands/python-review.md`、`csp-patterns/review-tools/csp-review-adversarial.md` 与 `csp-review-edge-case.md`。*
+*来源：本提示词综合提炼自 code-skills-package 仓库的 `packages/csp-code/csp-patterns/skills/csp-python-reviewer`（含 references：python-coding-standards / python-security-checklist / python-project-structure）、`packages/csp-code/csp-patterns/skills/csp-code-review`（六维方法论）、`packages/csp-code/csp-patterns/skills/csp-ruff-fixer`、`packages/csp-code/csp-patterns/skills/python-testing`、`packages/csp-code/csp-patterns/agents/csp-python-reviewer.md`、`packages/csp-code/csp-patterns/commands/python-review.md`、`packages/csp-code/csp-patterns/review-tools/csp-review-adversarial.md` 与 `csp-review-edge-case.md`。*

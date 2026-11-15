@@ -714,7 +714,7 @@ csp-router/
     {
       "name": "csp-python-reviewer",
       "description": "Python specialized review: PEP8, type hints, security, performance",
-      "path": "csp-patterns/agents/csp-python-reviewer.md",
+      "path": "packages/csp-code/csp-patterns/agents/csp-python-reviewer.md",
       "stacks": ["python"],
       "priority": 2,
       "triggers": { "file_ext": [".py"], "frameworks": ["django", "fastapi", "flask"] }
@@ -722,7 +722,7 @@ csp-router/
     {
       "name": "csp-go-reviewer",
       "description": "Go specialized review: concurrency patterns, error handling, performance",
-      "path": "csp-patterns/agents/csp-go-reviewer.md",
+      "path": "packages/csp-code/csp-patterns/agents/csp-go-reviewer.md",
       "stacks": ["golang"],
       "priority": 2,
       "triggers": { "file_ext": [".go"], "frameworks": ["gin", "echo", "fiber"] }
@@ -1949,7 +1949,7 @@ When multiple sources have similar skills:
 
 Merge result:
 - `csp-patterns/skills/code-review/SKILL.md` — Unified review process
-- `csp-patterns/agents/code-reviewer.md` — Unified review agent (includes REVIEW.md output)
+- `packages/csp-code/csp-patterns/agents/code-reviewer.md` — Unified review agent (includes REVIEW.md output)
 - `csp-patterns/skills/reviewers/<lang>-reviewer.md` — Language-specific (14 items)
 - `csp-meta/skills/csp-requesting-code-review/SKILL.md` — Meta skill (how to request)
 - `csp-meta/skills/csp-receiving-code-review/SKILL.md` — Meta skill (how to receive)
@@ -2059,7 +2059,7 @@ CSP provides unified slash command prefix `/csp-`, **does not retain** any origi
 
 ### Phase 5: Technology Library Migration (L3)
 - [x] Copy ECC skills → csp-patterns/skills/ (✅ 2026-06-14, already exists)
-- [x] Copy ECC agents → csp-patterns/agents/ (✅ 2026-06-14, already exists)
+- [x] Copy ECC agents → packages/csp-code/csp-patterns/agents/ (✅ 2026-06-14, already exists)
 - [x] Merge overlapping items (code-review, debug, verify, etc.) (✅ Completed in Phase 1)
 - [x] Generate registry.json (✅ Verified consistency, 0 missing paths)
 

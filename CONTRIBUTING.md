@@ -105,10 +105,10 @@ Not propagating a change is a bug.
 | Layer | Directory | Purpose | Target Token Budget |
 |-------|-----------|---------|---------------------|
 | L0 | `csp-router/` | Task classification + skill auto-routing (always loaded) | ~2000 |
-| L1 | `csp-meta/` | Methodology: brainstorming, TDD, debugging, spec-driven | ~300/skill |
-| L2 | `csp-workflow/` | Project lifecycle: plan → execute → verify → ship | ~500/skill |
-| L3 | `csp-patterns/` | Language/framework patterns, reviewers, build-resolvers | ~200-600/skill |
-| L4 | `csp-runtime/` | Runtime: autopilot, ralph, wiki, remember, self-improve | ~300/skill |
+| L1 | `packages/csp-code/csp-meta/` | Methodology: brainstorming, TDD, debugging, spec-driven | ~300/skill |
+| L2 | `packages/csp-code/csp-workflow/` | Project lifecycle: plan → execute → verify → ship | ~500/skill |
+| L3 | `packages/csp-code/csp-patterns/` | Language/framework patterns, reviewers, build-resolvers | ~200-600/skill |
+| L4 | `packages/csp-code/csp-runtime/` | Runtime: autopilot, ralph, wiki, remember, self-improve | ~300/skill |
 
 ---
 

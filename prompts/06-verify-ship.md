@@ -12,7 +12,7 @@
 
 **你现在在：`06` 审查·测试·发布交付·运维**（前置：`05`；下一步 → `07` 复盘 / 下一轮 01）。
 
-> **子步骤编号消歧义**：本阶段正文用 `S6`（质量门控）/`S7`（审查验证）/`S8`（发布交付）/`S9`（运维监控）标记**本阶段内部子步骤**，非管线 stage 编号；管线 stage 即本阶段 `06`。S0-S9 与 00-07 的映射见 README「阶段并入说明」与 `csp-workflow/references/lifecycle-contract.json` 的 `stage_id_aliases`。
+> **子步骤编号消歧义**：本阶段正文用 `S6`（质量门控）/`S7`（审查验证）/`S8`（发布交付）/`S9`（运维监控）标记**本阶段内部子步骤**，非管线 stage 编号；管线 stage 即本阶段 `06`。S0-S9 与 00-07 的映射见 README「阶段并入说明」与 `packages/csp-code/csp-workflow/references/lifecycle-contract.json` 的 `stage_id_aliases`。
 
 ## 一、使命与硬边界（不可违背）
 

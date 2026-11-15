@@ -13,7 +13,7 @@
 
 1. **`csp-workflow/skills/csp-tech-task-breakdown/SKILL.md`** — Canonical Task Schema（字段集唯一权威）
 2. **`.claude/agents/task-breaker.md`** — 引用 skill schema，不另立字段
-3. **`csp-workflow/references/lifecycle-contract.json` S3.5** — gate 检 `.csp/tasks/WBS.md` + `DEPENDENCY-DAG.md` 独立文件
+3. **`packages/csp-code/csp-workflow/references/lifecycle-contract.json` S3.5** — gate 检 `.csp/tasks/WBS.md` + `DEPENDENCY-DAG.md` 独立文件
 
 ## 产物对齐动作
 
