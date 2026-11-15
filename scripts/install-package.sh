@@ -35,12 +35,12 @@ declare -A PACKAGES=(
 # ── 子包→目录映射 ────────────────────────────────────────────
 declare -A PKG_DIRS=(
   ["csp-code"]="csp-meta csp-workflow csp-patterns csp-runtime"
-  ["csp-quality"]="quality-meta quality-workflow quality-patterns quality-runtime"
-  ["csp-devops"]="devops-meta devops-workflow devops-patterns devops-runtime"
-  ["csp-data"]="data-meta data-workflow data-patterns data-runtime"
-  ["csp-workspace"]="workspace-meta workspace-workflow workspace-patterns workspace-runtime"
-  ["csp-creator"]="creator-meta creator-workflow creator-patterns creator-runtime"
-  ["csp-business"]="business-meta business-workflow business-patterns business-runtime"
+  ["csp-quality"]="packages/csp-quality/meta packages/csp-quality/workflow packages/csp-quality/patterns packages/csp-quality/runtime"
+  ["csp-devops"]="packages/csp-devops/meta packages/csp-devops/workflow packages/csp-devops/patterns packages/csp-devops/runtime"
+  ["csp-data"]="packages/csp-data/meta packages/csp-data/workflow packages/csp-data/patterns packages/csp-data/runtime"
+  ["csp-workspace"]="packages/csp-workspace/meta packages/csp-workspace/workflow packages/csp-workspace/patterns packages/csp-workspace/runtime"
+  ["csp-creator"]="packages/csp-creator/meta packages/csp-creator/workflow packages/csp-creator/patterns packages/csp-creator/runtime"
+  ["csp-business"]="packages/csp-business/meta packages/csp-business/workflow packages/csp-business/patterns packages/csp-business/runtime"
 )
 
 # ── --list 模式 ───────────────────────────────────────────────
