@@ -44,11 +44,11 @@ function contractPath() {
   if (CONTRACT_ENV) return resolve(PROJECT_ROOT, CONTRACT_ENV);
   const here = dirname(new URL(import.meta.url).pathname);
   const candidates = [
-    join(here, '..', 'csp-workflow', 'references', 'lifecycle-contract.json'),       // repo: bin/../csp-workflow
-    join(PROJECT_ROOT, 'csp-workflow', 'references', 'lifecycle-contract.json'),     // repo root
-    join(PROJECT_ROOT, 'csp-workflow', 'references', 'lifecycle-contract.json'),     // installed under skills
-    join(PROJECT_ROOT, '.cursor', 'skills', 'csp-workflow', 'references', 'lifecycle-contract.json'),
-    join(PROJECT_ROOT, '.claude', 'skills', 'csp-workflow', 'references', 'lifecycle-contract.json'),
+    join(here, '..', 'packages/csp-code/csp-workflow', 'references', 'lifecycle-contract.json'),       // repo: bin/../csp-workflow
+    join(PROJECT_ROOT, 'packages/csp-code/csp-workflow', 'references', 'lifecycle-contract.json'),     // repo root
+    join(PROJECT_ROOT, 'packages/csp-code/csp-workflow', 'references', 'lifecycle-contract.json'),     // installed under skills
+    join(PROJECT_ROOT, '.cursor', 'skills', 'packages/csp-code/csp-workflow', 'references', 'lifecycle-contract.json'),
+    join(PROJECT_ROOT, '.claude', 'skills', 'packages/csp-code/csp-workflow', 'references', 'lifecycle-contract.json'),
   ];
   return candidates.find(p => existsSync(p)) || candidates[0];
 }
@@ -122,7 +122,7 @@ function findMarkdownFiles(dir) {
 // install.sh overwrites the csp-* layer dirs on update; non-csp-* siblings
 // are left untouched, but we surface them so the update workflow can back
 // them up defensively. Returns POSIX-relative paths under the config dir.
-const CSP_LAYER_DIRS = new Set(['csp-router', 'csp-meta', 'csp-workflow', 'csp-patterns', 'csp-runtime']);
+const CSP_LAYER_DIRS = new Set(['csp-router', 'packages/csp-code/csp-meta', 'packages/csp-code/csp-workflow', 'packages/csp-code/csp-patterns', 'packages/csp-code/csp-runtime']);
 const SKILLS_SUBDIR_CANDIDATES = [
   'skills',            // claude-code, cursor (.cursor/skills), windsurf
   'code-skills-package', // direct install layout
@@ -184,7 +184,7 @@ function saveState(state) {
 
 // --- Lifecycle Drive Chain (enforced state machine) ---
 // Turns advisory skill handoff into enforced transitions: a stage cannot advance
-// until its gate (artifacts + commands) passes. See csp-workflow/references/lifecycle-contract.json.
+// until its gate (artifacts + commands) passes. See packages/csp-code/csp-workflow/references/lifecycle-contract.json.
 
 function loadContract() {
   const data = readJSON(contractPath(), null);
@@ -442,7 +442,7 @@ function driveNext() {
     stage: cur,
     stage_name: stageDef.name,
     skill_to_run: stageDef.skill,
-    skill_path_hint: `csp-workflow/skills/${stageDef.skill}/SKILL.md`,
+    skill_path_hint: `packages/csp-code/csp-workflow/skills/${stageDef.skill}/SKILL.md`,
     depends_on_resolved: deps,
     load_order: [...deps, stageDef.skill],
     gate,
@@ -512,7 +512,7 @@ function driveAdvance() {
     from: cur,
     to: nxt,
     next_skill: nxt ? getStageDef(contract, nxt)?.skill : null,
-    next_skill_path: nxt ? `csp-workflow/skills/${getStageDef(contract, nxt)?.skill}/SKILL.md` : null,
+    next_skill_path: nxt ? `packages/csp-code/csp-workflow/skills/${getStageDef(contract, nxt)?.skill}/SKILL.md` : null,
     instruction: nxt
       ? `Advanced to ${nxt}. Run \`csp-sdk query drive.next\` for the next skill load order.`
       : `Terminal stage reached. Milestone complete.`,
@@ -865,10 +865,10 @@ function getAgentSkills(agentName) {
   if (!agentName || /[./]/.test(agentName) || agentName.length > 100) {
     return { name: agentName || '', content: null, error: 'invalid_name' };
   }
-  // Search in csp-runtime/agents/ and csp-patterns/agents/
+  // Search in packages/csp-code/csp-runtime/agents/ and packages/csp-code/csp-patterns/agents/
   const searchDirs = [
-    join(PROJECT_ROOT, 'csp-runtime', 'agents'),
-    join(PROJECT_ROOT, 'csp-patterns', 'agents'),
+    join(PROJECT_ROOT, 'packages/csp-code/csp-runtime', 'agents'),
+    join(PROJECT_ROOT, 'packages/csp-code/csp-patterns', 'agents'),
   ];
   for (const dir of searchDirs) {
     const mdPath = join(dir, `${agentName}.md`);
@@ -1205,7 +1205,7 @@ Lifecycle drive chain (enforced skill handoff — IDE-agnostic):
     const skillName = name.startsWith('csp-') ? name : 'csp-' + name;
     if (!/^[a-z0-9-]+$/.test(skillName)) { err(`invalid skill name: ${skillName} (lowercase kebab only)`); process.exit(1); }
 
-    const layerDir = ({ '1': 'csp-meta/skills', '2': 'csp-workflow/skills', '3': 'csp-patterns/skills', '4': 'csp-runtime/skills' }[layer]);
+    const layerDir = ({ '1': 'packages/csp-code/csp-meta/skills', '2': 'packages/csp-code/csp-workflow/skills', '3': 'packages/csp-code/csp-patterns/skills', '4': 'packages/csp-code/csp-runtime/skills' }[layer]);
     if (!layerDir) { err(`invalid layer: ${layer} (1|2|3|4)`); process.exit(1); }
 
     const skillDir = join(PROJECT_ROOT, layerDir, skillName);

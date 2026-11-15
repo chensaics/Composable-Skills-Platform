@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(import.meta.dirname, '..');
-const SCRIPT = join(ROOT, 'csp-workflow/skills/csp-knowledge-hub/scripts/hub_manifest.sh');
+const SCRIPT = join(ROOT, 'packages/csp-code/packages/csp-code/csp-workflow/skills/csp-knowledge-hub/scripts/hub_manifest.sh');
 
 function run(args, opts = {}) {
   const env = { ...process.env, CSP_PROJECT_ROOT: opts.root };

@@ -11,10 +11,10 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(import.meta.dirname, '..');
-const CHECK_SH = join(ROOT, 'csp-patterns/skills/csp-account-research/scripts/check.sh');
-const TOOLKIT = join(ROOT, 'csp-patterns/skills/csp-account-research/references/shared/account_research_toolkit.py');
-const VISUALS = join(ROOT, 'csp-patterns/skills/csp-market-research/scripts/generate_market_visuals.py');
-const SKILL_DIR = join(ROOT, 'csp-patterns/skills/csp-account-research');
+const CHECK_SH = join(ROOT, 'packages/csp-code/csp-patterns/skills/csp-account-research/scripts/check.sh');
+const TOOLKIT = join(ROOT, 'packages/csp-code/csp-patterns/skills/csp-account-research/references/shared/account_research_toolkit.py');
+const VISUALS = join(ROOT, 'packages/csp-code/csp-patterns/skills/csp-market-research/scripts/generate_market_visuals.py');
+const SKILL_DIR = join(ROOT, 'packages/csp-code/csp-patterns/skills/csp-account-research');
 
 function runBash(script, args, opts = {}) {
   const env = { ...process.env, CSP_PROJECT_ROOT: opts.root };

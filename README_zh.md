@@ -16,7 +16,7 @@
 **可组合的多领域技能平台 — 从编程到创作、从商业到生活的全栈能力。**
 [![Platforms: 22+](https://img.shields.io/badge/platforms-22+-brightgreen)](./docs/guides/INSTALL.md)
 
-**统一 AI 编程技能 · 22+ 个平台 · 15+ 语言 · 358 Skills + 116 Agents + 154 Commands + 36 Workflows**
+**统一 AI 技能架构 · 22+ 个平台 · 15+ 语言 · 358 Skills + 116 Agents + 154 Commands + 36 Workflows**
 
 整合多个开源 AI 编程项目为分层自动路由框架，以极低的 token 成本完成复杂开发任务。
 
@@ -34,7 +34,7 @@
 
 </div>
 
-CSP（Code Skills Package）将多个开源 AI 编程项目的精华整合为一体化解决方案。它通过五层架构按需加载技能，配合置信度评分路由器和技能知识图谱，让 AI 编程助手在每次会话中只加载任务所需的最小 skill 集合。同时，CSP 会记忆用户的使用习惯和项目上下文，随着项目演进提供越来越精准的服务。710 个条目覆盖全栈开发、DevOps、安全审计等领域，并专为独立开发者提供部署运维、商业化运营、性能调优、国际化、Monorepo 管理等专项技能包，支持从 idea 到 production 的完整旅程。
+CSP（Composable Skills Platform）将多个开源 AI 编程项目的精华整合为一体化解决方案。它通过五层架构按需加载技能，配合置信度评分路由器和技能知识图谱，让 AI 编程助手在每次会话中只加载任务所需的最小 skill 集合。同时，CSP 会记忆用户的使用习惯和项目上下文，随着项目演进提供越来越精准的服务。710 个条目覆盖全栈开发、DevOps、安全审计等领域，并专为独立开发者提供部署运维、商业化运营、性能调优、国际化、Monorepo 管理等专项技能包，支持从 idea 到 production 的完整旅程。
 
 ## 核心亮点
 
@@ -167,7 +167,7 @@ cd /your/project && csp-install --platform cursor
 在项目 `CLAUDE.md` 中添加一行即可开始使用：
 
 ```markdown
-使用 CSP (Code Skills Package) 技能包。当用户给出任务时，先通过 csp-router 路由到合适的 skill 组合。
+使用 CSP (Composable Skills Platform) 技能包。当用户给出任务时，先通过 csp-router 路由到合适的 skill 组合。
 ```
 
 之后正常给 AI 下任务即可，路由器会自动工作：

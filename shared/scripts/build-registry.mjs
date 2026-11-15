@@ -17,10 +17,10 @@ const REGISTRY_OUTPUT = 'csp-router/registry.json';
 // ─── Layer mapping ───────────────────────────────────────────────────
 const LAYER_MAP = {
   'csp-router':   { layer: 0, category: 'router' },
-  'csp-meta':     { layer: 1, category: 'meta' },
-  'csp-workflow': { layer: 2, category: 'workflow' },
-  'csp-patterns': { layer: 3, category: 'patterns' },
-  'csp-runtime':  { layer: 4, category: 'runtime' },
+  'csp-meta':     { layer: 1, category: 'meta', root: 'packages/csp-code' },
+  'csp-workflow': { layer: 2, category: 'workflow', root: 'packages/csp-code' },
+  'csp-patterns': { layer: 3, category: 'patterns', root: 'packages/csp-code' },
+  'csp-runtime':  { layer: 4, category: 'runtime', root: 'packages/csp-code' },
 };
 
 function getLayerCategory(relPath) {
@@ -305,12 +305,12 @@ if (fs.existsSync('csp-router/SKILL.md')) {
 
 // 2. Skill directories (SKILL.md only, depth 2)
 for (const dir of [
-  'csp-meta/skills',
-  'csp-workflow/skills',
-  'csp-patterns/skills',
-  'csp-patterns/reviewers',
-  'csp-patterns/build-resolvers',
-  'csp-runtime/skills',
+  'packages/csp-code/csp-meta/skills',
+  'packages/csp-code/csp-workflow/skills',
+  'packages/csp-code/csp-patterns/skills',
+  'packages/csp-code/csp-patterns/reviewers',
+  'packages/csp-code/csp-patterns/build-resolvers',
+  'packages/csp-code/csp-runtime/skills',
 ]) {
   addEntries(scanSkillDir(dir));
 }

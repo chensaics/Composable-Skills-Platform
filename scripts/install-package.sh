@@ -34,7 +34,7 @@ declare -A PACKAGES=(
 
 # ── 子包→目录映射 ────────────────────────────────────────────
 declare -A PKG_DIRS=(
-  ["csp-code"]="csp-meta csp-workflow csp-patterns csp-runtime"
+  ["csp-code"]="packages/csp-code/csp-meta packages/csp-code/csp-workflow packages/csp-code/csp-patterns packages/csp-code/csp-runtime csp-router"
   ["csp-quality"]="packages/csp-quality/meta packages/csp-quality/workflow packages/csp-quality/patterns packages/csp-quality/runtime"
   ["csp-devops"]="packages/csp-devops/meta packages/csp-devops/workflow packages/csp-devops/patterns packages/csp-devops/runtime"
   ["csp-data"]="packages/csp-data/meta packages/csp-data/workflow packages/csp-data/patterns packages/csp-data/runtime"

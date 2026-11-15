@@ -56,10 +56,10 @@ packages:
       deps: ["csp-meta"]
 
     layers:
-      - { name: "L1 方法论", path: "csp-meta/", desc: "TDD, debugging, brainstorming" }
-      - { name: "L2 工作流", path: "csp-workflow/", desc: "plan → execute → verify → ship" }
-      - { name: "L3 模式", path: "csp-patterns/", desc: "语言/框架/DB 模式, reviewers, build" }
-      - { name: "L4 运行时", path: "csp-runtime/", desc: "autopilot, wiki, self-improve" }
+      - { name: "L1 方法论", path: "packages/csp-code/csp-meta/", desc: "TDD, debugging, brainstorming" }
+      - { name: "L2 工作流", path: "packages/csp-code/csp-workflow/", desc: "plan → execute → verify → ship" }
+      - { name: "L3 模式", path: "packages/csp-code/csp-patterns/", desc: "语言/框架/DB 模式, reviewers, build" }
+      - { name: "L4 运行时", path: "packages/csp-code/csp-runtime/", desc: "autopilot, wiki, self-improve" }
 
     skill_count: 550
     token_budget: ~1800

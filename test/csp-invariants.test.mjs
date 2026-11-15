@@ -185,9 +185,9 @@ function driveRoot() {
       { name: 'csp-requirement-decomposition', deps: ['csp-knowledge-hub'] },
     ]}));
   // contract: copy from repo so stages/gates stay in sync
-  mkdirSync(join(tmp, 'csp-workflow', 'references'), { recursive: true });
-  writeFileSync(join(tmp, 'csp-workflow', 'references', 'lifecycle-contract.json'),
-    readText('csp-workflow/references/lifecycle-contract.json'));
+  mkdirSync(join(tmp, 'packages/csp-code/csp-workflow', 'references'), { recursive: true });
+  writeFileSync(join(tmp, 'packages/csp-code/csp-workflow', 'references', 'lifecycle-contract.json'),
+    readText('packages/csp-code/csp-workflow/references/lifecycle-contract.json'));
   return tmp;
 }
 

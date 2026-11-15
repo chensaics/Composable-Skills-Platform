@@ -11,12 +11,12 @@
 
 <br>
 
-**面向一人公司与超级个体的 AI 技能操作系统。可组合的多领域技能平台。**
-
 **The AI capability operating system for one-person companies and independent builders.**
+
+**Composable Multi-Domain Skills Platform — Full-stack capabilities from code to creation, commerce to life.**
 [![Platforms: 22+](https://img.shields.io/badge/platforms-22+-brightgreen)](./docs/guides/INSTALL.md)
 
-**Unified AI Programming Skills · 22+ Platforms · 15+ Languages · 358 Skills + 116 Agents + 154 Commands + 36 Workflows**
+**Unified AI Skills Architecture · 22+ Platforms · 15+ Languages · 358 Skills + 116 Agents + 154 Commands + 36 Workflows**
 
 Integrates capabilities from multiple open-source AI coding projects into a layered, auto-routing framework with extremely low token costs to complete complex development tasks.
 
@@ -34,7 +34,7 @@ Integrates capabilities from multiple open-source AI coding projects into a laye
 
 </div>
 
-CSP (Code Skills Package) consolidates the essence of multiple open-source AI programming projects into an integrated solution. It uses a five-layer architecture to load skills on demand, with confidence scoring router and skill knowledge graph, allowing AI programming assistants to load only the minimum skill set required for each task during a session. At the same time, CSP remembers user usage habits and project context, providing increasingly accurate services as the project evolves. With 710 entries spanning full-stack development, DevOps, security, and a dedicated indie developer toolkit covering deployment, monetization, performance, and more, CSP supports the complete journey from idea to production.
+CSP (Composable Skills Platform) consolidates the essence of multiple open-source AI programming projects into an integrated solution. It uses a five-layer architecture to load skills on demand, with confidence scoring router and skill knowledge graph, allowing AI programming assistants to load only the minimum skill set required for each task during a session. At the same time, CSP remembers user usage habits and project context, providing increasingly accurate services as the project evolves. With 710 entries spanning full-stack development, DevOps, security, and a dedicated indie developer toolkit covering deployment, monetization, performance, and more, CSP supports the complete journey from idea to production.
 
 ## Core Features
 

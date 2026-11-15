@@ -10,7 +10,7 @@ CSP 项目文档导航中枢。
 |------|------|------|
 | [architecture/](architecture/INDEX.md) | 架构设计、系统地图、衔接标准 | [ARCHITECTURE_zh.md](architecture/ARCHITECTURE_zh.md) |
 | [guides/](guides/INDEX.md) | 安装、使用、更新、贡献、技能编写指南 | [USER-GUIDE.md](guides/USER-GUIDE.md) |
-| [reference/](reference/INDEX.md) | 技能索引、技能规范、版本管理规则 | [SKILL-INDEX.md](reference/SKILL-INDEX.md) |
+| [reference/](reference/INDEX.md) | 技能索引、技能规范、版本管理、上游项目 | [SKILL-INDEX.md](reference/SKILL-INDEX.md) |
 | [reports/](reports/INDEX.md) | 项目审查、功能矩阵、案例分析 | [FEATURES.md](reports/FEATURES.md) |
 | [analysis/](analysis/INDEX.md) | 能力地图、对齐检查清单 | [skill-layer-capability-map.md](analysis/skill-layer-capability-map.md) |
 | [archive/](archive/INDEX.md) | 历史版本文档快照 | — |
@@ -23,6 +23,7 @@ CSP 项目文档导航中枢。
 - [如何贡献](guides/SKILL-AUTHORING_zh.md)
 - [技能规范](reference/SKILL-SPEC.md)
 - [版本管理](reference/VERSIONING.md)
+- [上游项目](reference/UPSTREAM-PROJECTS.md)
 
 ## 文档组织说明
 

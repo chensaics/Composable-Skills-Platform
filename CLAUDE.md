@@ -6,10 +6,10 @@
 
 ```
 L0  csp-router    — task classification + skill selection (always loaded, ~800 tokens)
-L1  csp-meta      — methodology: brainstorming, TDD, debugging, spec-driven (27 entries)
-L2  csp-workflow  — project lifecycle: plan → execute → verify → ship (206 entries)
-L3  csp-patterns  — language/framework patterns, reviewers, build-resolvers (419 entries)
-L4  csp-runtime   — autopilot, ralph, wiki, remember, self-improve (57 entries)
+L1  packages/csp-code/csp-meta      — methodology: brainstorming, TDD, debugging, spec-driven (27 entries)
+L2  packages/csp-code/csp-workflow  — project lifecycle: plan → execute → verify → ship (206 entries)
+L3  packages/csp-code/csp-patterns  — language/framework patterns, reviewers, build-resolvers (419 entries)
+L4  packages/csp-code/csp-runtime   — autopilot, ralph, wiki, remember, self-improve (57 entries)
 Total: 716 entries across 5 layers (2 deprecated, carry redirect targets)
 ```
 

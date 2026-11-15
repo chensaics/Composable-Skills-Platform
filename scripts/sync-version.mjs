@@ -25,8 +25,8 @@ const TARGETS = [
   },
   {
     path: 'CLAUDE.md',
-    match: /^# CSP — Code Skills Package v[0-9]+\.[0-9]+\.[0-9]+/m,
-    replace: (v) => `# CSP — Code Skills Package v${v}`,
+    match: /^# CSP — Composable Skills Platform v[0-9]+\.[0-9]+\.[0-9]+/m,
+    replace: (v) => `# CSP — Composable Skills Platform v${v}`,
     extract: (m) => m[0].match(/v[0-9.]+$/)[0].slice(1),
   },
   {
