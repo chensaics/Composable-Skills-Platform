@@ -372,6 +372,94 @@ packages:
     skill_count: 0
     token_budget: ~400
 
+  # ── Data: 数据分析/数据科学 ──
+  - id: csp-data
+    name: "CSP Data — 数据分析引擎"
+    description: "数据科学/数据工程/可视化/SQL/BI：从采集到洞察的完整数据技能"
+    package_name: "@csp/data"
+    repo: "maythyai/csp-data"
+    install_commands:
+      npx: "npx skills add maythyai/csp-data"
+      claude: "/plugin marketplace add maythyai/csp-data"
+
+    domains:
+      data_science:
+        keywords: ["数据科学", "机器学习", "特征工程", "模型训练", "预测", "分类", "聚类", "推荐系统", "NLP"]
+        weight: 85
+      data_engineering:
+        keywords: ["数据工程", "ETL", "数据管道", "数据仓库", "数据湖", "Airflow", "dbt", "Spark"]
+        weight: 80
+      sql:
+        keywords: ["SQL", "查询", "PostgreSQL", "MySQL", "BigQuery", "ClickHouse", "窗口函数", "JOIN"]
+        weight: 85
+      visualization:
+        keywords: ["可视化", "图表", "仪表盘", "Tableau", "Metabase", "Superset", "ECharts", "D3", "Plotly"]
+        weight: 75
+      bi:
+        keywords: ["BI", "商业智能", "报表", "自助分析", "下钻", "OLAP", "数据看板", "指标"]
+        weight: 70
+
+    layers:
+      - name: "L1 Data Meta"
+        path: "data-meta/"
+        description: "数据方法论：CRISP-DM, 数据质量框架, 统计思维"
+      - name: "L2 Data Workflow"
+        path: "data-workflow/"
+        description: "数据流水线：ingest → clean → model → visualize → communicate"
+      - name: "L3 Data Patterns"
+        path: "data-patterns/"
+        description: "工具链：pandas/polars, scikit-learn, dbt, Airflow, Superset"
+      - name: "L4 Data Runtime"
+        path: "data-runtime/"
+        description: "自动报表、数据质量监控、异常检测、定时分析"
+
+    skill_count: 0
+    token_budget: ~500
+
+  # ── Automation: 工具与自动化 ──
+  - id: csp-automation
+    name: "CSP Automation — 自动化工作台"
+    description: "无代码自动化/工作流编排/API 集成/webhook/定时任务：让机器人替你干活"
+    package_name: "@csp/automation"
+    repo: "maythyai/csp-automation"
+    install_commands:
+      npx: "npx skills add maythyai/csp-automation"
+      claude: "/plugin marketplace add maythyai/csp-automation"
+
+    domains:
+      no_code:
+        keywords: ["无代码", "自动化", "Zapier", "n8n", "Make", "Integromat", "IFTTT", "低代码"]
+        weight: 85
+      workflow:
+        keywords: ["工作流", "编排", "审批流", "自动化流程", "触发器", "条件判断", "循环"]
+        weight: 80
+      integration:
+        keywords: ["API集成", "webhook", "对接", "数据同步", "通知推送", "Slack", "钉钉", "飞书"]
+        weight: 80
+      scheduler:
+        keywords: ["定时任务", "cron", "调度", "定期执行", "批量处理", "轮询"]
+        weight: 75
+      scraping:
+        keywords: ["爬虫", "抓取", "数据采集", "BeautifulSoup", "Puppeteer", "Playwright", "Scrapy", "RSS"]
+        weight: 70
+
+    layers:
+      - name: "L1 Automation Meta"
+        path: "automation-meta/"
+        description: "自动化方法论：事件驱动、声明式配置、幂等设计"
+      - name: "L2 Automation Workflow"
+        path: "automation-workflow/"
+        description: "自动化流水线：trigger → condition → action → log → retry"
+      - name: "L3 Automation Patterns"
+        path: "automation-patterns/"
+        description: "工具链：Zapier/n8n/Make/Pipedream、GitHub Actions/Scheduled Tasks"
+      - name: "L4 Automation Runtime"
+        path: "automation-runtime/"
+        description: "自动监控、异常重试、执行日志、通知告警"
+
+    skill_count: 0
+    token_budget: ~500
+
   # ── Finance: 财务/投资 ──
   - id: csp-finance
     name: "CSP Finance — AI 财务管家"
@@ -442,6 +530,12 @@ decision_matrix:
     - when: "marketing + business domain > 0.5"
       route_to: "csp-business"
       reason: "商业类任务由 business 处理"
+    - when: "data_science + sql + visualization domain > 0.5"
+      route_to: "csp-data"
+      reason: "数据分析类任务由 data 处理"
+    - when: "no_code + workflow + integration domain > 0.5"
+      route_to: "csp-automation"
+      reason: "自动化类任务由 automation 处理"
     - when: "ui_ux + brand + print domain > 0.5"
       route_to: "csp-design"
       reason: "设计类任务由 design 处理"
