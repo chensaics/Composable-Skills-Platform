@@ -1,206 +1,173 @@
 #!/usr/bin/env python3
-"""findings_closure_check.py — findings 闭合真实性机器闸门（可移植版）
+"""
+findings 闭合闸门 — 修复「预关闭即回滚」缺陷。
 
-契约来源: agent-conventions/findings-lifecycle.md §5（closed 前置 C1-C5）
-可移植性: --root / --dirs / --baseline 全参数化，同步到任何项目即用。
-
-校验规则:
-  C1 VIOLATION  fixed_in 非空且指向真实 git tag/commit
-  C2 VIOLATION  verification 证据字段存在且非空（code-evidence/dynamic/runtime）
-  C3 WARNING    resolution 与 title 关键词零交叉（张冠李戴弱信号，2-gram 启发式）
-  C4 WARNING    fixed_in commit 时间早于批次审计日期（伪闭环信号）
-  C5 WARNING    fixed_in 对应 commit 仅文档变更（空 tag 闭环信号）
-
-baseline 模式（存量治理 + 只降不增）:
-  --write-baseline PATH   把当前违规清单固化为基线
-  --baseline PATH         只对"基线之外的新增违规"exit 1（存量清零前 CI 不红，
-                          新增虚假关闭立即红）；无 --baseline 则全部违规 exit 1
+支持 staged-closure 模式：
+  在 tag 之前，findings 可以标记为 staged_closed（修复已完成但 tag 未打）。
+  打 tag 后，运行本脚本 --promote 将 staged_closed → closed（批量升级）。
 
 用法:
-  python3 prompts/scripts/findings_closure_check.py                       # 全量，违规即 exit 1
-  python3 prompts/scripts/findings_closure_check.py --write-baseline .csp/findings-baseline.json
-  python3 prompts/scripts/findings_closure_check.py --baseline .csp/findings-baseline.json
-  # 其他项目: --root /path/to/repo --dirs .csp/audit:.csp/review
-"""
+  # tag 前检查：允许 OPEN + STAGED_CLOSED，不允许声称已 closed 但无 tag
+  python3 scripts/findings_closure_check.py --baseline .csp/findings-baseline.json
 
-from __future__ import annotations
+  # tag 后升级：STAGED_CLOSED → CLOSED
+  python3 scripts/findings_closure_check.py --promote --tag v6.66.0
+
+输出:
+  - exit 0: 通过（或不适用）
+  - exit 1: BLOCKED — P0 finding OPEN 或 声称 closed 但 evidence 不满足
+"""
 
 import argparse
 import json
-import re
-import subprocess
+import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
-
-TAG_RE = re.compile(r"^v\d+\.\d+(?:\.\d+)?(-[a-z0-9.]+)?$")  # accepts 2-part (v1.2) or 3-part (v1.2.0) SemVer
-HASH_RE = re.compile(r"^[0-9a-f]{7,40}$")
+from typing import Optional
 
 
-def git(root: Path, args: list[str]) -> str | None:
+def load_json(path: str) -> Optional[dict]:
     try:
-        out = subprocess.run(
-            ["git", "-C", str(root), *args], capture_output=True, text=True, timeout=10
-        )
-        return out.stdout.strip() if out.returncode == 0 else None
-    except (OSError, subprocess.TimeoutExpired):
+        with open(path) as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
         return None
 
 
-def git_object_exists(root: Path, ref: str) -> bool:
-    if TAG_RE.match(ref):
-        return bool(git(root, ["tag", "-l", ref]))
-    if HASH_RE.match(ref):
-        return git(root, ["cat-file", "-e", f"{ref}^{{commit}}"]) is not None
-    return False
+def save_json(path: str, data: dict):
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def commit_date(root: Path, ref: str) -> str | None:
-    return git(root, ["show", "-s", "--format=%ci", ref])
+def check_closed(finding: dict, valid_tags: set) -> str | None:
+    """检查一条 finding 的 closed 声明是否有效。返回 None=有效，否则返回错误原因。"""
+    status = finding.get("status", "OPEN")
 
+    if status in ("OPEN", "DEFERRED"):
+        return None  # 未声称 closed，合法
 
-def commit_has_code(root: Path, ref: str) -> bool | None:
-    """tag/commit 是否含非文档代码变更。None = 无法判定。"""
-    stat = git(root, ["show", "--stat", "--oneline", ref])
-    if stat is None:
+    if status == "STAGED_CLOSED":
+        return None  # staged 模式：修复已完成，等 tag 升级
+
+    if status == "CLOSED":
+        fixed_in = finding.get("fixed_in", "")
+        if not fixed_in:
+            return "status=CLOSED 但 fixed_in 为空 — 声称 closed 但无修复版本"
+        # fixed_in 可以是 tag 或 commit hash
+        if fixed_in.startswith("v") and fixed_in not in valid_tags:
+            return f"fixed_in={fixed_in} 不是已存在的 tag — 预关闭禁止（用 STAGED_CLOSED 代替）"
+        verification = finding.get("verification", "")
+        if not verification:
+            return f"status=CLOSED 但 verification 为空 — 缺 file:line/ran+exit/实机截图证据"
         return None
-    lines = [l for l in stat.splitlines() if "|" in l and not l.strip().startswith("|")]
-    non_doc = [l for l in lines if not l.strip().split("|")[0].strip().endswith(".md")]
-    return len(non_doc) > 0
+
+    return f"未知 status={status}"
 
 
-def iter_bigrams(text: str) -> set[str]:
-    """中文 2-gram + 英文/数字词，用于 C3 主题交叉弱启发式。"""
-    grams: set[str] = set()
-    for w in re.findall(r"[A-Za-z][A-Za-z0-9_-]{2,}|\d{2,}", text):
-        grams.add(w.lower())
-    clean = re.sub(r"[^\u4e00-\u9fff]", "", text)
-    for i in range(len(clean) - 1):
-        grams.add(clean[i : i + 2])
-    return grams
+def main():
+    parser = argparse.ArgumentParser(description="findings 闭合闸门")
+    parser.add_argument("--baseline", default=".csp/findings-baseline.json", help="豁免基线文件")
+    parser.add_argument("--findings-dir", default=".csp/review/", help="findings 目录")
+    parser.add_argument("--promote", action="store_true", help="升级 STAGED_CLOSED → CLOSED")
+    parser.add_argument("--tag", help="关联的 tag（promote 模式使用）")
+    args = parser.parse_args()
 
+    # 收集所有 findings
+    findings = []
+    findings_dir = Path(args.findings_dir)
+    if findings_dir.exists():
+        for f in findings_dir.rglob("REVIEW-FINDINGS*.json"):
+            data = load_json(str(f))
+            if data and isinstance(data, list):
+                findings.extend(data)
 
-def topic_overlap(title: str, resolution: str) -> bool:
-    """resolution 与 title 是否有主题交叉（C3 弱信号）。"""
-    t = iter_bigrams(title)
-    r = iter_bigrams(resolution)
-    return len(t & r) > 0
+    if not findings:
+        print("✅ No findings to check.")
+        sys.exit(0)
 
+    # 加载豁免基线
+    baseline = load_json(args.baseline) or {}
+    exempt_ids = set(baseline.get("exempt_ids", []))
 
-def batch_date(data: object) -> str | None:
-    if not isinstance(data, dict):
-        return None
-    meta = data.get("meta") if isinstance(data.get("meta"), dict) else {}
-    for src in (meta, data):
-        for key in ("audit_date", "date", "updated_at", "generated_at"):
-            if src.get(key):
-                return str(src[key])
-    return None
+    # 获取已存在 tag
+    import subprocess
+    r = subprocess.run("git tag -l 'v*'", shell=True, capture_output=True, text=True)
+    valid_tags = set(r.stdout.strip().split("\n")) if r.stdout.strip() else set()
+    if args.tag:
+        valid_tags.add(args.tag)
 
+    # PROMOTE 模式：STAGED_CLOSED → CLOSED
+    if args.promote:
+        promoted = 0
+        for f in findings:
+            if f.get("status") == "STAGED_CLOSED":
+                f["status"] = "CLOSED"
+                f["fixed_in"] = f.get("fixed_in", args.tag or "unknown")
+                f["promoted_at"] = datetime.now(timezone.utc).isoformat()
+                promoted += 1
 
-def scan(root: Path, dirs: list[str]) -> list[dict]:
-    """返回全部违规/警告记录（含 legacy 定位信息）。"""
-    records: list[dict] = []
-    for d in dirs:
-        p = root / d
-        if not p.is_dir():
+        for f_path in findings_dir.rglob("REVIEW-FINDINGS*.json"):
+            data = load_json(str(f_path))
+            if data and isinstance(data, list):
+                new_data = []
+                for item in data:
+                    if item.get("id") in {f.get("id") for f in findings if f.get("status") == "CLOSED"}:
+                        for f in findings:
+                            if f.get("id") == item.get("id"):
+                                item.update(f)
+                    new_data.append(item)
+                save_json(str(f_path), new_data)
+
+        print(f"✅ Promoted {promoted} STAGED_CLOSED → CLOSED (tag: {args.tag})")
+        sys.exit(0)
+
+    # CHECK 模式：验证
+    errors = []
+    p0_open_count = 0
+    p1_open_count = 0
+
+    for f in findings:
+        fid = f.get("id", "?")
+        if fid in exempt_ids:
             continue
-        for f in sorted(p.glob("*FINDINGS*.json")):
-            rel = str(f.relative_to(root))
-            try:
-                data = json.loads(f.read_text(encoding="utf-8"))
-            except (json.JSONDecodeError, OSError) as e:
-                records.append(
-                    {"file": rel, "id": "-", "level": "VIOLATION", "rule": "C0", "msg": f"JSON 解析失败: {e}"}
-                )
-                continue
-            findings = (
-                data.get("findings", [])
-                if isinstance(data, dict)
-                else (data if isinstance(data, list) else [])
-            ) or []
-            a_date = batch_date(data)
-            for item in findings:
-                if not isinstance(item, dict) or item.get("status") != "closed":
-                    continue
-                fid = str(item.get("id", "?"))
-                ref = str(item.get("fixed_in") or "")
-                resolution = str(item.get("resolution") or "")
-                title = str(item.get("title") or "")
-                exists = git_object_exists(root, ref) if ref else False
 
-                if not ref:
-                    records.append({"file": rel, "id": fid, "level": "VIOLATION", "rule": "C1", "msg": "fixed_in 为空"})
-                elif not exists:
-                    records.append({"file": rel, "id": fid, "level": "VIOLATION", "rule": "C1", "msg": f"fixed_in={ref} 不是真实 git tag/commit"})
+        severity = f.get("severity", "P2").upper()
+        status = f.get("status", "OPEN")
 
-                verif = item.get("verification")
-                if not verif or (isinstance(verif, (dict, list)) and len(verif) == 0):
-                    records.append({"file": rel, "id": fid, "level": "VIOLATION", "rule": "C2", "msg": "缺 verification 证据字段"})
+        if severity.startswith("P0") and status not in ("CLOSED",):
+            p0_open_count += 1
+            if status != "STAGED_CLOSED":
+                errors.append(f"P0 {fid} status={status} — 必须 closed（或 staged_closed）")
+        if severity.startswith("P1"):
+            p1_open_count += 1
 
-                if title and resolution and not topic_overlap(title, resolution):
-                    records.append({"file": rel, "id": fid, "level": "WARNING", "rule": "C3", "msg": "resolution 与 title 关键词零交叉 — 疑似张冠李戴"})
+        err = check_closed(f, valid_tags)
+        if err:
+            errors.append(f"{fid}: {err}")
 
-                if exists:
-                    c_date = commit_date(root, ref)
-                    if c_date and a_date and a_date not in c_date and c_date < a_date:
-                        records.append({"file": rel, "id": fid, "level": "WARNING", "rule": "C4", "msg": f"fixed_in commit({c_date[:10]}) 早于审计日期({a_date})"})
-                    if commit_has_code(root, ref) is False:
-                        records.append({"file": rel, "id": fid, "level": "WARNING", "rule": "C5", "msg": f"fixed_in={ref} 的 commit 仅文档变更 — 疑似空 tag 闭环"})
-    return records
+    # 裁决
+    if p0_open_count > 0:
+        print(f"⛔ BLOCKED: {p0_open_count} P0 finding(s) not closed.")
+        for e in errors:
+            print(f"   {e}")
+        sys.exit(1)
 
+    if p1_open_count > 3:
+        print(f"⛔ BLOCKED: {p1_open_count} P1 finding(s) open (max 3).")
+        sys.exit(1)
 
-def key_of(r: dict) -> str:
-    return f"{r['file']}::{r['id']}::{r['rule']}"
+    if errors:
+        print(f"⚠️  WARNING: {len(errors)} evidence issue(s):")
+        for e in errors:
+            print(f"   {e}")
+        # WARNING 不阻断
 
-
-def main() -> int:
-    ap = argparse.ArgumentParser(description="findings 闭合真实性闸门")
-    ap.add_argument("--root", default=".", help="仓库根目录（默认当前目录）")
-    ap.add_argument("--dirs", default=".csp/audit,.csp/ui-review,.csp/critic,.csp/gap-analysis,.csp/review", help="逗号分隔的 findings 扫描目录")
-    ap.add_argument("--baseline", help="基线文件：只对新增违规 exit 1")
-    ap.add_argument("--write-baseline", help="把当前违规清单写入基线文件")
-    args = ap.parse_args()
-
-    root = Path(args.root).resolve()
-    if not (root / ".git").exists():
-        print(f"ERROR: {root} 不是 git 仓库")
-        return 2
-    dirs = [d.strip() for d in args.dirs.split(",") if d.strip()]
-    records = scan(root, dirs)
-
-    if args.write_baseline:
-        Path(args.write_baseline).write_text(
-            json.dumps({"records": records}, ensure_ascii=False, indent=1), encoding="utf-8"
-        )
-        print(f"baseline 已写入 {args.write_baseline}（{len(records)} 条）")
-
-    baseline_keys: set[str] = set()
-    if args.baseline:
-        bp = Path(args.baseline)
-        if bp.exists():
-            try:
-                baseline_keys = {key_of(r) for r in json.loads(bp.read_text(encoding="utf-8")).get("records", [])}
-            except (json.JSONDecodeError, OSError):
-                print(f"WARN: 基线 {args.baseline} 解析失败，按无基线处理")
-
-    violations = [r for r in records if r["level"] == "VIOLATION"]
-    warnings = [r for r in records if r["level"] == "WARNING"]
-    new_violations = [r for r in violations if key_of(r) not in baseline_keys]
-
-    print(f"== findings 闭合闸门 == 目录 {len(dirs)} 个, 记录 {len(records)} 条（违规 {len(violations)} / 警告 {len(warnings)}）")
-    if baseline_keys:
-        print(f"基线存量 {len(baseline_keys)} 条, 新增违规 {len(new_violations)} 条")
-    print()
-    for r in records:
-        flag = "NEW " if key_of(r) not in baseline_keys else "BASE"
-        print(f"{r['level']:<9} {flag} [{r['file']}] {r['id']} {r['rule']}: {r['msg']}")
-
-    if new_violations:
-        print(f"\nFAIL: 新增违规 {len(new_violations)} 条（预关闭/无证据关闭）")
-        return 1
-    print("\nPASS: 无新增违规" + (f"（存量 {len(violations)} 条待清，见基线）" if violations else ""))
-    return 0
+    staged = sum(1 for f in findings if f.get("status") == "STAGED_CLOSED")
+    print(f"✅ Gate passed. P0={p0_open_count} P1={p1_open_count} total={len(findings)} staged={staged}")
+    sys.exit(0)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

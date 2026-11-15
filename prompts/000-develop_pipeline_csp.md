@@ -102,16 +102,9 @@ Layer 4: Spec (technical)    ← 03 产出: .csp/planning/spec.md + .csp/tech-de
 循环收敛：06 未过按根因回 05/03 修 delta 重验，循环到全绿；超 5 轮再报我。跨版本熔断：连续 3 个版本因同一根因失败，暂停并报我，附根因证据链。
 
 06 done 硬定义（由 [[workflow:csp-release-manager]] 执行全流程，详见 prompts/06-verify-ship.md，任一不满足即 06 未过）：
-- **G-11 Tag 前置门控**（打 annotated tag 前必须五项全绿，缺一项禁止打 tag）：
-  ```
-  ruff check --statistics    → exit 0, 0 violations
-  mypy <src>                 → exit 0
-  pytest --maxfail=0         → exit 0
-  vitest run                 → exit 0
-  tsc --noEmit               → exit 0
-  ```
-  五项全部 exit 0 → 允许 `git tag -a vX.Y.Z`。任一项 non-zero → BLOCKED，修到全绿再 tag。
-  V-03 证据链：每条门控声明必须附带 `ran: <cmd> exit <code>` 格式证据。06 gate 实测验证声明值——声称"ruff 16→0"但实测 1472 条 → BLOCKED。
+- **G-11 Tag 前置门控**（打 annotated tag 前必须六项全绿，缺一项禁止打 tag）：
+  执行: `python3 prompts/scripts/tag_gate.py --tag vX.Y.Z --json`
+  （自动检测项目技术栈，六项逐一 ran+exit 证据。全部 exit 0 → PASS，任一项 non-zero → BLOCKED）
 
 - S6 质量门控全 ran（附命令+exit code 证据，禁止 not-run 降级）：
   Check 1: 测试 → [[workflow:csp-verify-phase]] Check 1
@@ -145,6 +138,8 @@ Layer 4: Spec (technical)    ← 03 产出: .csp/planning/spec.md + .csp/tech-de
 - 跨层集成验证 → [[pattern:csp-integration-review]]（11 场景全栈契约审查）
 - 7.6 对账 reconciled=true（含 findings 闭合闸门 exit 0）
   → `python3 prompts/scripts/findings_closure_check.py --baseline .csp/findings-baseline.json`
+- **Tag 后 findings 升级**: `python3 prompts/scripts/findings_closure_check.py --promote --tag vX.Y.Z`
+  （STAGED_CLOSED → CLOSED。tag 前标记 staged，tag 后批量升级——解决"预关闭回滚"缺陷）
 - 版本对齐：按本项目真源传实际存在的 `--files` 运行 `python3 prompts/scripts/version_integrity_check.py --files <...> --baseline .csp/version-baseline.json`。脚本当前只实现 T1–T4；缺文件为 WARNING，存量基线可豁免旧违规，不得因此声称 T5/T6、所有来源、Release 或线上版本已自动校验。发布/部署状态另以远端 Release 与运行环境证据核对
 - 归档完成 → [[workflow:csp-ship]] + 里程碑归档
 - 文档结构维护 → [[workflow:csp-documentation-governance]]（对外/对内文档分界 + 更新触发规则）
