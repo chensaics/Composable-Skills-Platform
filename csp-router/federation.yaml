@@ -1,588 +1,315 @@
-# CSP Federation Registry — 联邦路由注册表
-# 
-# 本文件定义 CSP 联邦体系中的所有子包（package），每个子包可独立安装。
-# csp-router 作为联邦路由层，根据用户意图自动探测 → 路由到对应子包 → 
+# CSP Federation Registry — 联邦路由注册表 v0.2.0
+#
+# 本文件定义 CSP 联邦体系中的所有子包，每个子包可独立安装。
+# csp-router 作为联邦路由层，根据用户意图自动探测 → 路由到对应子包 →
 # 子包缺失时提示安装。
+#
+# 核心设计原则：
+#   CSP skills 是"链接器"(Connector)，不是"构建器"(Builder)。
+#   - ✅ 通过 Notion API 同步知识库条目
+#   - ❌ 构建一个 Notion 克隆
+#   - ✅ 通过 WeCom API 发送企业微信消息
+#   - ❌ 构建一个企业微信客户端
+#   - ✅ 通过 Stripe API 管理订阅
+#   - ❌ 构建一个支付网关
 
 version: "1.0.0"
-federation_version: "0.1.0"
+federation_version: "0.2.0"
 
 # ── 联邦路由规则 ──────────────────────────────────────────────
 routing:
-  # 策略：先本地 skills 匹配（L0→L4），无匹配时查 federation
   strategy: local_first_then_federal
-  # 子包未安装时的行为
   on_missing_package:
-    action: suggest_install  # 提示用户安装，不静默跳过
+    action: suggest_install
     message_template: >
-      🔍 检测到你的任务属于 {package_name} 领域（{domain}），但你还没有安装它。
-      
-      一键安装：{install_command}
-      
-      这个包包含 {skill_count} 个技能，覆盖 {domains}。
-      安装后我会自动路由到对应的 skill。
+      🔍 检测到你的任务属于 {name} 领域。
 
-# ── 联邦子包注册 ──────────────────────────────────────────────
+      一键安装：{install_command}
+
+      包含 {skill_count} 个技能，覆盖 {domains}。
+      安装后自动路由到对应 skill。
+
+# ── 联邦子包注册（12 包）──────────────────────────────────────
 packages:
-  # ── Meta: 联邦核心引擎（必装，所有包共享）──
+
+  # ── 1. Meta: Agent 自进化引擎（必装基座）──
   - id: csp-meta
-    name: "CSP Meta — 联邦核心引擎"
-    description: "路由器 + 生命周期编排 + 技能蒸馏 + SKPG。所有子包共享的基础设施。**安装任何 CSP 子包时自动安装。**"
+    name: "CSP Meta · Agent 自进化"
+    description: "路由器 + 生命周期编排 + 技能蒸馏 + 联邦路由。所有子包的共同基座，安装任一子包时自动安装。"
     package_name: "@csp/meta"
-    repo: "maythyai/code-skills-package"   # 与 csp-code 同仓库，路由层共享
+    repo: "maythyai/code-skills-package"
+    auto_install: true
     install_commands:
       npx: "npx skills add maythyai/code-skills-package"
       claude: "/plugin marketplace add maythyai/code-skills-package"
-      manual: "git clone https://github.com/maythyai/code-skills-package.git"
-    auto_install: true  # 安装任何其他子包时自动安装
-
     domains:
-      meta:
-        keywords: ["skill", "技能", "路由", "编排", "lifecycle", "蒸馏", "distill"]
-        weight: 50  # 不高权重——meta 不抢路由，靠 auto_install 保证存在
-
-    layers:
-      - name: "L0 Router"
-        path: "csp-router/"
-        description: "任务分类 + skill 自动路由 + 联邦路由"
-      - name: "L0 Federation"
-        path: "csp-router/federation.yaml"
-        description: "联邦路由注册表"
-      - name: "L0 SKPG"
-        path: "csp-router/skpg/"
-        description: "技能知识图谱"
-
-    skill_count: 5  # router + federation + distiller 等核心部件
+      meta:  { keywords: ["路由", "编排", "lifecycle", "蒸馏", "distill", "联邦"], weight: 50 }
+    skill_count: 8
     token_budget: ~2000
 
-  # ── Code: 编程全链路 ──
+  # ── 2. Code: 代码开发 ──
   - id: csp-code
-    name: "CSP Code — 编程全链路"
-    description: "从需求到上线的完整编程技能：语言/框架模式、reviewers、测试、安全、DevOps。**纯编程技能——不含产品管理和设计技能。**"
+    name: "CSP Code · 代码开发"
+    description: "全栈编程：语言模式、框架、API 设计、后端、前端、移动端。Skills 链接 VS Code/JetBrains/Git 等开发工具。"
     package_name: "@csp/code"
     repo: "maythyai/code-skills-package"
     install_commands:
       npx: "npx skills add maythyai/code-skills-package"
       claude: "/plugin marketplace add maythyai/code-skills-package"
-      manual: "git clone https://github.com/maythyai/code-skills-package.git"
-    # csp-code 是当前 CSP 仓库的直接延续
-    # 与 csp-meta 同仓库（router 共享），未来可拆出独立仓库
-
     domains:
-      programming:
-        keywords: ["代码", "开发", "编程", "debug", "TDD", "API", "数据库", "前端", "后端",
-                   "Python", "JavaScript", "TypeScript", "Go", "Rust", "Java", "React", "Vue"]
-        weight: 100
-      devops:
-        keywords: ["部署", "CI/CD", "K8s", "Docker", "服务器", "运维", "监控", "日志"]
-        weight: 80
-      security:
-        keywords: ["安全", "漏洞", "渗透", "注入", "XSS", "CSRF", "加密", "认证"]
-        weight: 75
-      testing:
-        keywords: ["测试", "单测", "E2E", "pytest", "vitest", "覆盖率", "mock"]
-        weight: 85
-      architecture:
-        keywords: ["架构", "设计模式", "系统设计", "微服务", "重构", "DDD"]
-        weight: 70
+      programming: { keywords: ["代码","开发","编程","Python","JavaScript","TypeScript","Go","Rust","Java","React","Vue","Next.js","FastAPI","API设计","后端","前端","移动端","iOS","Android"], weight: 100 }
+      architecture: { keywords: ["架构","设计模式","系统设计","微服务","DDD","重构"], weight: 70 }
+      deps: ["csp-meta"]
 
     layers:
-      - name: "L1 Methodology"
-        path: "csp-meta/"
-        description: "TDD, debugging, brainstorming, spec-driven"
-      - name: "L2 Workflow"
-        path: "csp-workflow/"
-        description: "项目生命周期：plan → execute → verify → ship"
-      - name: "L3 Patterns"
-        path: "csp-patterns/"
-        description: "语言/框架/DB 模式、reviewers、build-resolvers"
-      - name: "L4 Runtime"
-        path: "csp-runtime/"
-        description: "autopilot, wiki, remember, self-improve"
+      - { name: "L1 方法论", path: "csp-meta/", desc: "TDD, debugging, brainstorming" }
+      - { name: "L2 工作流", path: "csp-workflow/", desc: "plan → execute → verify → ship" }
+      - { name: "L3 模式", path: "csp-patterns/", desc: "语言/框架/DB 模式, reviewers, build" }
+      - { name: "L4 运行时", path: "csp-runtime/", desc: "autopilot, wiki, self-improve" }
 
-    skill_count: 600  # 约 716 - 产品/设计相关技能
-    token_budget: ~2000
+    skill_count: 550
+    token_budget: ~1800
 
-  # ── Product: 产品管理 ──
-  - id: csp-product
-    name: "CSP Product — 产品管理引擎"
-    description: "PRD 生成/路线图/需求拆解/Spec 契约/产品说明书。从想法到可执行需求的产品管理全链路。**从 csp-code 中拆分出来的独立包。**"
-    package_name: "@csp/product"
-    repo: "maythyai/csp-product"
+  # ── 3. Quality: 测试与安全 + 代码评审 ──
+  - id: csp-quality
+    name: "CSP Quality · 测试与安全"
+    description: "测试(单测/集成/E2E/性能) + 安全(审计/渗透/合规) + 代码评审(CR/编码规范/技术债)。Skills 链接 SonarQube/Snyk/CI 等质量工具。"
+    package_name: "@csp/quality"
+    repo: "maythyai/csp-quality"
     install_commands:
-      npx: "npx skills add maythyai/csp-product"
-      claude: "/plugin marketplace add maythyai/csp-product"
-    # 来源：从 csp-code（原 csp-core）中提取 product/PRD/roadmap/spec 相关技能
-
+      npx: "npx skills add maythyai/csp-quality"
+      claude: "/plugin marketplace add maythyai/csp-quality"
     domains:
-      product_mgmt:
-        keywords: ["PRD", "产品需求", "需求文档", "产品规划", "路线图", "roadmap", "产品管理",
-                   "需求拆解", "用户故事", "优先级", "产品说明书", "PMS"]
-        weight: 90
-      spec:
-        keywords: ["Spec", "技术规格", "contract", "契约", "FR", "AC", "验收标准", "Given/When/Then"]
-        weight: 85
-      requirements:
-        keywords: ["需求分析", "需求拆解", "feature", "用户旅程", "user journey", "功能清单"]
-        weight: 80
-
-    layers:
-      - name: "L1 Product Meta"
-        path: "product-meta/"
-        description: "产品方法论：RICE, Kano, 用户故事映射, 优先级框架"
-      - name: "L2 Product Workflow"
-        path: "product-workflow/"
-        description: "产品流水线：ROADMAP → PRD → Spec → Decomposition"
-      - name: "L3 Product Patterns"
-        path: "product-patterns/"
-        description: "产品模板：8 段 PRD, Spec Contract, PMS 说明书"
-      - name: "L4 Product Runtime"
-        path: "product-runtime/"
-        description: "自动 PRD 生成、需求追溯、变更影响分析"
-
-    skill_count: 0  # 从 csp-code 拆分中迁移
+      testing:   { keywords: ["测试","单测","集成测试","E2E","pytest","vitest","Playwright","Cypress","覆盖率","TDD","pairwise","模糊测试","性能测试","QA"], weight: 90 }
+      security:  { keywords: ["安全","漏洞","渗透","注入","XSS","CSRF","加密","认证","SonarQube","Snyk","CodeQL","依赖扫描","STRIDE"], weight: 85 }
+      code_review:{ keywords: ["代码评审","CR","Code Review","编码规范","命名规范","lint","ruff","技术债","重构"], weight: 80 }
+    deps: ["csp-meta"]
+    skill_count: 0
     token_budget: ~600
 
-  # ── Creator: 创作者工具 ──
-  - id: csp-creator
-    name: "CSP Creator — AI 创作者工具箱"
-    description: "短视频/自媒体/图片生成/内容策略：从创意到发布的完整创作技能"
-    package_name: "@csp/creator"
-    repo: "maythyai/csp-creator"
+  # ── 4. DevOps: 运维部署 + 开发者工具 ──
+  - id: csp-devops
+    name: "CSP DevOps · 运维部署"
+    description: "CI/CD、容器/K8s、云部署、监控告警、开发者工具。Skills 链接 GitHub Actions/Docker/K8s/AWS/GCP/阿里云。"
+    package_name: "@csp/devops"
+    repo: "maythyai/csp-devops"
     install_commands:
-      npx: "npx skills add maythyai/csp-creator"
-      claude: "/plugin marketplace add maythyai/csp-creator"
-      manual: "git clone https://github.com/maythyai/csp-creator.git"
-
+      npx: "npx skills add maythyai/csp-devops"
+      claude: "/plugin marketplace add maythyai/csp-devops"
     domains:
-      video:
-        keywords: ["短视频", "剪辑", "视频", "抖音", "TikTok", "YouTube", "B站", "拍摄", "字幕", "配音", "转场", "Shorts", "Reels"]
-        weight: 90
-      image:
-        keywords: ["图片", "生成图片", "AI绘画", "Midjourney", "Stable Diffusion", "DALL-E", "海报", "封面", "修图", "P图"]
-        weight: 85
-      social_media:
-        keywords: ["自媒体", "小红书", "公众号", "微博", "Instagram", "内容运营", "涨粉", "爆款", "选题", "蹭热点"]
-        weight: 80
-      content_strategy:
-        keywords: ["内容策略", "内容日历", "选题库", "标题党", "文案", "脚本", "策划"]
-        weight: 75
-      audio:
-        keywords: ["播客", "音频", "录音", "混音", "Podcast", "有声书", "ASMR", "BGM"]
-        weight: 60
-
-    layers:
-      - name: "L1 Creator Meta"
-        path: "creator-meta/"
-        description: "创作方法论：内容策略、视觉思维、叙事结构"
-      - name: "L2 Creator Workflow"
-        path: "creator-workflow/"
-        description: "创作流水线：ideate → storyboard → shoot → edit → publish → analyze"
-      - name: "L3 Creator Patterns"
-        path: "creator-patterns/"
-        description: "工具链：CapCut/Premiere/DaVinci、Canva/Figma、SD/MJ、OBS"
-      - name: "L4 Creator Runtime"
-        path: "creator-runtime/"
-        description: "自动发布、定时排期、数据复盘、素材管理"
-
-    skill_count: 0  # 待建设
-    token_budget: ~800
-
-  # ── Business: 商业/增长 ──
-  - id: csp-business
-    name: "CSP Business — 一人公司商业引擎"
-    description: "从获客到成交的商业全链路：SEO/邮件/广告/CRM/数据分析"
-    package_name: "@csp/business"
-    repo: "maythyai/csp-business"
-    install_commands:
-      npx: "npx skills add maythyai/csp-business"
-      claude: "/plugin marketplace add maythyai/csp-business"
-      manual: "git clone https://github.com/maythyai/csp-business.git"
-
-    domains:
-      marketing:
-        keywords: ["营销", "推广", "广告", "投放", "获客", "增长", "SEO", "SEM", "ASO", "裂变", "私域", "KOL"]
-        weight: 90
-      business:
-        keywords: ["创业", "商业模型", "变现", "付费", "订阅", "定价", "收入", "成本", "ROI", "融资", "BP"]
-        weight: 85
-      sales:
-        keywords: ["销售", "CRM", "客户", "邮件营销", "漏斗", "转化", "线索", "跟进", "成交", "话术"]
-        weight: 80
-      analytics:
-        keywords: ["数据分析", "GA", "Mixpanel", "Amplitude", "报表", "仪表盘", "A/B测试", "转化率"]
-        weight: 75
-      finance:
-        keywords: ["财务", "记账", "发票", "税务", "报税", "合同", "法律", "合规"]
-        weight: 65
-
-    layers:
-      - name: "L1 Business Meta"
-        path: "business-meta/"
-        description: "商业方法论：商业模式画布、精益创业、RICE 优先级"
-      - name: "L2 Business Workflow"
-        path: "business-workflow/"
-        description: "商业流水线：research → validate → acquire → convert → retain → scale"
-      - name: "L3 Business Patterns"
-        path: "business-patterns/"
-        description: "工具链：Stripe/LemonSqueezy、Mailchimp/ConvertKit、GA4/Mixpanel"
-      - name: "L4 Business Runtime"
-        path: "business-runtime/"
-        description: "自动营销、客户旅程、付费管理、数据看板"
-
-    skill_count: 0  # 待建设
-    token_budget: ~600
-
-  # ── Lifestyle: 生活效能 ──
-  - id: csp-life
-    name: "CSP Life — 超级个体生活助手"
-    description: "旅行规划/健康管理/学习效率/家居整理：AI 辅助的日常生活技能"
-    package_name: "@csp/life"
-    repo: "maythyai/csp-life"
-    install_commands:
-      npx: "npx skills add maythyai/csp-life"
-      claude: "/plugin marketplace add maythyai/csp-life"
-      manual: "git clone https://github.com/maythyai/csp-life.git"
-
-    domains:
-      productivity:
-        keywords: ["效率", "GTD", "时间管理", "番茄钟", "Notion", "日程", "待办", "习惯"]
-        weight: 85
-      health:
-        keywords: ["健身", "饮食", "睡眠", "冥想", "健康", "跑步", "减脂", "营养"]
-        weight: 75
-      travel:
-        keywords: ["旅行", "攻略", "机票", "酒店", "签证", "行程", "自驾", "背包"]
-        weight: 70
-      learning:
-        keywords: ["学习", "读书", "笔记", "记忆", "考试", "考证", "课程", "复习"]
-        weight: 80
-      home:
-        keywords: ["装修", "租房", "搬家", "收纳", "整理", "家居", "智能家居"]
-        weight: 55
-
-    skill_count: 0  # 待建设
+      cicd:       { keywords: ["CI/CD","GitHub Actions","Jenkins","部署","发布","构建","pipeline"], weight: 90 }
+      cloud:      { keywords: ["容器","Docker","K8s","Kubernetes","云部署","AWS","GCP","Azure","阿里云","Vercel","Railway"], weight: 85 }
+      monitoring: { keywords: ["监控","告警","日志","Prometheus","Grafana","Datadog","可观测","trace"], weight: 75 }
+      devtools:   { keywords: ["Git","GitHub","CLI","Shell","Bash","IDE","VS Code","JetBrains","插件","环境变量"], weight: 70 }
+    deps: ["csp-meta"]
+    skill_count: 0
     token_budget: ~500
 
-  # ── Education: 教育/教学 ──
-  - id: csp-edu
-    name: "CSP Edu — AI 教育工具箱"
-    description: "课程设计/在线教学/辅导答疑/学习评估：从内容到交付的完整教育技能"
-    package_name: "@csp/edu"
-    repo: "maythyai/csp-edu"
-    install_commands:
-      npx: "npx skills add maythyai/csp-edu"
-      claude: "/plugin marketplace add maythyai/csp-edu"
-
-    domains:
-      teaching:
-        keywords: ["教学", "课程", "教案", "课件", "在线教育", "MOOC", "网课", "翻转课堂"]
-        weight: 85
-      tutoring:
-        keywords: ["辅导", "答疑", "1对1", "家教", "补习", "作业", "题目"]
-        weight: 80
-      assessment:
-        keywords: ["考试", "测验", "题库", "出题", "评分", "评估", "成绩", "测评"]
-        weight: 75
-      curriculum:
-        keywords: ["课程设计", "大纲", "教学计划", "课标", "知识点", "知识图谱"]
-        weight: 70
-
-    skill_count: 0
-    token_budget: ~400
-
-  # ── Research: 学术研究 ──
-  - id: csp-research
-    name: "CSP Research — AI 学术研究助手"
-    description: "文献综述/实验设计/数据分析/论文写作：完整的学术研究技能链"
-    package_name: "@csp/research"
-    repo: "maythyai/csp-research"
-    install_commands:
-      npx: "npx skills add maythyai/csp-research"
-      claude: "/plugin marketplace add maythyai/csp-research"
-
-    domains:
-      literature:
-        keywords: ["文献", "论文", "综述", "引用", "参考文献", "BibTeX", "Zotero", "PubMed", "arXiv"]
-        weight: 85
-      experiment:
-        keywords: ["实验设计", "A/B测试", "对照组", "统计显著", "p值", "效应量", "样本量"]
-        weight: 80
-      writing:
-        keywords: ["论文写作", "Abstract", "Method", "Discussion", "LaTeX", "投稿", "审稿"]
-        weight: 75
-      data:
-        keywords: ["数据收集", "数据清洗", "统计分析", "SPSS", "R语言", "Stata", "可视化"]
-        weight: 70
-
-    skill_count: 0
-    token_budget: ~400
-
-  # ── Design: 设计/创意 ──
-  - id: csp-design
-    name: "CSP Design — AI 设计工作室"
-    description: "UI/UX/品牌/印刷/3D：完整的设计技能链"
-    package_name: "@csp/design"
-    repo: "maythyai/csp-design"
-    install_commands:
-      npx: "npx skills add maythyai/csp-design"
-      claude: "/plugin marketplace add maythyai/csp-design"
-
-    domains:
-      ui_ux:
-        keywords: ["UI设计", "UX设计", "原型", "线框", "Figma", "Sketch", "交互设计", "用户研究"]
-        weight: 85
-      brand:
-        keywords: ["品牌设计", "Logo", "VI", "视觉识别", "品牌手册", "色彩系统"]
-        weight: 80
-      print:
-        keywords: ["印刷", "海报", "名片", "画册", "包装设计", "排版", "InDesign"]
-        weight: 65
-      three_d:
-        keywords: ["3D建模", "Blender", "渲染", "动画", "三维", "C4D"]
-        weight: 55
-
-    skill_count: 0
-    token_budget: ~400
-
-  # ── Writing: 写作/出版 ──
-  - id: csp-write
-    name: "CSP Write — AI 写作工坊"
-    description: "图书/博客/通讯/翻译：从大纲到出版的完整写作技能"
-    package_name: "@csp/write"
-    repo: "maythyai/csp-write"
-    install_commands:
-      npx: "npx skills add maythyai/csp-write"
-      claude: "/plugin marketplace add maythyai/csp-write"
-
-    domains:
-      book:
-        keywords: ["写书", "出版", "电子书", "自出版", "章节", "校对", "排版", "ISBN"]
-        weight: 85
-      blog:
-        keywords: ["博客", "公众号", "专栏", "Newsletter", "Substack", "内容创作"]
-        weight: 80
-      translation:
-        keywords: ["翻译", "本地化", "中译英", "英译中", "多语言", "i18n"]
-        weight: 70
-      copywriting:
-        keywords: ["文案", "广告语", "slogan", "营销文案", "landing page", "转化文案"]
-        weight: 75
-
-    skill_count: 0
-    token_budget: ~400
-
-  # ── Data: 数据分析/数据科学 ──
+  # ── 5. Data: 数据分析 + 数据库 ──
   - id: csp-data
-    name: "CSP Data — 数据分析引擎"
-    description: "数据科学/数据工程/可视化/SQL/BI：从采集到洞察的完整数据技能"
+    name: "CSP Data · 数据分析"
+    description: "数据科学/SQL/BI/可视化/数据工程。Skills 链接 BigQuery/Tableau/dbt/Superset 等数据工具。"
     package_name: "@csp/data"
     repo: "maythyai/csp-data"
     install_commands:
       npx: "npx skills add maythyai/csp-data"
       claude: "/plugin marketplace add maythyai/csp-data"
-
     domains:
-      data_science:
-        keywords: ["数据科学", "机器学习", "特征工程", "模型训练", "预测", "分类", "聚类", "推荐系统", "NLP"]
-        weight: 85
-      data_engineering:
-        keywords: ["数据工程", "ETL", "数据管道", "数据仓库", "数据湖", "Airflow", "dbt", "Spark"]
-        weight: 80
-      sql:
-        keywords: ["SQL", "查询", "PostgreSQL", "MySQL", "BigQuery", "ClickHouse", "窗口函数", "JOIN"]
-        weight: 85
-      visualization:
-        keywords: ["可视化", "图表", "仪表盘", "Tableau", "Metabase", "Superset", "ECharts", "D3", "Plotly"]
-        weight: 75
-      bi:
-        keywords: ["BI", "商业智能", "报表", "自助分析", "下钻", "OLAP", "数据看板", "指标"]
-        weight: 70
-
-    layers:
-      - name: "L1 Data Meta"
-        path: "data-meta/"
-        description: "数据方法论：CRISP-DM, 数据质量框架, 统计思维"
-      - name: "L2 Data Workflow"
-        path: "data-workflow/"
-        description: "数据流水线：ingest → clean → model → visualize → communicate"
-      - name: "L3 Data Patterns"
-        path: "data-patterns/"
-        description: "工具链：pandas/polars, scikit-learn, dbt, Airflow, Superset"
-      - name: "L4 Data Runtime"
-        path: "data-runtime/"
-        description: "自动报表、数据质量监控、异常检测、定时分析"
-
+      data_science: { keywords: ["数据科学","机器学习","特征工程","pandas","scikit-learn","预测","分类","聚类"], weight: 85 }
+      sql:          { keywords: ["SQL","查询","PostgreSQL","MySQL","BigQuery","ClickHouse","窗口函数","JOIN","索引"], weight: 85 }
+      visualization:{ keywords: ["可视化","图表","仪表盘","Tableau","Metabase","Superset","ECharts","D3","Plotly","BI"], weight: 75 }
+      data_eng:     { keywords: ["数据工程","ETL","数据管道","数据仓库","Airflow","dbt","Spark"], weight: 70 }
+    deps: ["csp-meta"]
     skill_count: 0
     token_budget: ~500
 
-  # ── Automation: 工具与自动化 ──
+  # ── 6. Design: 视觉设计 ──
+  - id: csp-design
+    name: "CSP Design · 视觉设计"
+    description: "UI/UX、品牌、印刷、3D、动效。Skills 链接 Figma/Canva/Spline/Framer 等设计工具。"
+    package_name: "@csp/design"
+    repo: "maythyai/csp-design"
+    install_commands:
+      npx: "npx skills add maythyai/csp-design"
+      claude: "/plugin marketplace add maythyai/csp-design"
+    domains:
+      ui_ux:  { keywords: ["UI设计","UX设计","原型","线框","Figma","Sketch","交互设计","用户研究"], weight: 85 }
+      brand:  { keywords: ["品牌","Logo","VI","视觉识别","品牌手册","色彩","设计系统"], weight: 80 }
+      graphic:{ keywords: ["海报","Canva","排版","印刷","包装","名片","画册"], weight: 70 }
+      three_d:{ keywords: ["3D","Blender","Spline","渲染","动画","C4D"], weight: 55 }
+    deps: ["csp-meta"]
+    skill_count: 0
+    token_budget: ~400
+
+  # ── 7. Creator: 内容创作 ──
+  - id: csp-creator
+    name: "CSP Creator · 内容创作"
+    description: "短视频/写作/自媒体/播客/图片生成。Skills 链接 TikTok/YouTube/Substack/Canva/Midjourney/剪映 等内容平台和工具。"
+    package_name: "@csp/creator"
+    repo: "maythyai/csp-creator"
+    install_commands:
+      npx: "npx skills add maythyai/csp-creator"
+      claude: "/plugin marketplace add maythyai/csp-creator"
+    domains:
+      video:    { keywords: ["短视频","抖音","TikTok","YouTube","Shorts","Reels","B站","剪辑","字幕","CapCut","剪映"], weight: 90 }
+      writing:  { keywords: ["写作","公众号","博客","Substack","Newsletter","文案","翻译","专栏"], weight: 85 }
+      social:   { keywords: ["自媒体","小红书","微博","Instagram","内容运营","涨粉","爆款"], weight: 80 }
+      image:    { keywords: ["图片生成","AI绘画","Midjourney","Stable Diffusion","DALL-E","海报","封面"], weight: 80 }
+      audio:    { keywords: ["播客","Podcast","音频","录音","配音","混音"], weight: 60 }
+    deps: ["csp-meta"]
+    skill_count: 1
+    token_budget: ~500
+
+  # ── 8. Automation: 工具与自动化 ──
   - id: csp-automation
-    name: "CSP Automation — 自动化工作台"
-    description: "无代码自动化/工作流编排/API 集成/webhook/定时任务：让机器人替你干活"
+    name: "CSP Automation · 工具与自动化"
+    description: "无代码自动化/工作流/webhook/定时任务/爬虫。Skills 链接 Zapier/n8n/Make/WeCom/飞书/钉钉 等自动化平台。"
     package_name: "@csp/automation"
     repo: "maythyai/csp-automation"
     install_commands:
       npx: "npx skills add maythyai/csp-automation"
       claude: "/plugin marketplace add maythyai/csp-automation"
-
     domains:
-      no_code:
-        keywords: ["无代码", "自动化", "Zapier", "n8n", "Make", "Integromat", "IFTTT", "低代码"]
-        weight: 85
-      workflow:
-        keywords: ["工作流", "编排", "审批流", "自动化流程", "触发器", "条件判断", "循环"]
-        weight: 80
-      integration:
-        keywords: ["API集成", "webhook", "对接", "数据同步", "通知推送", "Slack", "钉钉", "飞书"]
-        weight: 80
-      scheduler:
-        keywords: ["定时任务", "cron", "调度", "定期执行", "批量处理", "轮询"]
-        weight: 75
-      scraping:
-        keywords: ["爬虫", "抓取", "数据采集", "BeautifulSoup", "Puppeteer", "Playwright", "Scrapy", "RSS"]
-        weight: 70
-
-    layers:
-      - name: "L1 Automation Meta"
-        path: "automation-meta/"
-        description: "自动化方法论：事件驱动、声明式配置、幂等设计"
-      - name: "L2 Automation Workflow"
-        path: "automation-workflow/"
-        description: "自动化流水线：trigger → condition → action → log → retry"
-      - name: "L3 Automation Patterns"
-        path: "automation-patterns/"
-        description: "工具链：Zapier/n8n/Make/Pipedream、GitHub Actions/Scheduled Tasks"
-      - name: "L4 Automation Runtime"
-        path: "automation-runtime/"
-        description: "自动监控、异常重试、执行日志、通知告警"
-
+      no_code:   { keywords: ["无代码","自动化","Zapier","n8n","Make","IFTTT"], weight: 85 }
+      workflow:  { keywords: ["工作流","编排","审批","触发器","条件判断"], weight: 80 }
+      webhook:   { keywords: ["webhook","API集成","数据同步","Slack","钉钉","飞书","WeCom","企业微信"], weight: 80 }
+      scheduler: { keywords: ["定时任务","cron","调度","批量处理","轮询"], weight: 75 }
+      scraping:  { keywords: ["爬虫","抓取","数据采集","BeautifulSoup","Puppeteer","Scrapy","RSS"], weight: 70 }
+    deps: ["csp-meta"]
     skill_count: 0
     token_budget: ~500
 
-  # ── Finance: 财务/投资 ──
-  - id: csp-finance
-    name: "CSP Finance — AI 财务管家"
-    description: "个人财务/投资分析/税务筹划/保险规划：一人公司的财务技能"
-    package_name: "@csp/finance"
-    repo: "maythyai/csp-finance"
+  # ── 9. Business: 市场商业 ──
+  - id: csp-business
+    name: "CSP Business · 市场商业"
+    description: "市场营销/电商零售/金融财务/销售运营/CRM。Skills 链接 Stripe/GA4/Shopify/Mailchimp 等商业工具。"
+    package_name: "@csp/business"
+    repo: "maythyai/csp-business"
     install_commands:
-      npx: "npx skills add maythyai/csp-finance"
-      claude: "/plugin marketplace add maythyai/csp-finance"
-
+      npx: "npx skills add maythyai/csp-business"
+      claude: "/plugin marketplace add maythyai/csp-business"
     domains:
-      personal_finance:
-        keywords: ["记账", "预算", "理财", "存钱", "开支", "消费", "省钱"]
-        weight: 85
-      investment:
-        keywords: ["投资", "股票", "基金", "加密货币", "量化", "定投", "资产配置"]
-        weight: 80
-      tax:
-        keywords: ["税务", "报税", "个税", "增值税", "抵扣", "发票"]
-        weight: 75
-      insurance:
-        keywords: ["保险", "社保", "医保", "商业保险", "理赔", "重疾险"]
-        weight: 65
+      marketing:  { keywords: ["营销","推广","SEO","SEM","广告","投放","获客","增长","裂变","私域","GA4","Mailchimp"], weight: 90 }
+      ecommerce:  { keywords: ["电商","Shopify","淘宝","京东","拼多多","TikTok Shop","独立站","选品","Listing"], weight: 80 }
+      sales:      { keywords: ["销售","CRM","客户","漏斗","转化","线索","跟进","话术","HubSpot","Salesforce"], weight: 80 }
+      finance:    { keywords: ["记账","预算","理财","报税","发票","Stripe","LeamonSqueezy","订阅","Paddle"], weight: 75 }
+    deps: ["csp-meta"]
+    skill_count: 1
+    token_budget: ~600
 
+  # ── 10. Product: 产品管理 ──
+  - id: csp-product
+    name: "CSP Product · 产品管理"
+    description: "PRD/路线图/Spec/需求拆解/产品说明书。Skills 链接 Notion/Linear/Jira/Figma 等产品管理工具。"
+    package_name: "@csp/product"
+    repo: "maythyai/csp-product"
+    install_commands:
+      npx: "npx skills add maythyai/csp-product"
+      claude: "/plugin marketplace add maythyai/csp-product"
+    domains:
+      prd:          { keywords: ["PRD","产品需求","需求文档","写需求","产品需求文档"], weight: 90 }
+      roadmap:      { keywords: ["路线图","roadmap","版本规划","产品规划","战略"], weight: 85 }
+      spec:         { keywords: ["Spec","技术规格","contract","契约","FR","AC","验收标准"], weight: 85 }
+      decomposition:{ keywords: ["需求拆解","需求分析","用户故事","user story","功能清单"], weight: 80 }
+    deps: ["csp-meta"]
     skill_count: 0
-    token_budget: ~400
+    token_budget: ~600
 
-  # ── Legal: 法律/合规 ──
-  - id: csp-legal
-    name: "CSP Legal — AI 法律助手"
-    description: "合同起草/合规审查/IP保护/公司注册：一人公司的法律工具箱"
-    package_name: "@csp/legal"
-    repo: "maythyai/csp-legal"
+  # ── 11. Workspace: 工作套件 + 效率工具 ──
+  - id: csp-workspace
+    name: "CSP Workspace · 工作套件"
+    description: "项目管理/知识库/文档协同/IM集成/效率工具。Skills 链接 Notion/Obsidian/Linear/飞书/微信/GitHub 等工作平台（不构建它们，只做集成）。"
+    package_name: "@csp/workspace"
+    repo: "maythyai/csp-workspace"
     install_commands:
-      npx: "npx skills add maythyai/csp-legal"
-      claude: "/plugin marketplace add maythyai/csp-legal"
-
+      npx: "npx skills add maythyai/csp-workspace"
+      claude: "/plugin marketplace add maythyai/csp-workspace"
     domains:
-      contract:
-        keywords: ["合同", "协议", "NDA", "服务条款", "隐私政策", "SaaS协议"]
-        weight: 85
-      compliance:
-        keywords: ["合规", "GDPR", "个人信息保护", "数据安全法", "网安法", "监管"]
-        weight: 80
-      ip:
-        keywords: ["知识产权", "商标", "专利", "著作权", "版权", "开源许可证", "MIT", "GPL"]
-        weight: 75
-      company:
-        keywords: ["公司注册", "工商", "股权", "章程", "年报", "变更", "注销"]
-        weight: 70
+      knowledge: { keywords: ["知识库","Notion","Obsidian","wiki","文档","笔记","第二大脑","知识管理"], weight: 90 }
+      project:   { keywords: ["项目管理","Linear","Jira","Trello","Asana","任务","OKR","甘特图"], weight: 85 }
+      im:        { keywords: ["IM集成","飞书","企业微信","WeCom","钉钉","Slack","Teams","消息推送"], weight: 80 }
+      productivity:{ keywords: ["效率","GTD","番茄钟","日程","日历","待办","习惯","Todoist","Things"], weight: 75 }
+      collab:    { keywords: ["协作","共享","团队","多人编辑","批注","审批"], weight: 70 }
+    deps: ["csp-meta"]
+    skill_count: 0
+    token_budget: ~500
 
+  # ── 12. Other: 其他（兜底）──
+  - id: csp-other
+    name: "CSP Other · 其他"
+    description: "教育/科研/法律/生活/健康/旅行等未归类技能。Skills 链接各领域专业工具。"
+    package_name: "@csp/other"
+    repo: "maythyai/csp-other"
+    install_commands:
+      npx: "npx skills add maythyai/csp-other"
+      claude: "/plugin marketplace add maythyai/csp-other"
+    domains:
+      education: { keywords: ["教育","课程","教学","MOOC","辅导","考试","知识图谱"], weight: 70 }
+      research:  { keywords: ["科研","论文","文献","实验","PubMed","arXiv","Zotero"], weight: 65 }
+      legal:     { keywords: ["法律","合同","NDA","隐私政策","合规","GDPR","商标","版权"], weight: 60 }
+      life:      { keywords: ["旅行","健身","健康","饮食","家居","装修"], weight: 55 }
+    deps: ["csp-meta"]
     skill_count: 0
     token_budget: ~400
 
 # ── 联邦路由决策矩阵 ──────────────────────────────────────────
 decision_matrix:
-  # 多包匹配时的优先级
   resolution:
-    - when: "programming + testing + security domain > 0.7"
+    # 精确匹配优先 — 明确的产品名直接路由（Skills 是 Connector 不是 Builder）
+    - when: "programming domain > 0.7"
       route_to: "csp-code"
-      reason: "编程类任务由 code 处理"
-    - when: "product_mgmt + spec + requirements domain > 0.5"
-      route_to: "csp-product"
-      reason: "产品管理类任务由 product 处理"
-    - when: "video + image domain > 0.5"
-      route_to: "csp-creator"
-      reason: "创作类任务由 creator 处理"
-    - when: "marketing + business domain > 0.5"
-      route_to: "csp-business"
-      reason: "商业类任务由 business 处理"
+    - when: "testing + security + code_review domain > 0.5"
+      route_to: "csp-quality"
+    - when: "cicd + cloud + monitoring domain > 0.5"
+      route_to: "csp-devops"
     - when: "data_science + sql + visualization domain > 0.5"
       route_to: "csp-data"
-      reason: "数据分析类任务由 data 处理"
-    - when: "no_code + workflow + integration domain > 0.5"
-      route_to: "csp-automation"
-      reason: "自动化类任务由 automation 处理"
-    - when: "ui_ux + brand + print domain > 0.5"
+    - when: "ui_ux + brand + graphic domain > 0.5"
       route_to: "csp-design"
-      reason: "设计类任务由 design 处理"
-    - when: "productivity + health domain > 0.5"
-      route_to: "csp-life"
-      reason: "生活类任务由 life 处理"
+    - when: "video + writing + social + audio domain > 0.5"
+      route_to: "csp-creator"
+    - when: "no_code + workflow + webhook domain > 0.5"
+      route_to: "csp-automation"
+    - when: "marketing + ecommerce + sales + finance domain > 0.5"
+      route_to: "csp-business"
+    - when: "prd + roadmap + spec domain > 0.5"
+      route_to: "csp-product"
+    - when: "knowledge + project + im + productivity domain > 0.5"
+      route_to: "csp-workspace"
+    - when: "education + research + legal + life domain > 0.4"
+      route_to: "csp-other"
+    # 兜底
     - when: "multiple domains > 0.3 each"
       route_to: "ask_user"
-      reason: "多领域交叉，让用户选择"
     - when: "no domain > 0.3"
       route_to: "csp-code"
-      reason: "无法判定时默认回退到 code"
 
 # ── 跨包能力发现 ──────────────────────────────────────────────
 capability_discovery:
-  # 当一个包无法覆盖用户意图时，检查其他包的能力
-  # 例如：用户在 core 中写代码，但提到了"SEO优化" → 提示 business 包
   cross_suggest:
-    - from: "csp-code"
-      triggers: ["SEO", "推广", "变现", "营销"]
-      suggest: "csp-business"
-    - from: "csp-code"
-      triggers: ["短视频", "封面图", "海报"]
-      suggest: "csp-creator"
-    - from: "csp-code"
-      triggers: ["PRD", "需求文档", "用户故事"]
-      suggest: "csp-product"
-    - from: "csp-business"
-      triggers: ["自动化脚本", "爬虫", "API 开发"]
-      suggest: "csp-code"
-    - from: "csp-product"
-      triggers: ["技术方案", "接口设计", "数据库"]
-      suggest: "csp-code"
+    - { from: "csp-code", triggers: ["SEO","推广","变现"], suggest: "csp-business" }
+    - { from: "csp-code", triggers: ["短视频","封面","海报"], suggest: "csp-creator" }
+    - { from: "csp-code", triggers: ["PRD","需求文档"], suggest: "csp-product" }
+    - { from: "csp-code", triggers: ["CI/CD","部署","K8s"], suggest: "csp-devops" }
+    - { from: "csp-code", triggers: ["安全","漏洞","渗透"], suggest: "csp-quality" }
+    - { from: "csp-business", triggers: ["自动化脚本","API"], suggest: "csp-code" }
+    - { from: "csp-creator", triggers: ["Notion","飞书","自动化"], suggest: "csp-workspace" }
+    - { from: "csp-product", triggers: ["技术方案","接口"], suggest: "csp-code" }
 
 # ── 版本兼容性 ────────────────────────────────────────────────
 compatibility:
   min_router_version: "1.0.0"
+  # csp-meta 是所有包的唯一依赖。其他包之间无依赖。
   package_dependencies:
-    csp-meta: []        # 元层无依赖，是所有其他包的依赖
-    csp-code: ["csp-meta"]
-    csp-product: ["csp-meta"]
-    csp-creator: ["csp-meta"]
-    csp-business: ["csp-meta"]
-    csp-life: ["csp-meta"]
-    csp-edu: ["csp-meta"]
-    csp-research: ["csp-meta"]
-    csp-design: ["csp-meta"]
-    csp-write: ["csp-meta"]
-    csp-finance: ["csp-meta"]
-    csp-legal: ["csp-meta"]
+    csp-meta:       []
+    csp-code:       ["csp-meta"]
+    csp-quality:    ["csp-meta"]
+    csp-devops:     ["csp-meta"]
+    csp-data:       ["csp-meta"]
+    csp-design:     ["csp-meta"]
+    csp-creator:    ["csp-meta"]
+    csp-automation: ["csp-meta"]
+    csp-business:   ["csp-meta"]
+    csp-product:    ["csp-meta"]
+    csp-workspace:  ["csp-meta"]
+    csp-other:      ["csp-meta"]
