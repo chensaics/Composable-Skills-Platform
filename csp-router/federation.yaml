@@ -1,0 +1,253 @@
+# CSP Federation Registry — 联邦路由注册表
+# 
+# 本文件定义 CSP 联邦体系中的所有子包（package），每个子包可独立安装。
+# csp-router 作为联邦路由层，根据用户意图自动探测 → 路由到对应子包 → 
+# 子包缺失时提示安装。
+
+version: "1.0.0"
+federation_version: "0.1.0"
+
+# ── 联邦路由规则 ──────────────────────────────────────────────
+routing:
+  # 策略：先本地 skills 匹配（L0→L4），无匹配时查 federation
+  strategy: local_first_then_federal
+  # 子包未安装时的行为
+  on_missing_package:
+    action: suggest_install  # 提示用户安装，不静默跳过
+    message_template: >
+      🔍 检测到你的任务属于 {package_name} 领域（{domain}），但你还没有安装它。
+      
+      一键安装：{install_command}
+      
+      这个包包含 {skill_count} 个技能，覆盖 {domains}。
+      安装后我会自动路由到对应的 skill。
+
+# ── 联邦子包注册 ──────────────────────────────────────────────
+packages:
+  # ── Core: 编程全链路（当前 CSP 本体）──
+  - id: csp-core
+    name: "CSP Core — 编程全链路"
+    description: "从需求到上线的完整编程技能体系：设计/规划/开发/测试/发布"
+    package_name: "@csp/core"        # npm 包名（未来）
+    repo: "maythyai/code-skills-package"  # GitHub 仓库
+    install_commands:
+      npx: "npx skills add maythyai/code-skills-package"
+      claude: "/plugin marketplace add maythyai/code-skills-package"
+      manual: "git clone https://github.com/maythyai/code-skills-package.git"
+
+    # 领域触发词
+    domains:
+      programming:
+        keywords: ["代码", "开发", "编程", "debug", "TDD", "API", "数据库", "前端", "后端"]
+        weight: 100  # core 是默认包，权重最高
+      devops:
+        keywords: ["部署", "CI/CD", "K8s", "Docker", "服务器", "运维"]
+        weight: 80
+      architecture:
+        keywords: ["架构", "设计模式", "系统设计", "微服务", "重构"]
+        weight: 70
+
+    # 内部五层结构（给联邦路由参考，不改变内部路由逻辑）
+    layers:
+      - name: "L0 Router"
+        path: "csp-router/"
+        description: "任务分类 + skill 自动路由"
+      - name: "L1 Methodology"
+        path: "csp-meta/"
+        description: "方法论：brainstorming, TDD, debugging, spec-driven"
+      - name: "L2 Workflow"
+        path: "csp-workflow/"
+        description: "项目生命周期：plan → execute → verify → ship"
+      - name: "L3 Patterns"
+        path: "csp-patterns/"
+        description: "语言/框架模式、reviewers、build-resolvers"
+      - name: "L4 Runtime"
+        path: "csp-runtime/"
+        description: "运行时：autopilot, wiki, remember, self-improve"
+
+    skill_count: 716
+    token_budget: ~2000
+
+  # ── Creator: 创作者工具 ──
+  - id: csp-creator
+    name: "CSP Creator — AI 创作者工具箱"
+    description: "短视频/自媒体/图片生成/内容策略：从创意到发布的完整创作技能"
+    package_name: "@csp/creator"
+    repo: "maythyai/csp-creator"
+    install_commands:
+      npx: "npx skills add maythyai/csp-creator"
+      claude: "/plugin marketplace add maythyai/csp-creator"
+      manual: "git clone https://github.com/maythyai/csp-creator.git"
+
+    domains:
+      video:
+        keywords: ["短视频", "剪辑", "视频", "抖音", "TikTok", "YouTube", "B站", "拍摄", "字幕", "配音", "转场", "Shorts", "Reels"]
+        weight: 90
+      image:
+        keywords: ["图片", "生成图片", "AI绘画", "Midjourney", "Stable Diffusion", "DALL-E", "海报", "封面", "修图", "P图"]
+        weight: 85
+      social_media:
+        keywords: ["自媒体", "小红书", "公众号", "微博", "Instagram", "内容运营", "涨粉", "爆款", "选题", "蹭热点"]
+        weight: 80
+      content_strategy:
+        keywords: ["内容策略", "内容日历", "选题库", "标题党", "文案", "脚本", "策划"]
+        weight: 75
+      audio:
+        keywords: ["播客", "音频", "录音", "混音", "Podcast", "有声书", "ASMR", "BGM"]
+        weight: 60
+
+    layers:
+      - name: "L1 Creator Meta"
+        path: "creator-meta/"
+        description: "创作方法论：内容策略、视觉思维、叙事结构"
+      - name: "L2 Creator Workflow"
+        path: "creator-workflow/"
+        description: "创作流水线：ideate → storyboard → shoot → edit → publish → analyze"
+      - name: "L3 Creator Patterns"
+        path: "creator-patterns/"
+        description: "工具链：CapCut/Premiere/DaVinci、Canva/Figma、SD/MJ、OBS"
+      - name: "L4 Creator Runtime"
+        path: "creator-runtime/"
+        description: "自动发布、定时排期、数据复盘、素材管理"
+
+    skill_count: 0  # 待建设
+    token_budget: ~800
+
+  # ── Business: 商业/增长 ──
+  - id: csp-business
+    name: "CSP Business — 一人公司商业引擎"
+    description: "从获客到成交的商业全链路：SEO/邮件/广告/CRM/数据分析"
+    package_name: "@csp/business"
+    repo: "maythyai/csp-business"
+    install_commands:
+      npx: "npx skills add maythyai/csp-business"
+      claude: "/plugin marketplace add maythyai/csp-business"
+      manual: "git clone https://github.com/maythyai/csp-business.git"
+
+    domains:
+      marketing:
+        keywords: ["营销", "推广", "广告", "投放", "获客", "增长", "SEO", "SEM", "ASO", "裂变", "私域", "KOL"]
+        weight: 90
+      business:
+        keywords: ["创业", "商业模型", "变现", "付费", "订阅", "定价", "收入", "成本", "ROI", "融资", "BP"]
+        weight: 85
+      sales:
+        keywords: ["销售", "CRM", "客户", "邮件营销", "漏斗", "转化", "线索", "跟进", "成交", "话术"]
+        weight: 80
+      analytics:
+        keywords: ["数据分析", "GA", "Mixpanel", "Amplitude", "报表", "仪表盘", "A/B测试", "转化率"]
+        weight: 75
+      finance:
+        keywords: ["财务", "记账", "发票", "税务", "报税", "合同", "法律", "合规"]
+        weight: 65
+
+    layers:
+      - name: "L1 Business Meta"
+        path: "business-meta/"
+        description: "商业方法论：商业模式画布、精益创业、RICE 优先级"
+      - name: "L2 Business Workflow"
+        path: "business-workflow/"
+        description: "商业流水线：research → validate → acquire → convert → retain → scale"
+      - name: "L3 Business Patterns"
+        path: "business-patterns/"
+        description: "工具链：Stripe/LemonSqueezy、Mailchimp/ConvertKit、GA4/Mixpanel"
+      - name: "L4 Business Runtime"
+        path: "business-runtime/"
+        description: "自动营销、客户旅程、付费管理、数据看板"
+
+    skill_count: 0  # 待建设
+    token_budget: ~600
+
+  # ── Lifestyle: 生活效能 ──
+  - id: csp-life
+    name: "CSP Life — 超级个体生活助手"
+    description: "旅行规划/健康管理/学习效率/家居整理：AI 辅助的日常生活技能"
+    package_name: "@csp/life"
+    repo: "maythyai/csp-life"
+    install_commands:
+      npx: "npx skills add maythyai/csp-life"
+      claude: "/plugin marketplace add maythyai/csp-life"
+      manual: "git clone https://github.com/maythyai/csp-life.git"
+
+    domains:
+      productivity:
+        keywords: ["效率", "GTD", "时间管理", "番茄钟", "Notion", "日程", "待办", "习惯"]
+        weight: 85
+      health:
+        keywords: ["健身", "饮食", "睡眠", "冥想", "健康", "跑步", "减脂", "营养"]
+        weight: 75
+      travel:
+        keywords: ["旅行", "攻略", "机票", "酒店", "签证", "行程", "自驾", "背包"]
+        weight: 70
+      learning:
+        keywords: ["学习", "读书", "笔记", "记忆", "考试", "考证", "课程", "复习"]
+        weight: 80
+      home:
+        keywords: ["装修", "租房", "搬家", "收纳", "整理", "家居", "智能家居"]
+        weight: 55
+
+    layers:
+      - name: "L1 Life Meta"
+        path: "life-meta/"
+        description: "生活方法论：GTD、原子习惯、第二大脑"
+      - name: "L2 Life Workflow"
+        path: "life-workflow/"
+        description: "生活流水线：capture → organize → plan → execute → reflect"
+      - name: "L3 Life Patterns"
+        path: "life-patterns/"
+        description: "工具链：Notion/Obsidian、Todoist/Things、Apple Health/Strava"
+      - name: "L4 Life Runtime"
+        path: "life-runtime/"
+        description: "自动排程、习惯追踪、健康监测报告"
+
+    skill_count: 0  # 待建设
+    token_budget: ~500
+
+# ── 联邦路由决策矩阵 ──────────────────────────────────────────
+decision_matrix:
+  # 多包匹配时的优先级
+  resolution:
+    - when: "programming domain > 0.7"
+      route_to: "csp-core"
+      reason: "编程类任务由 core 处理"
+    - when: "video + image domain > 0.5"
+      route_to: "csp-creator"
+      reason: "创作类任务由 creator 处理"
+    - when: "marketing + business domain > 0.5"
+      route_to: "csp-business"
+      reason: "商业类任务由 business 处理"
+    - when: "productivity + health domain > 0.5"
+      route_to: "csp-life"
+      reason: "生活类任务由 life 处理"
+    - when: "multiple domains > 0.3 each"
+      route_to: "ask_user"
+      reason: "多领域交叉，让用户选择"
+    - when: "no domain > 0.3"
+      route_to: "csp-core"
+      reason: "无法判定时默认回退到 core"
+
+# ── 跨包能力发现 ──────────────────────────────────────────────
+capability_discovery:
+  # 当一个包无法覆盖用户意图时，检查其他包的能力
+  # 例如：用户在 core 中写代码，但提到了"SEO优化" → 提示 business 包
+  cross_suggest:
+    - from: "csp-core"
+      triggers: ["SEO", "推广", "变现", "营销"]
+      suggest: "csp-business"
+    - from: "csp-core"
+      triggers: ["短视频", "封面图", "海报"]
+      suggest: "csp-creator"
+    - from: "csp-business"
+      triggers: ["自动化脚本", "爬虫", "API 开发"]
+      suggest: "csp-core"
+
+# ── 版本兼容性 ────────────────────────────────────────────────
+compatibility:
+  # csp-router 最低版本要求（联邦路由需要路由器的联邦模式支持）
+  min_router_version: "1.0.0"
+  # 各包之间的依赖关系
+  package_dependencies:
+    csp-core: []
+    csp-creator: []
+    csp-business: []
+    csp-life: []

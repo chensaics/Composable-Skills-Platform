@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSP · Code Skills Package — 超级个体 AI 技能库</title>
+  <meta name="description" content="CSP (Code Skills Package) — 联邦制 AI 技能体系。从编程到创作、从商业到生活，一人公司的全栈 AI 技能库。">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.6}
+    .container{max-width:1100px;margin:0 auto;padding:2rem}
+    header{text-align:center;padding:4rem 0 3rem}
+    h1{font-size:2.5rem;margin-bottom:.5rem;background:linear-gradient(135deg,#58a6ff,#bc8cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .subtitle{color:#8b949e;font-size:1.1rem;max-width:600px;margin:.5rem auto}
+    .badge{display:inline-block;padding:.25rem .75rem;border-radius:2rem;font-size:.8rem;margin:.25rem}
+    .badge-core{background:#1f6feb22;color:#58a6ff;border:1px solid #1f6feb44}
+    .badge-creator{background:#d2992222;color:#d29922;border:1px solid #d2992244}
+    .badge-business{background:#23863622;color:#3fb950;border:1px solid #23863644}
+    .badge-life{background:#bc8cff22;color:#bc8cff;border:1px solid #bc8cff44}
+    .packages{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin:2rem 0}
+    .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1.5rem;transition:border-color .2s}
+    .card:hover{border-color:#58a6ff}
+    .card h3{margin-bottom:.5rem;font-size:1.2rem}
+    .card .meta{color:#8b949e;font-size:.85rem;margin:.5rem 0}
+    .card .domains{display:flex;flex-wrap:wrap;gap:.3rem;margin:.8rem 0}
+    .card .install{background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:.6rem;font-family:monospace;font-size:.8rem;color:#7ee787;word-break:break-all;cursor:pointer;margin-top:.8rem}
+    .card .install:hover{background:#161b22}
+    section{padding:2rem 0}
+    h2{font-size:1.5rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid #30363d}
+    .architecture{margin:2rem 0}
+    .arch-box{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1.5rem;margin:1rem 0}
+    pre{background:#0d1117;padding:1rem;border-radius:4px;overflow-x:auto;font-size:.85rem}
+    code{font-family:monospace}
+    footer{text-align:center;color:#484f58;padding:3rem 0 1rem;font-size:.85rem}
+    a{color:#58a6ff}
+    .copy-toast{position:fixed;bottom:2rem;right:2rem;background:#238636;color:white;padding:.8rem 1.2rem;border-radius:8px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
+    .copy-toast.show{opacity:1}
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>CSP · Code Skills Package</h1>
+    <p class="subtitle">联邦制 AI 技能体系 — 从编程到创作的超级个体全栈技能库</p>
+    <p class="subtitle" style="font-size:.9rem;margin-top:0">716 个编程技能 · 5 层架构 · 联邦路由 · 即将扩展至创作/商业/生活</p>
+    <div style="margin-top:1rem">
+      <span class="badge badge-core">csp-core · 716 skills</span>
+      <span class="badge badge-creator">csp-creator · 建设中</span>
+      <span class="badge badge-business">csp-business · 建设中</span>
+      <span class="badge badge-life">csp-life · 建设中</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>📦 联邦子包</h2>
+    <div class="packages">
+      <div class="card">
+        <h3>🖥️ csp-core</h3>
+        <p>编程全链路 — 设计/规划/开发/测试/发布</p>
+        <div class="meta">716 skills · 5 layers · 22+ platforms</div>
+        <div class="domains">
+          <span class="badge badge-core">programming</span>
+          <span class="badge badge-core">devops</span>
+          <span class="badge badge-core">architecture</span>
+          <span class="badge badge-core">testing</span>
+          <span class="badge badge-core">security</span>
+        </div>
+        <div class="install" onclick="copyInstall(this, 'npx skills add maythyai/code-skills-package')">npx skills add maythyai/code-skills-package</div>
+      </div>
+
+      <div class="card">
+        <h3>🎬 csp-creator</h3>
+        <p>AI 创作者工具箱 — 从创意到发布的完整创作技能</p>
+        <div class="meta">建设中 · 4 layers · 短视频/图片/自媒体</div>
+        <div class="domains">
+          <span class="badge badge-creator">video</span>
+          <span class="badge badge-creator">image</span>
+          <span class="badge badge-creator">social media</span>
+          <span class="badge badge-creator">audio</span>
+        </div>
+        <div class="install" onclick="copyInstall(this, 'npx skills add maythyai/csp-creator')">npx skills add maythyai/csp-creator</div>
+      </div>
+
+      <div class="card">
+        <h3>💼 csp-business</h3>
+        <p>一人公司商业引擎 — 从获客到成交的商业全链路</p>
+        <div class="meta">建设中 · 4 layers · SEO/邮件/增长/分析</div>
+        <div class="domains">
+          <span class="badge badge-business">marketing</span>
+          <span class="badge badge-business">sales</span>
+          <span class="badge badge-business">analytics</span>
+          <span class="badge badge-business">finance</span>
+        </div>
+        <div class="install" onclick="copyInstall(this, 'npx skills add maythyai/csp-business')">npx skills add maythyai/csp-business</div>
+      </div>
+
+      <div class="card">
+        <h3>🧘 csp-life</h3>
+        <p>超级个体生活助手 — AI 辅助的日常生活技能</p>
+        <div class="meta">规划中 · 4 layers · 效率/健康/学习/旅行</div>
+        <div class="domains">
+          <span class="badge badge-life">productivity</span>
+          <span class="badge badge-life">health</span>
+          <span class="badge badge-life">learning</span>
+          <span class="badge badge-life">travel</span>
+        </div>
+        <div class="install" onclick="copyInstall(this, 'npx skills add maythyai/csp-life')">npx skills add maythyai/csp-life</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>🏗️ 联邦架构</h2>
+    <div class="arch-box">
+      <pre><code>csp-router (联邦路由层 — 总是加载, ~2000 tokens)
+  │
+  ├── csp-core/          ← 编程全链路 (716 skills, 5 layers)
+  │     L0 router → L1 meta → L2 workflow → L3 patterns → L4 runtime
+  │
+  ├── csp-creator/       ← 创作者工具 (4 layers)
+  │     L1 meta → L2 workflow → L3 patterns → L4 runtime
+  │
+  ├── csp-business/      ← 商业引擎 (4 layers)
+  │     L1 meta → L2 workflow → L3 patterns → L4 runtime
+  │
+  └── csp-life/          ← 生活助手 (4 layers)
+        L1 meta → L2 workflow → L3 patterns → L4 runtime</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>🚀 安装</h2>
+    <div class="card">
+      <h3>Claude Code</h3>
+      <div class="install" onclick="copyInstall(this, '/plugin marketplace add maythyai/code-skills-package')">/plugin marketplace add maythyai/code-skills-package</div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <h3>Codex / Cursor / Copilot / Gemini CLI</h3>
+      <div class="install" onclick="copyInstall(this, 'npx skills add maythyai/code-skills-package -g')">npx skills add maythyai/code-skills-package -g</div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <h3>手动安装</h3>
+      <div class="install" onclick="copyInstall(this, 'git clone https://github.com/maythyai/code-skills-package.git')">git clone https://github.com/maythyai/code-skills-package.git && ./install.sh</div>
+    </div>
+  </section>
+
+  <footer>
+    <p>CSP v0.12.0 · MIT License · <a href="https://github.com/maythyai/code-skills-package">GitHub</a></p>
+    <p style="margin-top:.5rem">联邦路由 v0.1.0 · 独立安装的子包即将上线</p>
+  </footer>
+</div>
+<div class="copy-toast" id="toast">✅ 已复制安装命令</div>
+<script>
+function copyInstall(el, cmd) {
+  navigator.clipboard.writeText(cmd).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+</script>
+</body>
+</html>

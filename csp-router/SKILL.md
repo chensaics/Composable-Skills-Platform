@@ -146,6 +146,53 @@ Context score 考虑:
 - **影响分析**: 如果修改 skill X，哪些其他 skill 受影响？
 - **路径查找**: skill A 到 skill B 的最短路径
 
+### 8. 联邦路由 (Federal Routing — v1.0.0)
+
+> 当本地 skills 无法匹配用户意图时，查询 `csp-router/federation.yaml` 判断是否属于其他子包领域。
+
+**联邦路由流程：**
+
+```
+本地 skills 置信度 < 30%
+    │
+    ▼
+读 csp-router/federation.yaml → 匹配 packages[].domains[].keywords
+    │
+    ├── 匹配到子包 + 子包已安装 → 路由到子包内部路由
+    │
+    ├── 匹配到子包 + 子包未安装 → 输出安装建议（不静默跳过）
+    │      提示模板:
+    │      "🔍 检测到你的任务属于 {package_name} ({domain})。
+    │       一键安装: {install_command}
+    │       包含 {skill_count} 个技能，覆盖 {domains}。
+    │       安装后自动路由。"
+    │
+    └── 无匹配 → 降级到 Phase 2 深度访谈
+```
+
+**跨包能力提示：**
+
+联邦路由在以下场景主动提及其他包的能力（`capability_discovery.cross_suggest`）：
+- CSP Core 中用户提到 SEO/推广/变现 → 提示 csp-business
+- CSP Core 中用户提到短视频/封面图/海报 → 提示 csp-creator
+
+**联邦路由输出格式：**
+
+```
+## 路由决策
+
+**联邦状态**: local_skills={confidence}% | federation={matched_package or "none"}
+
+**本地匹配** (置信度):
+1. csp-xxx — {score}%
+
+**联邦匹配** (领域发现):
+{package_name} — {domain} (score: {weight}%)
+  → 状态: {已安装 / 建议安装: {install_command}}
+
+**决策**: {routing_decision}
+```
+
 ### 8. 输出格式
 
 ```
@@ -184,5 +231,6 @@ Context score 考虑:
 | `skill-metadata.yaml` |  元数据集中注册 |
 | `registry.json` | 全量 skill 注册表 |
 | `csp-router/skpg/graph.json` | 技能知识图谱 |
+| `csp-router/federation.yaml` | 联邦路由注册表（多包能力发现 + 安装建议） |
 | `.csp/state.json` | 当前项目状态快照
 | `references/code-modification-routing.md` | 改码类意图路由决策详述 |
