@@ -5,13 +5,16 @@
 # 子包缺失时提示安装。
 #
 # 核心设计原则：
-#   CSP skills 是"链接器"(Connector)，不是"构建器"(Builder)。
-#   - ✅ 通过 Notion API 同步知识库条目
-#   - ❌ 构建一个 Notion 克隆
-#   - ✅ 通过 WeCom API 发送企业微信消息
-#   - ❌ 构建一个企业微信客户端
-#   - ✅ 通过 Stripe API 管理订阅
-#   - ❌ 构建一个支付网关
+#   CSP 是一个 Skills 系统包 — 给 Agent 提供"怎么做"的知识 + "用什么工具做"的能力。
+#
+#   Skills 的两重定位：
+#   1. Agent 的效率工具包 — 封装领域方法论/工作流/最佳实践。
+#      Agent 加载后能高效完成该领域的任务（写代码/做设计/分析数据...）
+#   2. 外部产品的连接器 — 可以链接 Notion/Figma/Stripe 等产品的
+#      API 和 SDK，但不构建这些产品本身。
+#
+#   一句话：Skills 是"知识库 + 连接器"，不是"产品构建器"。
+#   我们是 skills 系统包，Agent 参考后能高效完成各个方面的任务。
 
 version: "1.0.0"
 federation_version: "0.2.0"
@@ -255,7 +258,7 @@ packages:
 # ── 联邦路由决策矩阵 ──────────────────────────────────────────
 decision_matrix:
   resolution:
-    # 精确匹配优先 — 明确的产品名直接路由（Skills 是 Connector 不是 Builder）
+    # 精确匹配优先 — 产品名直接路由到对应 skill 包
     - when: "programming domain > 0.7"
       route_to: "csp-code"
     - when: "testing + security + code_review domain > 0.5"
