@@ -31,6 +31,22 @@ anti_rationalizations:
 | **Integration** | API endpoints, database operations, service interactions | Always |
 | **E2E** | Critical user flows (Playwright/Cypress) | Critical paths |
 
+## Seams: Where Tests Go
+
+A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
+
+- **Test only at pre-agreed seams.** Before writing any test, identify the seams under test.
+- **Ask:** "What's the public interface, and which seams should we test?"
+- **One seam, one test, one minimal implementation per cycle.**
+- **Vertical slices, not horizontal:** One test → one implementation → repeat. Bulk tests verify imagined behavior, not real behavior.
+
+**Anti-patterns:**
+- Implementation-coupled: test breaks on refactor but behavior unchanged
+- Tautological: assertion recomputes expected value same way as code
+- Horizontal slicing: all tests first, then all implementation
+
+> Inspired by mattpocock/skills codebase-design vocabulary.
+
 ## Coverage Requirements
 
 - Minimum **80%** coverage (branches, functions, lines, statements)
