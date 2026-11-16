@@ -19,6 +19,33 @@ Transform a spec or requirements document into a fully detailed, step-by-step im
 
 ## Task Structure
 
+### Task Right-Sizing
+
+A task is the smallest unit that carries its own test cycle and is worth a fresh reviewer's gate. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where a reviewer could meaningfully reject one task while approving its neighbor. Each task ends with an independently testable deliverable.
+
+### Interfaces Block (per task)
+
+Every task declares what it consumes from earlier tasks and what it produces for later ones — exact function names, parameter types, and return types. This is how tasks communicate without a shared implementation:
+
+```
+**Interfaces:**
+- Consumes: [what earlier tasks provide — exact signatures]
+- Produces: [what later tasks rely on — exact names + types]
+```
+
+Slack in the interfaces is where bugs breed: if `clearLayers()` in Task 3 becomes `clearFullLayers()` in Task 7, the plan is broken. The self-review catches this.
+
+### Step Granularity
+
+**Each step is one action with a checkable result:**
+- "Write the failing test" — step
+- "Run it to make sure it fails" — step
+- "Implement the minimal code" — step
+- "Run tests and verify they pass" — step
+- "Commit" — step
+
+A step is done when the implementer can write exactly one reasonable thing from it. More than that is multiple steps; less than that is ambiguous.
+
 ````markdown
 ### Task N: [Component Name]
 
