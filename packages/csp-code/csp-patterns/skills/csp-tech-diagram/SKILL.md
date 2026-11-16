@@ -32,10 +32,15 @@ triggers:
   - 生成 GIF
   - animate diagram
   - 让图动起来
+  - drawio
+  - draw.io
+  - 转drawio
+  - 生成drawio
 related_skills:
   - csp-frontend-slides
   - csp-visual-verdict
   - csp-graph-architecture
+  - csp-drawio
 anti_rationalizations:
   - Never skip geometry validation — syntactic SVG validity does not guarantee visual correctness
   - Never hardcode node positions without checking for collisions
@@ -220,6 +225,53 @@ Golden signals, critical paths, correlated traces. Validates: exactly 4 golden s
 - **State Machine**: Rounded rects + initial/final states + guard conditions
 - **ER Diagram**: Entity rects with PK/FK, relationship diamonds, cardinality labels
 - **Network Topology**: Tiered devices (Internet → Edge → Core → Access → Endpoints)
+
+## Drawio Export (MD Document → Visual Pipeline)
+
+When the user wants a `.drawio` file (editable in draw.io/diagrams.net), use the drawio pipeline:
+
+### Step 1: Analyze Document Structure
+
+| MD structure | Maps to drawio type |
+|-------------|---------------------|
+| `# Title` + `## Sections` | Part chapters (colored title bars) |
+| Tables `|...|` | HTML `<table>` with colored rows |
+| Ordered lists `1. 2. 3.` | SOP step boxes (rectangles + arrows) |
+| Conditions "if...then..." | Decision tree (diamonds + rectangles) |
+| Priority P0/P1/P2 | Color coding (红/黄/绿) |
+
+### Step 2: Select Diagram Type
+
+| Info to convey | Diagram type | Not |
+|---------------|-------------|-----|
+| Yes/no decision chain | Decision tree (diamond→rect) | Table |
+| Multi-step procedure | Side-by-side SOP (rects+arrows) | Plain text |
+| Multi-dimension comparison | HTML `<table>` | Markdown table |
+| Metric matrix | HTML `<table>` + color rows | Many small boxes |
+| Escalation path | Horizontal nodes + arrows | Plain text |
+| Both flow + detail | Hybrid (upper flow, lower table) | Single type only |
+
+### Step 3: Apply Color Semantics
+
+One diagram = one color dimension:
+- Attribution (who owns what) → green/blue/orange fills
+- Priority (P0/P1/P2) → red/amber/green fills
+- Status (done/in-progress/todo) → green/yellow/grey fills
+
+**Never mix color semantics in one diagram.** When color = attribution, use emoji for priority: 🔴P0 🟡P1 ⚪P2
+
+### Step 4: Generate XML
+
+Key rules for drawio XML:
+- HTML tables: `rounded=0;whiteSpace=wrap;html=1;overflow=fill` (never `shape=table`)
+- Decision nodes: rhombus, `fillColor=#fff2cc;strokeColor=#d6b656`
+- Links: `<UserObject link="URL">` not plain mxCell value
+- XML entity escaping: `<`→`&lt;`, `>`→`&gt;`, `&`→`&amp;`
+- Section title bars: `fillColor=#1565C0;fontColor=#fff;fontSize=14;fontStyle=1;rounded=1`
+
+### Step 5: Self-Check
+
+Run 10-point checklist: 3-sec structure grasp, color dimension check, no markdown tables, no shape=table, legend present, HTML table alternating rows, all Part titles colored, no y-overlaps, links in UserObject, page height covers all.
 
 ## Shape Vocabulary
 
