@@ -9,7 +9,7 @@
       "prompt_title": "Knowledge Hub Initialization",
       "skill_references": [
         {"skill_name": "csp-knowledge-hub", "skill_directory": "packages/csp-code/csp-workflow/skills/csp-knowledge-hub/", "reference_type": "prerequisite"},
-        {"skill_name": "csp-codebase-mapper", "skill_directory": "csp-workflow/agents/", "reference_type": "template"},
+        {"skill_name": "csp-codebase-mapper", "skill_directory": "packages/csp-code/csp-workflow/agents/", "reference_type": "template"},
         {"skill_name": "csp-agentic-engineering", "skill_directory": "packages/csp-code/csp-workflow/skills/csp-agentic-engineering/", "reference_type": "methodology"}
       ]
     },
@@ -121,7 +121,7 @@
       "prompt_title": "UI/UX Design Director Review (8 Lenses)",
       "skill_references": [
         {"skill_name": "csp-roadmap-update", "skill_directory": "packages/csp-code/csp-workflow/skills/csp-roadmap-update/", "reference_type": "tool_call"},
-        {"skill_name": "csp-roadmap-planner", "skill_directory": "csp-workflow/agents/", "reference_type": "agent_spawn"}
+        {"skill_name": "csp-roadmap-planner", "skill_directory": "packages/csp-code/csp-workflow/agents/", "reference_type": "agent_spawn"}
       ]
     },
     {
