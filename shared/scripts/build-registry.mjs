@@ -24,7 +24,15 @@ const LAYER_MAP = {
 };
 
 function getLayerCategory(relPath) {
-  const top = relPath.split('/')[0];
+  // New paths: packages/csp-code/csp-meta/skills/xxx/SKILL.md
+  // Old paths (compat): csp-router/SKILL.md
+  // Try the 3rd component first (for packages/csp-code/csp-meta/...), then 1st (for csp-router/...)
+  const parts = relPath.split('/');
+  if (parts[0] === 'packages') {
+    const layerName = parts[2]; // packages/csp-code/csp-meta → csp-meta
+    return LAYER_MAP[layerName] || { layer: 9, category: 'unknown' };
+  }
+  const top = parts[0];
   return LAYER_MAP[top] || { layer: 9, category: 'unknown' };
 }
 
@@ -317,22 +325,21 @@ for (const dir of [
 
 // 3. Flat directories (all .md files)
 for (const dir of [
-  'csp-patterns/skills/cursor-rules',
-  'csp-patterns/commands',
-  'csp-patterns/agents',  // has both subdirs with SKILL.md AND flat .md files
-  'csp-patterns/review-tools',
-  'csp-patterns/doc-tools',
-  'csp-runtime/agents',
-  'csp-runtime/commands',
-  'csp-workflow/commands',
-  'csp-workflow/agents',
-  'csp-workflow/workflows',
+  'packages/csp-code/csp-patterns/commands',
+  'packages/csp-code/csp-patterns/agents',  // has both subdirs with SKILL.md AND flat .md files
+  'packages/csp-code/csp-patterns/review-tools',
+  'packages/csp-code/csp-patterns/doc-tools',
+  'packages/csp-code/csp-runtime/agents',
+  'packages/csp-code/csp-runtime/commands',
+  'packages/csp-code/csp-workflow/commands',
+  'packages/csp-code/csp-workflow/agents',
+  'packages/csp-code/csp-workflow/workflows',
 ]) {
   addEntries(scanFlatDir(dir));
 }
 
 // 4. csp-patterns/agents also has subdirectories with SKILL.md
-addEntries(scanSkillDir('csp-patterns/agents'));
+addEntries(scanSkillDir('packages/csp-code/csp-patterns/agents'));
 
 // Sort by path for stability
 allSkills.sort((a, b) => a.path.localeCompare(b.path));

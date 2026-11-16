@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![npm](https://img.shields.io/npm/v/code-skills-package)](https://www.npmjs.com/package/code-skills-package)
 [![v0.12.0](https://img.shields.io/badge/version-0.12.0-green)](./CHANGELOG.md)
-[![Registry: 716](https://img.shields.io/badge/entries-716-orange)](./docs/reference/SKILL-INDEX.md)
+[![Registry: 716](https://img.shields.io/badge/entries-678-orange)](./docs/reference/SKILL-INDEX.md)
 
 <br>
 
@@ -16,7 +16,7 @@
 **Composable Multi-Domain Skills Platform — Full-stack capabilities from code to creation, commerce to life.**
 [![Platforms: 22+](https://img.shields.io/badge/platforms-22+-brightgreen)](./docs/guides/INSTALL.md)
 
-**Unified AI Skills Architecture · 22+ Platforms · 15+ Languages · 358 Skills + 116 Agents + 154 Commands + 36 Workflows**
+**Unified AI Skills Architecture · 22+ Platforms · 15+ Languages · 365 Skills + 116 Agents + 154 Commands + 36 Workflows**
 
 Integrates capabilities from multiple open-source AI coding projects into a layered, auto-routing framework with extremely low token costs to complete complex development tasks.
 
@@ -34,7 +34,7 @@ Integrates capabilities from multiple open-source AI coding projects into a laye
 
 </div>
 
-CSP (Composable Skills Platform) consolidates the essence of multiple open-source AI programming projects into an integrated solution. It uses a five-layer architecture to load skills on demand, with confidence scoring router and skill knowledge graph, allowing AI programming assistants to load only the minimum skill set required for each task during a session. At the same time, CSP remembers user usage habits and project context, providing increasingly accurate services as the project evolves. With 710 entries spanning full-stack development, DevOps, security, and a dedicated indie developer toolkit covering deployment, monetization, performance, and more, CSP supports the complete journey from idea to production.
+CSP (Composable Skills Platform) consolidates the essence of multiple open-source AI programming projects into an integrated solution. It uses a five-layer architecture to load skills on demand, with confidence scoring router and skill knowledge graph, allowing AI programming assistants to load only the minimum skill set required for each task during a session. At the same time, CSP remembers user usage habits and project context, providing increasingly accurate services as the project evolves. With 678 entries spanning full-stack development, DevOps, security, and a dedicated indie developer toolkit covering deployment, monetization, performance, and more, CSP supports the complete journey from idea to production.
 
 ## Core Features
 
@@ -44,7 +44,7 @@ CSP (Composable Skills Platform) consolidates the essence of multiple open-sourc
 | **Token Savings** | Five-layer on-demand loading + index sharding, ~500–1,500 tokens per task | Full loading ~12,000+ tokens |
 | **Skill Orchestration** | Static Recipe + Dynamic DAG, supports branching / parallel / rollback / automatic merging | Fixed pipeline / no orchestration |
 | **Continuous Learning** | 5-dimensional knowledge extraction, gets smarter about projects and developers | Stateless, starts from zero each time |
-| **Full-Stack Coverage** | 710 entries · 5 layers · 15+ languages · 22+ platforms | Single language / limited scenarios |
+| **Full-Stack Coverage** | 678 entries · 5 layers · 15+ languages · 22+ platforms | Single language / limited scenarios |
 | **Open Extension** | Custom Skills + Recipe + Creation Wizard | Closed ecosystem / no extension |
 
 ### State-Driven Smart Routing
@@ -101,7 +101,7 @@ Automatically extracts knowledge in 5 dimensions at session end — project arch
 
 ### Full Development Lifecycle Coverage
 
-710 entries (358 skills, 116 agents, 154 commands, 36 workflows, 39 cursor rules, 4 review tools, 3 doc tools) distributed across 5 layers, covering the full process of requirement planning, code implementation, review, debugging, testing, and release, extending to specialized areas such as AI Engineering (RAG/LLM/vLLM), DevOps (CI/CD/IaC/K8s), mobile (React Native/cross-platform), security auditing (STRIDE-A/CodeQL/incident response). Additionally, 31 skills are specifically designed for independent developers, covering deployment (Vercel/Railway/VPS), monetization (Stripe/subscriptions/SEO/analytics), performance tuning, API integration (webhooks/OAuth), testing engineering (E2E/visual regression), internationalization, and monorepo management. Each skill follows the SKILL.md v2 specification, with structured fields like phase/domain/role.
+678 entries (365 skills, 116 agents, 154 commands, 36 workflows, 39 cursor rules, 4 review tools, 3 doc tools) distributed across 5 layers, covering the full process of requirement planning, code implementation, review, debugging, testing, and release, extending to specialized areas such as AI Engineering (RAG/LLM/vLLM), DevOps (CI/CD/IaC/K8s), mobile (React Native/cross-platform), security auditing (STRIDE-A/CodeQL/incident response). Additionally, 31 skills are specifically designed for independent developers, covering deployment (Vercel/Railway/VPS), monetization (Stripe/subscriptions/SEO/analytics), performance tuning, API integration (webhooks/OAuth), testing engineering (E2E/visual regression), internationalization, and monorepo management. Each skill follows the SKILL.md v2 specification, with structured fields like phase/domain/role.
 
 A **three-spec governance layer** (PMS product-spec / CMS code-spec / TMS test-spec) runs alongside the lifecycle as living baselines: each stage reads the relevant spec before producing, and writes back deltas after shipping — keeping PRD, code, and tests mutually traceable without a separate tool.
 
@@ -230,7 +230,7 @@ CSP uses a five-layer layered architecture. Only the router (L0) loads at sessio
 │      Continuous learning · Autonomous execution · Knowledge  │
 │      management · Token budget · File-organizer · Parallel   │
 └──────────────────────────────────────────────────────────────┘
-                    Total: 710 entries (358 skills + 116 agents + 154 commands + 36 workflows + 46 other entries)
+                    Total: 678 entries (365 skills + 116 agents + 154 commands + 36 workflows + 46 other entries)
 ```
 
 ### Routing Process

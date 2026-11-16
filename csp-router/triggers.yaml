@@ -121,7 +121,7 @@ trigger_index:
     skills: [csp-party-mode]
     weight: 45
   "spec":
-    skills: [csp-spec-contract, csp-spec-driven-development]
+    skills: [csp-spec-contract, csp-spec-driven-development, csp-spec-phase]
     weight: 50
   "specification":
     skills: [csp-spec-contract, csp-spec-driven-development]
@@ -6259,6 +6259,95 @@ trigger_index:
     weight: 40
   "skill-distiller":
     skills: [csp-skill-distiller]
+    weight: 40
+
+  # ─── auto-generated triggers (generate-triggers.mjs) ───
+  "django code review":
+    skills: [csp-django-reviewer]
+    weight: 40
+  "django review":
+    skills: [csp-django-reviewer]
+    weight: 40
+  "django 审查":
+    skills: [csp-django-reviewer]
+    weight: 40
+  "django-reviewer":
+    skills: [csp-django-reviewer]
+    weight: 40
+  "execute phase":
+    skills: [csp-execute-phase]
+    weight: 40
+  "execute-phase":
+    skills: [csp-execute-phase]
+    weight: 40
+  "fastapi-reviewer":
+    skills: [csp-fastapi-reviewer]
+    weight: 40
+  "fix execute phase":
+    skills: [csp-execute-phase]
+    weight: 40
+  "fix map codebase":
+    skills: [csp-map-codebase]
+    weight: 40
+  "fix secure phase":
+    skills: [csp-secure-phase]
+    weight: 40
+  "fix spec phase":
+    skills: [csp-spec-phase]
+    weight: 40
+  "map":
+    skills: [csp-map-codebase]
+    weight: 40
+  "map codebase":
+    skills: [csp-map-codebase]
+    weight: 40
+  "map-codebase":
+    skills: [csp-map-codebase]
+    weight: 40
+  "review django code":
+    skills: [csp-django-reviewer]
+    weight: 40
+  "review execute phase":
+    skills: [csp-execute-phase]
+    weight: 40
+  "review map codebase":
+    skills: [csp-map-codebase]
+    weight: 40
+  "review secure phase":
+    skills: [csp-secure-phase]
+    weight: 40
+  "review spec phase":
+    skills: [csp-spec-phase]
+    weight: 40
+  "review typescript code":
+    skills: [csp-typescript-reviewer]
+    weight: 40
+  "secure":
+    skills: [csp-secure-phase]
+    weight: 40
+  "secure phase":
+    skills: [csp-secure-phase]
+    weight: 40
+  "secure-phase":
+    skills: [csp-secure-phase]
+    weight: 40
+  "spec phase":
+    skills: [csp-spec-phase]
+    weight: 40
+  "spec-phase":
+    skills: [csp-spec-phase]
+    weight: 40
+  "typescript code review":
+    skills: [csp-typescript-reviewer]
+    weight: 40
+  "typescript review":
+    skills: [csp-typescript-reviewer]
+    weight: 40
+  "typescript 审查":
+    skills: [csp-typescript-reviewer]
+    weight: 40
+  "typescript-reviewer":
+    skills: [csp-typescript-reviewer]
     weight: 40
 stack_rules:
   python:

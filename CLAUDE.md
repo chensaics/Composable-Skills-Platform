@@ -10,7 +10,7 @@ L1  packages/csp-code/csp-meta      — methodology: brainstorming, TDD, debuggi
 L2  packages/csp-code/csp-workflow  — project lifecycle: plan → execute → verify → ship (206 entries)
 L3  packages/csp-code/csp-patterns  — language/framework patterns, reviewers, build-resolvers (419 entries)
 L4  packages/csp-code/csp-runtime   — autopilot, ralph, wiki, remember, self-improve (57 entries)
-Total: 716 entries across 5 layers (2 deprecated, carry redirect targets)
+Total: 678 entries across 5 layers (2 deprecated, carry redirect targets)
 ```
 
 ## Skill 内容规范（强制，所有新增/移植技能必须遵守）
