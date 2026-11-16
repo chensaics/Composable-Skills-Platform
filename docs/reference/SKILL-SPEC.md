@@ -30,6 +30,7 @@ New in v3: `type` field for skill categorization.
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `type` | enum | No | Skill type: `technique`, `pattern`, `reference`, `workflow`, `guardian`. Used to determine Required Sections. |
+| `invocation` | enum | No | **New in v3.1**: `user` (only when user explicitly invokes), `model` (AI can auto-invoke), `both` (default). Inspired by mattpocock/skills. |
 
 ---
 
