@@ -18,14 +18,27 @@ readonly VERSION="0.12.0"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly PROJECT_DIR="$(pwd)"
 
-# CSP 五层架构源目录
-readonly CSP_LAYERS="csp-router packages/csp-code/csp-meta packages/csp-code/csp-workflow packages/csp-code/csp-patterns packages/csp-code/csp-runtime"
+# CSP 五层架构源目录（安装时自动去掉 packages/csp-code/ 前缀）
+readonly CSP_SOURCE_LAYERS="csp-router packages/csp-code/csp-meta packages/csp-code/csp-workflow packages/csp-code/csp-patterns packages/csp-code/csp-runtime"
+readonly CSP_LAYERS="csp-router csp-meta csp-workflow csp-patterns csp-runtime"
+
+# Map a target layer name to its source path (e.g. csp-meta → packages/csp-code/csp-meta)
+source_layer_for() {
+  case "$1" in
+    csp-meta)     echo "packages/csp-code/csp-meta" ;;
+    csp-workflow) echo "packages/csp-code/csp-workflow" ;;
+    csp-patterns) echo "packages/csp-code/csp-patterns" ;;
+    csp-runtime)  echo "packages/csp-code/csp-runtime" ;;
+    *)            echo "$1" ;;  # csp-router stays as-is
+  esac
+}
 
 # ─── Remote Bootstrap ──────────────────────────────────────────────
 # Auto-detect: if layer dirs are missing, download full repo and re-exec.
 # Supports standalone file, pipe (curl|bash), and npm-installed scenarios.
+# Validate: if layer dirs are missing at source paths, download and re-exec
 _has_layers=true
-for _l in $CSP_LAYERS; do
+for _l in $CSP_SOURCE_LAYERS; do
   if [ ! -d "$SCRIPT_DIR/$_l" ]; then _has_layers=false; break; fi
 done
 if [ "$_has_layers" = "false" ]; then
@@ -194,7 +207,7 @@ count_skill_dirs() {
 count_all_csp_skills() {
   local total=0
   for layer in $CSP_LAYERS; do
-    local src="$SCRIPT_DIR/$layer"
+    local src_layer=$(source_layer_for "$layer"); local src="$SCRIPT_DIR/$src_layer"
     [ -d "$src" ] || continue
     local n
     n=$(find "$src" -name "SKILL.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -259,7 +272,7 @@ extract_frontmatter_field() {
 # Scan SKILL.md entries recursively: output "name|description" per line
 scan_skill_entries() {
   for layer in $CSP_LAYERS; do
-    local src="$SCRIPT_DIR/$layer"
+    local src_layer=$(source_layer_for "$layer"); local src="$SCRIPT_DIR/$src_layer"
     [ -d "$src" ] || continue
     while read -r skill_file; do
       [ -z "$skill_file" ] && continue
@@ -287,7 +300,7 @@ install_skills_to() {
   local total=0
   mkdir -p "$target_dir"
   for layer in $CSP_LAYERS; do
-    local src="$SCRIPT_DIR/$layer"
+    local src_layer=$(source_layer_for "$layer"); local src="$SCRIPT_DIR/$src_layer"
     [ -d "$src" ] || continue
 
     if [ -z "$stack_skills" ]; then
@@ -810,7 +823,7 @@ main() {
       if [ -n "$layer_filter" ]; then
         echo "$layer_filter" | grep -qw "$layer" || continue
       fi
-      local src="$SCRIPT_DIR/$layer"
+      local src_layer=$(source_layer_for "$layer"); local src="$SCRIPT_DIR/$src_layer"
       [ -d "$src" ] || continue
 
       # Determine skill dirs: $src/skills/ if exists, else $src/
@@ -881,7 +894,7 @@ main() {
       if [ -n "$layer_filter" ]; then
         echo "$layer_filter" | grep -qw "$layer" || continue
       fi
-      local src="$SCRIPT_DIR/$layer"
+      local src_layer=$(source_layer_for "$layer"); local src="$SCRIPT_DIR/$src_layer"
       [ -d "$src" ] || continue
 
       if [ -z "$stack_filter" ] || [ "$layer" != "csp-patterns" ]; then
