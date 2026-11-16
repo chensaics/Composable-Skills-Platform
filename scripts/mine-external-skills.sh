@@ -25,95 +25,125 @@ readonly REPORT="${MINE_DIR}/REPORT-$(date +%Y%m%d).md"
 #   skills.sh trending, awesome-agent-skills 合集, 社区搜索
 
 readonly TARGETS=(
-  # ═══ Programming · 编程 (13 repos) ═══
-  "mattpocock/skills|programming|5|TypeScript 工程技能(119K stars). 21 skills: TDD/PRD/设计/Git安全"
-  "anthropics/skills|programming|5|Anthropic 官方技能(189K stars). docx/pptx/xlsx/pdf/mcp-builder"
-  "obra/superpowers|programming|5|SDLC 技能系统(317K stars). 20+ composable skills"
-  "vercel-labs/agent-skills|programming|4|Vercel 官方: React/Next.js 最佳实践"
-  "apify/agent-skills|programming|4|Web scraping+automation skills. 130+ curated Actors"
-  "sickn33/agentic-awesome-skills|programming|4|2,955+ reusable skills 合集. CLI/MCP/plugins"
-  "EmilKowalski/skill|programming|3|全栈审美: 设计+动效+代码+性能"
-  "imsai-sh/skills|programming|3|worktree 三件套 + iOS ICP filing + 火山引擎 RTC"
-  "GoogleChrome/modern-web-guidance|programming|3|Chrome 团队: 现代 Web 最佳实践(7.2K stars)"
-  "solana-foundation/solana-dev-skill|programming|3|Solana 链上开发技能"
-  "new-silvermoon/awesome-android-agent-skills|programming|3|Android 开发技能(Kotlin/Compose)"
-  "lennney/gate-all-skills|programming|3|前端/Next.js 技能合集"
-  "golang-collection/go-modern-guidelines|programming|3|Go 现代编码规范(2.6K stars)"
+  # ═══ Programming · 编程 (18 repos) ═══
+  "mattpocock/skills|programming|5|TS工程技能(119K★). 21 skills TDD/PRD/设计/git-guardrails"
+  "anthropics/skills|programming|5|Anthropic官方(189K★). docx/pptx/xlsx/pdf/mcp-builder"
+  "obra/superpowers|programming|5|SDLC技能框架(317K★). 20+ composable skills+subagent"
+  "vercel-labs/agent-skills|programming|5|Vercel官方: React/Next.js/web-design-guidelines"
+  "addyosmani/agent-skills|programming|4|Production-grade engineering skills(Addy Osmani)"
+  "apify/agent-skills|programming|4|Web scraping+automation(130+ curated Actors)"
+  "sickn33/agentic-awesome-skills|programming|4|2955+ reusable skills合集. CLI/MCP/plugins"
+  "alirezarezvani/claude-skills|programming|4|410 skills+120 agents. 全领域覆盖"
+  "flreey/myskills|programming|3|跨CLI review/site-analytics/skill-forge"
+  "EmilKowalski/skill|programming|3|全栈审美:设计+动效+代码+性能"
+  "lennney/gate-all-skills|programming|3|前端/Next.js技能合集. skills.sh一键装"
+  "imsai-sh/skills|programming|3|worktree三件套+iOS ICP filing+火山引擎RTC"
+  "GoogleChrome/modern-web-guidance|programming|3|Chrome团队:现代Web最佳实践(7.2K★)"
+  "solana-foundation/solana-dev-skill|programming|3|Solana链上开发技能"
+  "new-silvermoon/awesome-android-agent-skills|programming|3|Android开发(Kotlin/Compose)"
+  "golang-collection/go-modern-guidelines|programming|3|Go现代编码规范+100+skills"
+  "full-stack-skills/tauri-skills|programming|3|Tauri v2跨平台桌面/移动开发(52 skills)"
+  "ijry/full-stack-skills|programming|3|全栈技能市场(42组,421 SKILL.md)"
 
-  # ═══ Quality · 测试/安全/代码质量 (6 repos) ═══
-  "cloudflare/security-audit-skill|quality|5|六阶段安全审计(65K stars). 隔离猎手+对抗验证"
-  "TrailOfBits/skills|quality|4|安全审计技能(26 skills). building-secure-contracts/static-analysis"
-  "sentry/skills|quality|4|Sentry 官方: code-review/commit/create-pr/find-bugs"
-  "UseAI-pro/openclaw-skills-security|quality|3|安全扫描: prompt injection/supply chain/credential leaks"
-  "buainoai/awesome-clawdbot-skills|quality|3|565+ Clawdbot 社区技能合集(安全扫描)"
-  "bruc3van/agent-skills-guard|quality|3|Agent Skills 安全扫描器+Rust桌面管理"
+  # ═══ Quality · 测试/安全/代码质量 (8 repos) ═══
+  "cloudflare/security-audit-skill|quality|5|六阶段安全审计(67K★).隔离猎手+对抗验证"
+  "TrailOfBits/skills|quality|4|安全审计26 skills. building-secure-contracts"
+  "sentry/skills|quality|4|Sentry官方:code-review/commit/create-pr/find-bugs"
+  "UseAI-pro/openclaw-skills-security|quality|3|安全扫描:prompt injection/supply chain"
+  "bruc3van/agent-skills-guard|quality|3|Agent Skills安全扫描器+Rust桌面管理"
+  "lovstudio/agent-skill-design-guide|quality|3|Skill设计指南. 5DQM质量框架"
+  "AgriciDaniel/claude-seo|quality|3|26 sub-skills+19 sub-agents. SEO/GEO/backlinks"
+  "buainoai/awesome-clawdbot-skills|quality|3|565+ Clawdbot社区技能合集"
 
-  # ═══ DevOps · 部署/CI/CD/云 (3 repos) ═══
-  "cloudflare/agent-skills|devops|4|Cloudflare Workers/Pages/Durable Objects"
-  "neondatabase/skills|devops|3|Neon Serverless Postgres 集成"
-  "tinybirdco/skills|devops|3|Tinybird 实时数据分析管道"
+  # ═══ DevOps · 部署/CI/CD/云 (5 repos) ═══
+  "cloudflare/agent-skills|devops|4|Cloudflare Workers/Pages/Durable Objects/R2"
+  "neondatabase/skills|devops|3|Neon Serverless Postgres集成"
+  "tinybirdco/skills|devops|3|Tinybird实时数据分析管道"
+  "hashicorp/skills|devops|3|HashiCorp Terraform/Vault/Consul技能"
+  "netlify/skills|devops|3|Netlify部署/Edge Functions/Forms"
 
-  # ═══ Data · 数据分析/SQL/BI (4 repos) ═══
-  "K-Dense-AI/scientific-agent-skills|data|5|165 科研技能(190K+ users). 100+科学数据库"
-  "brycewang-stanford/Auto-Research-Skills|data|4|自主科研: 从灵感到论文全自动(21 projects)"
-  "leanjialuyao-dev/AcademicForge|data|4|学术写作技能集成. 论文润色/翻译/排版"
-  "ClickHouse/skills|data|3|ClickHouse 分析数据库技能"
+  # ═══ Data · 数据分析/SQL/BI (6 repos) ═══
+  "K-Dense-AI/scientific-agent-skills|data|5|165科研技能(190K+users). 100+科学数据库"
+  "brycewang-stanford/Auto-Research-Skills|data|4|自主科研:灵感到论文全自动(21 projects)"
+  "leanjialuyao-dev/AcademicForge|data|4|学术写作集成. 润色/翻译/排版/LaTeX"
+  "ClickHouse/skills|data|3|ClickHouse分析数据库技能"
+  "xrb936/nature-skills|data|3|Nature论文图表/paper-to-patent"
+  "replicate/skills|data|3|Replicate模型部署/推理技能"
 
-  # ═══ Design · 设计 (5 repos) ═══
-  "Nutlope/hallmark|design|5|AI 设计技能(51K stars). 设计稿→代码"
+  # ═══ Design · 设计 (8 repos) ═══
+  "Nutlope/hallmark|design|5|AI设计技能(51K★). 设计稿→代码"
   "nextlevelbuilder/ui-ux-pro-max-skill|design|4|视觉层级×色彩心理学×交互模式"
-  "tt-a1i/archify|design|4|架构图自动生成(27K stars). Mermaid/流程图"
-  "motiful/product-shots|design|3|电商视觉: 产品图→全套 e-commerce visuals"
-  "emilkowalski/skill|design|3|设计驱动开发: 动效+性能+审美"
+  "tt-a1i/archify|design|4|架构图自动生成(27K★). Mermaid/流程图/时序图"
+  "Leonxlnx/taste-skill|design|4|给Agent加审美:art direction/reference/browser"
+  "motiful/product-shots|design|3|电商视觉:产品图→全套e-commerce visuals"
+  "emilkowalski/skill|design|3|设计驱动开发:动效+性能+审美"
+  "meta/astryx|design|3|React设计系统(26K★). 150+无障碍组件/主题/CLI"
+  "weiyongw/Skills|design|3|写作思考设计效率. idea-forge/evergreen-writing"
 
-  # ═══ Creator · 内容创作 (8 repos) ═══
-  "ConardLi/garden-skills|creator|4|创作与知识处理(11K stars). 文章/图像/网页/PPT"
-  "alchaincyf/huashu-skills|creator|4|内容创作21合1(30万粉博主). 选题/PPT/审校/短视频"
+  # ═══ Creator · 内容创作 (12 repos) ═══
+  "ConardLi/garden-skills|creator|5|创作知识处理(11K★). 文章/图像/网页/PPT"
+  "alchaincyf/huashu-skills|creator|5|30万粉博主内容创作21合1. 选题/PPT/短视频"
+  "alchaincyf/nuwa-skill|creator|4|蒸馏任何人思维方式. 心智模型/表达DNA"
   "lijigang/ljg-skills|creator|4|写作思考认知工具箱. plain/learn/read/card/think"
-  "Remotion/skills|creator|3|Remotion 视频编辑技能(React编程生成视频)"
-  "storytold/craft-anything|creator|3|网站→代码: 分析任意网站生成可编译项目(29K stars)"
-  "kostja94/marketing-skills|creator|3|营销技能(160+): SEO/内容/40+page types/付费广告"
-  "echohaoran/AI-AGENT-Skills|creator|3|办公生产力: Office/WPS/PDF/浏览器自动化"
-  "imsai-sh/skills-hackernews|creator|2|HackerNews Show HN 提交技能"
+  "jianshuo/Claude-skills|creator|4|视频创作+公众号. 13 skills:转录/配音/多机位"
+  "Remotion/skills|creator|3|Remotion视频编辑(React编程生成视频)"
+  "storytold/craft-anything|creator|3|网站→代码:分析任意网站生成项目(29K★)"
+  "wwwzhouhui/skills_collection|creator|3|视频创作合集:mp-cover/seedance/voice-to-video"
+  "kostja94/marketing-skills|creator|3|营销技能(160+):SEO/内容/40+page types"
+  "echohaoran/AI-AGENT-Skills|creator|3|办公生产力:Office/WPS/PDF/feishu"
+  "ricocc/rico-skills|creator|2|内容创作/设计优化/资源策展"
+  "dantefung/gm-skills|creator|2|topic-engine/de-ai-article/x-hook-writer"
 
-  # ═══ Automation · 工具与自动化 (3 repos) ═══
-  "firecrawl/skills|automation|4|Firecrawl 网页抓取+数据提取"
-  "ComposioHQ/skills|automation|3|Composio 工具集成平台(Tool-as-a-Service)"
-  "VintLin/skill-flow|automation|3|跨平台 skill 管理器(Claude/Cursor/Copilot)"
+  # ═══ Automation · 工具与自动化 (5 repos) ═══
+  "firecrawl/skills|automation|4|Firecrawl网页抓取+数据提取+search"
+  "ComposioHQ/skills|automation|3|Composio工具集成平台. 250+tools"
+  "VintLin/skill-flow|automation|3|跨平台skill管理器. 安装/管理/分享"
+  "vercel-labs/agent-browser|automation|3|浏览器自动化CLI+配套Skill"
+  "psenger/ai-agent-skills|automation|3|生产级skills合集. handoff/profile-critique"
 
-  # ═══ Business · 商业 (5 repos) ═══
-  "Eronred/aso-skills|business|4|ASO 应用商店优化. 关键词/元数据/竞品分析"
-  "stripe/agent-skills|business|4|Stripe 官方: 支付/订阅集成最佳实践"
-  "Nexscope/eCommerce-Skills|business|3|Amazon/eCommerce 技能合集"
-  "Typefully/skills|business|3|Typefully: X/Twitter 内容创作与数据分析"
-  "Sanity-io/skills|business|3|Sanity CMS 内容管理集成"
+  # ═══ Business · 商业 (7 repos) ═══
+  "Eronred/aso-skills|business|4|ASO应用商店优化. 关键词/元数据/竞品分析"
+  "stripe/agent-skills|business|4|Stripe官方:支付/订阅/billing/invoicing"
+  "Nexscope/eCommerce-Skills|business|3|Amazon/eCommerce技能合集"
+  "Nexscope/Amazon-Skills|business|3|Amazon卖家技能合集"
+  "Typefully/skills|business|3|Typefully:X/Twitter内容创作+数据分析"
+  "Sanity-io/skills|business|3|Sanity CMS内容管理集成"
+  "courier/skills|business|3|Courier通知推送:email/SMS/push/slack/in-app"
 
-  # ═══ Product · 产品管理 (2 repos) ═══
-  "better-auth/skills|product|3|Better Auth: 认证/授权最佳实践"
-  "cursor/plugins|product|3|Cursor 官方插件目录(4K stars)"
+  # ═══ Product · 产品管理 (3 repos) ═══
+  "better-auth/skills|product|3|Better Auth:认证/授权/Session/2FA/OAuth"
+  "cursor/plugins|product|3|Cursor官方插件目录. Marketplace分发"
+  "plaidwork/agency-agents|product|3|完整AI agency. frontend/Reddit/whimsy"
 
-  # ═══ Workspace · 工作套件/效率 (5 repos) ═══
-  "thedotmack/claude-mem|workspace|5|跨会话记忆(114K stars). 压缩+注入+持久化"
-  "paperclipai/paperclip|workspace|4|Agent 工作管理: multi-agent/project/编排"
-  "Egonex-AI/Understand-Anything|workspace|4|代码知识图谱: 可搜索/可提问/可探索"
-  "claude-obsidian/skills|workspace|3|Claude ↔ Obsidian 双向同步(14K stars)"
-  "jackfrued/awesome-agent-skills|workspace|3|1000+ 精品技能合集. 手选非AI生成"
+  # ═══ Workspace · 工作套件/效率 (7 repos) ═══
+  "thedotmack/claude-mem|workspace|5|跨会话记忆(115K★). 压缩+注入+持久化"
+  "paperclipai/paperclip|workspace|4|Agent工作管理:multi-agent/project/编排"
+  "Egonex-AI/Understand-Anything|workspace|4|代码知识图谱. 可搜索/可提问/可探索"
+  "Graphify-Labs/graphify|workspace|4|代码库→知识图谱(36K★). AST解析. MCP"
+  "claude-obsidian/skills|workspace|3|Claude↔Obsidian双向同步(14K★)"
+  "Leon-Drq/openagentskill|workspace|3|Skill注册中心. npm for Agent Skills"
+  "xingkongliang/skills-manager|workspace|3|跨50+工具skill管理器+桌面app"
 
-  # ═══ Other · 其他/跨域 (6 repos) ═══
-  "Donchitos/Claude-Code-Game-Studios|other|4|49 Agent+72 Skills 游戏开发多智能体"
-  "nvidia/skills|other|4|NVIDIA 官方: Physical AI/机器人/仿真/CUDA/RAG"
-  "aAAaqwq/AGI-Super-Team|other|3|跨框架 AI 组织: C-suite agents+expert subagents(837 skills)"
-  "expo/skills|other|3|Expo 官方: React Native 移动开发"
-  "huggingface/skills|other|3|Hugging Face: model-trainer/datasets/evaluation/jobs"
-  "google/labs-skills|other|3|Google Labs: design-md/react-components"
+  # ═══ Other · 其他/跨域/大厂 (9 repos) ═══
+  "nvidia/skills|other|5|NVIDIA官方:Physical AI/机器人/仿真/CUDA/RAG"
+  "Donchitos/Claude-Code-Game-Studios|other|4|49 Agent+72 Skills游戏开发"
+  "aAAaqwq/AGI-Super-Team|other|4|837 skills+C-suite agents+expert subagents"
+  "expo/skills|other|3|Expo官方:React Native/app-design/deployment"
+  "huggingface/skills|other|3|HuggingFace:model-trainer/datasets/evaluation"
+  "google/labs-skills|other|3|Google Labs:design-md/react-components"
+  "lmstudio-ai/skills|other|3|LM Studio:本地模型运行/配置"
+  "inngest/skills|other|3|Inngest:durable functions/event-driven/workflow"
+  "callstackincubator/skills|other|3|Callstack:React Native testing/linting"
 
-  # ═══ Awesome 合集 · 发现平台 (6 repos) ═══
-  "VoltAgent/awesome-agent-skills|discovery|5|1000+ 精品合集. 官方+社区. 手选非AI生成"
-  "JackyST0/awesome-agent-skills|discovery|5|AI Agent Skills 发现平台(install.sh一键装)"
-  "helloianneo/awesome-claude-code-skills|discovery|4|50+精选. 按场景分类. 带推荐等级"
-  "subinium/awesome-claude-code|discovery|4|Claude Code 工具/技能/插件/MCP 精选"
-  "michielhdoteth/awesome-ai-agent-tools|discovery|4|AI agent 工具全栈: skills/MCP/loops/hooks/plugins"
-  "mantoufan/behi-acs|discovery|3|Awesome Claude Skills: 按域分类收录"
+  # ═══ Discovery · 发现平台/awesome合集 (8 repos) ═══
+  "JackyST0/awesome-agent-skills|discovery|5|Agent Skills发现平台(install.sh一键装)"
+  "VoltAgent/awesome-agent-skills|discovery|5|1000+精品合集. 官方+社区. 手选非AI"
+  "helloianneo/awesome-claude-code-skills|discovery|5|50+精选. 按场景分类. 带推荐等级"
+  "subinium/awesome-claude-code|discovery|4|Claude Code全生态:tools/skills/plugins/MCP"
+  "michielhdoteth/awesome-ai-agent-tools|discovery|4|AI agent工具全栈:skills/MCP/loops/hooks"
+  "mantoufan/behi-acs|discovery|4|Awesome Claude Skills:按Document/Dev/Data分类"
+  "LeoYeAI/agent-master-skills|discovery|4|2700+ curated skills. daily refresh"
+  "laolaoshiren/claude-code-skills-zh|discovery|3|中文skills合集+星标跟踪"
 )
 
 readonly DRY_RUN="${1:-}"
@@ -235,7 +265,7 @@ main() {
 # 外部 Agent Skills 挖掘报告
 
 生成时间: $(date '+%Y-%m-%d %H:%M:%S')
-分析仓库: ${#TARGETS[@]} 个（覆盖 12 个 CSP 领域 + 6 个发现平台）
+分析仓库: ${#TARGETS[@]} 个（覆盖 12 个 CSP 领域 + 8 个发现平台）
 
 ---
 
