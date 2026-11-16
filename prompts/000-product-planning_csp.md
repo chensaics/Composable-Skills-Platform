@@ -520,4 +520,3 @@ Phase 0 上下文探测
 - **测试嵌入** = `000-test_pipeline_csp.md` 产出测试证据 → 嵌入开发 Pipeline S6 的 Check 1-5.10
 - **项目治理** = `[[prompts/000-project-governance_csp.md]]` 定义产物路径/版本管理/文档边界——所有产物落盘遵循 G2.1 约定
 
-
