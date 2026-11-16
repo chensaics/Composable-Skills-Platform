@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "total_skills": 678,
+  "total_skills": 683,
   "shards": [],
   "skill_metadata": "skill-metadata.yaml",
   "skills": [
@@ -61,6 +61,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-code/csp-meta/skills/csp-code-graph/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-constraints",
+      "description": "Use when setting up a project's machine-checkable quality bar (CONSTRAINTS.md), when an agent keeps silencing checks or skipping tests to get to green, when coverage/performance/security numbers get argued about per-PR, or when starting autonomous loops without a written bar. Produces a CONSTRAINTS.",
+      "layer": 1,
+      "category": "meta",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-code/csp-meta/skills/csp-constraints/SKILL.md",
       "deps": [],
       "priority": 10
     },
@@ -136,6 +151,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-code/csp-meta/skills/csp-finishing-a-development-branch/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-grilling",
+      "description": "Use when stress-testing a plan, design, or decision before implementation. Uses design-tree + frontier-based interviewing to map decisions and their dependencies, asking the whole frontier in each round until nothing is left unexamined. Inspired by mattpocock/skills grilling pattern. Keywords: grill",
+      "layer": 1,
+      "category": "meta",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-code/csp-meta/skills/csp-grilling/SKILL.md",
       "deps": [],
       "priority": 10
     },
@@ -4089,6 +4119,21 @@
       "priority": 10
     },
     {
+      "name": "csp-drawio",
+      "description": "Use when generating draw.io architecture diagrams, flowcharts, decision trees, comparisons, or converting Markdown documents into draw.io XML. Structured pipeline: MD analysis → diagram type selection → XML generation → self-check. Triggers on \"drawio\", \"画图\", \"架构图\", \"流程图\", \"对比图\", \"决策树\". Keywords: dr",
+      "layer": 3,
+      "category": "patterns",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-code/csp-patterns/skills/csp-drawio/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
       "name": "csp-e2e-case-automation",
       "description": "从自然语言/JSON 测试用例自动生成并执行 Playwright 端到端测试：解析用例步骤 → 自愈式 元素定位（经验学习 > 动态探测 > ID > 邻近 > 语义 > 属性 > CSS）→ 执行并采集证据 → 通过后生成确定性 TypeScript 测试脚本。支持登录态复用、增量执行（跳过已存在脚本）、 业务术语库与经验库持续学习。当用户提供 JSON 测试用例并要求执行/生成 E2E 脚本，或需要 把自然语言用例沉淀为可维护 Playwright 脚本时使用。务必在「用例 → 可执行脚本」转化场景 使用此 skill，而不是手写 .spec.ts 后再调试。",
       "layer": 3,
@@ -6605,6 +6650,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-code/csp-runtime/skills/csp-file-organizer/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-handoff",
+      "description": "Use when approaching context limit (300K+ tokens), needing a clean session start, delegating work to another agent, or saving progress. Creates/loads a structured JSON handoff with goals, decisions, completed/pending steps, and file changes. Keywords: handoff, 交接, save state, resume, 继续, clean sessi",
+      "layer": 4,
+      "category": "runtime",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-code/csp-runtime/skills/csp-handoff/SKILL.md",
       "deps": [],
       "priority": 10
     },
@@ -9620,6 +9680,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-code/csp-workflow/skills/csp-verify-phase/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-wizard",
+      "description": "Use when a manual procedure needs to be walked through step-by-step by a human (provisioning infrastructure, setting up credentials/CI secrets, navigating third-party dashboards, running one-off migrations). Generates an interactive bash wizard script from `scripts/template.sh`. Keywords: wizard, 向导",
+      "layer": 2,
+      "category": "workflow",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-code/csp-workflow/skills/csp-wizard/SKILL.md",
       "deps": [],
       "priority": 10
     },

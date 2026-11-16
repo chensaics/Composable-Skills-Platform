@@ -351,7 +351,7 @@ a { color: var(--layer-1); text-decoration: none; }
 // ═══════════════════════════════════════════════════
 const CSP_DATA = {
   "stats": {
-    "total": 678,
+    "total": 683,
     "by_layer": {
       "Router": {
         "count": 1,
@@ -359,32 +359,32 @@ const CSP_DATA = {
         "color": "#ef4444"
       },
       "Meta": {
-        "count": 27,
+        "count": 29,
         "layer": "L1",
         "color": "#3b82f6"
       },
       "Patterns": {
-        "count": 382,
+        "count": 383,
         "layer": "L3",
         "color": "#a855f7"
       },
       "Runtime": {
-        "count": 57,
+        "count": 58,
         "layer": "L4",
         "color": "#f97316"
       },
       "Workflow": {
-        "count": 211,
+        "count": 212,
         "layer": "L2",
         "color": "#22c55e"
       }
     },
     "by_category": {
       "router": 1,
-      "meta": 27,
-      "patterns": 382,
-      "runtime": 57,
-      "workflow": 211
+      "meta": 29,
+      "patterns": 383,
+      "runtime": 58,
+      "workflow": 212
     },
     "reviewers": 77
   },
@@ -458,6 +458,23 @@ const CSP_DATA = {
       }
     },
     {
+      "name": "csp-constraints",
+      "description": "Use when setting up a project's machine-checkable quality bar (CONSTRAINTS.md), when an agent keeps silencing checks or skipping tests to get to green, when coverage/performance/security numbers get argued about per-PR, or when starting autonomous loops without a written bar. Produces a CONSTRAINTS.",
+      "category": "meta",
+      "layer": "L1",
+      "layer_name": "Meta",
+      "layer_color": "#3b82f6",
+      "triggers": {
+        "en": [
+          "csp-constraints",
+          "constraints",
+          "fix constraints",
+          "review constraints"
+        ],
+        "zh": []
+      }
+    },
+    {
       "name": "csp-context-engineering",
       "description": "Optimizes agent context setup. Use when starting a new session, when agent output quality degrades, when switching between tasks, or when you need to configure rules files and context for a project.",
       "category": "meta",
@@ -523,6 +540,23 @@ const CSP_DATA = {
       "triggers": {
         "en": [
           "csp-finishing-a-development-branch"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-grilling",
+      "description": "Use when stress-testing a plan, design, or decision before implementation. Uses design-tree + frontier-based interviewing to map decisions and their dependencies, asking the whole frontier in each round until nothing is left unexamined. Inspired by mattpocock/skills grilling pattern. Keywords: grill",
+      "category": "meta",
+      "layer": "L1",
+      "layer_name": "Meta",
+      "layer_color": "#3b82f6",
+      "triggers": {
+        "en": [
+          "csp-grilling",
+          "fix grilling",
+          "grilling",
+          "review grilling"
         ],
         "zh": []
       }
@@ -4402,6 +4436,23 @@ const CSP_DATA = {
       }
     },
     {
+      "name": "csp-drawio",
+      "description": "Use when generating draw.io architecture diagrams, flowcharts, decision trees, comparisons, or converting Markdown documents into draw.io XML. Structured pipeline: MD analysis → diagram type selection → XML generation → self-check. Triggers on \"drawio\", \"画图\", \"架构图\", \"流程图\", \"对比图\", \"决策树\". Keywords: dr",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-drawio",
+          "drawio",
+          "fix drawio",
+          "review drawio"
+        ],
+        "zh": []
+      }
+    },
+    {
       "name": "csp-e2e-case-automation",
       "description": "从自然语言/JSON 测试用例自动生成并执行 Playwright 端到端测试：解析用例步骤 → 自愈式 元素定位（经验学习 > 动态探测 > ID > 邻近 > 语义 > 属性 > CSS）→ 执行并采集证据 → 通过后生成确定性 TypeScript 测试脚本。支持登录态复用、增量执行（跳过已存在脚本）、 业务术语库与经验库持续学习。当用户提供 JSON 测试用例并要求执行/生成 E2E 脚本，或需要 把自然语言用例沉淀为可维护 Playwright 脚本时使用。务必在「用例 → 可执行脚本」转化场景 使用此 skill，而不是手写 .spec.ts 后再调试。",
       "category": "patterns",
@@ -7099,6 +7150,23 @@ const CSP_DATA = {
           "file-organizer",
           "fix file organizer",
           "review file organizer"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-handoff",
+      "description": "Use when approaching context limit (300K+ tokens), needing a clean session start, delegating work to another agent, or saving progress. Creates/loads a structured JSON handoff with goals, decisions, completed/pending steps, and file changes. Keywords: handoff, 交接, save state, resume, 继续, clean sessi",
+      "category": "runtime",
+      "layer": "L4",
+      "layer_name": "Runtime",
+      "layer_color": "#f97316",
+      "triggers": {
+        "en": [
+          "csp-handoff",
+          "fix handoff",
+          "handoff",
+          "review handoff"
         ],
         "zh": []
       }
@@ -10294,6 +10362,23 @@ const CSP_DATA = {
           "验证",
           "开发反馈设计"
         ]
+      }
+    },
+    {
+      "name": "csp-wizard",
+      "description": "Use when a manual procedure needs to be walked through step-by-step by a human (provisioning infrastructure, setting up credentials/CI secrets, navigating third-party dashboards, running one-off migrations). Generates an interactive bash wizard script from `scripts/template.sh`. Keywords: wizard, 向导",
+      "category": "workflow",
+      "layer": "L2",
+      "layer_name": "Workflow",
+      "layer_color": "#22c55e",
+      "triggers": {
+        "en": [
+          "csp-wizard",
+          "fix wizard",
+          "review wizard",
+          "wizard"
+        ],
+        "zh": []
       }
     },
     {

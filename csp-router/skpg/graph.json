@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-16T01:51:44.294Z",
+  "generated_at": "2026-11-16T09:27:52.560Z",
   "nodes": {
     "8681655e0ee6": {
       "id": "8681655e0ee6",
@@ -40,6 +40,16 @@
         "layer": 1,
         "category": "meta",
         "path": "packages/csp-code/csp-meta/skills/csp-code-graph/SKILL.md"
+      }
+    },
+    "9681323c8246": {
+      "id": "9681323c8246",
+      "kind": "skill",
+      "name": "csp-constraints",
+      "metadata": {
+        "layer": 1,
+        "category": "meta",
+        "path": "packages/csp-code/csp-meta/skills/csp-constraints/SKILL.md"
       }
     },
     "1a4d1538d8fe": {
@@ -90,6 +100,16 @@
         "layer": 1,
         "category": "meta",
         "path": "packages/csp-code/csp-meta/skills/csp-finishing-a-development-branch/SKILL.md"
+      }
+    },
+    "8c0ee5f6c271": {
+      "id": "8c0ee5f6c271",
+      "kind": "skill",
+      "name": "csp-grilling",
+      "metadata": {
+        "layer": 1,
+        "category": "meta",
+        "path": "packages/csp-code/csp-meta/skills/csp-grilling/SKILL.md"
       }
     },
     "352980e82ca3": {
@@ -2722,6 +2742,16 @@
         "path": "packages/csp-code/csp-patterns/skills/csp-docs-lookup/SKILL.md"
       }
     },
+    "c4933f93d9ed": {
+      "id": "c4933f93d9ed",
+      "kind": "skill",
+      "name": "csp-drawio",
+      "metadata": {
+        "layer": 3,
+        "category": "patterns",
+        "path": "packages/csp-code/csp-patterns/skills/csp-drawio/SKILL.md"
+      }
+    },
     "97b0ff5b96a9": {
       "id": "97b0ff5b96a9",
       "kind": "skill",
@@ -4400,6 +4430,16 @@
         "layer": 4,
         "category": "runtime",
         "path": "packages/csp-code/csp-runtime/skills/csp-file-organizer/SKILL.md"
+      }
+    },
+    "8d6de6b90752": {
+      "id": "8d6de6b90752",
+      "kind": "skill",
+      "name": "csp-handoff",
+      "metadata": {
+        "layer": 4,
+        "category": "runtime",
+        "path": "packages/csp-code/csp-runtime/skills/csp-handoff/SKILL.md"
       }
     },
     "e5c8d44636e3": {
@@ -6410,6 +6450,16 @@
         "layer": 2,
         "category": "workflow",
         "path": "packages/csp-code/csp-workflow/skills/csp-verify-phase/SKILL.md"
+      }
+    },
+    "90cb8f1b0f31": {
+      "id": "90cb8f1b0f31",
+      "kind": "skill",
+      "name": "csp-wizard",
+      "metadata": {
+        "layer": 2,
+        "category": "workflow",
+        "path": "packages/csp-code/csp-workflow/skills/csp-wizard/SKILL.md"
       }
     },
     "7a6c132192ae": {
@@ -11659,6 +11709,96 @@
       "kind": "trigger",
       "name": "typescript-reviewer",
       "metadata": {}
+    },
+    "6a11ba0c8d44": {
+      "id": "6a11ba0c8d44",
+      "kind": "trigger",
+      "name": "constraints",
+      "metadata": {}
+    },
+    "1b7c76373ddf": {
+      "id": "1b7c76373ddf",
+      "kind": "trigger",
+      "name": "drawio",
+      "metadata": {}
+    },
+    "14aa635474e1": {
+      "id": "14aa635474e1",
+      "kind": "trigger",
+      "name": "fix constraints",
+      "metadata": {}
+    },
+    "95d039dcb07e": {
+      "id": "95d039dcb07e",
+      "kind": "trigger",
+      "name": "fix drawio",
+      "metadata": {}
+    },
+    "9f878c4e96e3": {
+      "id": "9f878c4e96e3",
+      "kind": "trigger",
+      "name": "fix grilling",
+      "metadata": {}
+    },
+    "54ab9da9450d": {
+      "id": "54ab9da9450d",
+      "kind": "trigger",
+      "name": "fix handoff",
+      "metadata": {}
+    },
+    "791ad4e5f06a": {
+      "id": "791ad4e5f06a",
+      "kind": "trigger",
+      "name": "fix wizard",
+      "metadata": {}
+    },
+    "5532972209a0": {
+      "id": "5532972209a0",
+      "kind": "trigger",
+      "name": "grilling",
+      "metadata": {}
+    },
+    "e35cffd21682": {
+      "id": "e35cffd21682",
+      "kind": "trigger",
+      "name": "handoff",
+      "metadata": {}
+    },
+    "9c4fb14cb4db": {
+      "id": "9c4fb14cb4db",
+      "kind": "trigger",
+      "name": "review constraints",
+      "metadata": {}
+    },
+    "fe29a1dd9ee1": {
+      "id": "fe29a1dd9ee1",
+      "kind": "trigger",
+      "name": "review drawio",
+      "metadata": {}
+    },
+    "d99e0c4f3938": {
+      "id": "d99e0c4f3938",
+      "kind": "trigger",
+      "name": "review grilling",
+      "metadata": {}
+    },
+    "89c6e52134b8": {
+      "id": "89c6e52134b8",
+      "kind": "trigger",
+      "name": "review handoff",
+      "metadata": {}
+    },
+    "1138704e273d": {
+      "id": "1138704e273d",
+      "kind": "trigger",
+      "name": "review wizard",
+      "metadata": {}
+    },
+    "8d08848bdbd1": {
+      "id": "8d08848bdbd1",
+      "kind": "trigger",
+      "name": "wizard",
+      "metadata": {}
     }
   },
   "edges": [
@@ -16829,6 +16969,96 @@
       "metadata": {}
     },
     {
+      "source": "6a11ba0c8d44",
+      "target": "9681323c8246",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "1b7c76373ddf",
+      "target": "c4933f93d9ed",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "14aa635474e1",
+      "target": "9681323c8246",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "95d039dcb07e",
+      "target": "c4933f93d9ed",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "9f878c4e96e3",
+      "target": "8c0ee5f6c271",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "54ab9da9450d",
+      "target": "8d6de6b90752",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "791ad4e5f06a",
+      "target": "90cb8f1b0f31",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "5532972209a0",
+      "target": "8c0ee5f6c271",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "e35cffd21682",
+      "target": "8d6de6b90752",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "9c4fb14cb4db",
+      "target": "9681323c8246",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "fe29a1dd9ee1",
+      "target": "c4933f93d9ed",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "d99e0c4f3938",
+      "target": "8c0ee5f6c271",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "89c6e52134b8",
+      "target": "8d6de6b90752",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "1138704e273d",
+      "target": "90cb8f1b0f31",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
+      "source": "8d08848bdbd1",
+      "target": "90cb8f1b0f31",
+      "kind": "triggers",
+      "metadata": {}
+    },
+    {
       "source": "33b95307fd24",
       "target": "8681655e0ee6",
       "kind": "contains",
@@ -16849,6 +17079,12 @@
     {
       "source": "b2e754d45580",
       "target": "91c598dea98d",
+      "kind": "contains",
+      "metadata": {}
+    },
+    {
+      "source": "b2e754d45580",
+      "target": "9681323c8246",
       "kind": "contains",
       "metadata": {}
     },
@@ -16879,6 +17115,12 @@
     {
       "source": "b2e754d45580",
       "target": "2bc93cb9b591",
+      "kind": "contains",
+      "metadata": {}
+    },
+    {
+      "source": "b2e754d45580",
+      "target": "8c0ee5f6c271",
       "kind": "contains",
       "metadata": {}
     },
@@ -18462,6 +18704,12 @@
     },
     {
       "source": "e94f651cc1ba",
+      "target": "c4933f93d9ed",
+      "kind": "contains",
+      "metadata": {}
+    },
+    {
+      "source": "e94f651cc1ba",
       "target": "97b0ff5b96a9",
       "kind": "contains",
       "metadata": {}
@@ -19465,6 +19713,12 @@
     {
       "source": "58945d676490",
       "target": "8513e7e01550",
+      "kind": "contains",
+      "metadata": {}
+    },
+    {
+      "source": "58945d676490",
+      "target": "8d6de6b90752",
       "kind": "contains",
       "metadata": {}
     },
@@ -20676,6 +20930,12 @@
     },
     {
       "source": "caa9d170319b",
+      "target": "90cb8f1b0f31",
+      "kind": "contains",
+      "metadata": {}
+    },
+    {
+      "source": "caa9d170319b",
       "target": "7a6c132192ae",
       "kind": "contains",
       "metadata": {}
@@ -21443,6 +21703,30 @@
       "metadata": {}
     },
     {
+      "source": "9681323c8246",
+      "target": "3c187c080b19",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "9681323c8246",
+      "target": "0a7ed682dea8",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "9681323c8246",
+      "target": "1fd378faa32f",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "9681323c8246",
+      "target": "352980e82ca3",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
       "source": "1a4d1538d8fe",
       "target": "6fccb1bf47c8",
       "kind": "depends_on",
@@ -21475,6 +21759,24 @@
     {
       "source": "abbd9b0494d9",
       "target": "5b37ecd541b4",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "8c0ee5f6c271",
+      "target": "352980e82ca3",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "8c0ee5f6c271",
+      "target": "e612ca87e754",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "8c0ee5f6c271",
+      "target": "e767641de27d",
       "kind": "depends_on",
       "metadata": {}
     },
@@ -23405,6 +23707,18 @@
       "metadata": {}
     },
     {
+      "source": "c4933f93d9ed",
+      "target": "3f0de07d6842",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "c4933f93d9ed",
+      "target": "91c598dea98d",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
       "source": "97b0ff5b96a9",
       "target": "254b9286a000",
       "kind": "depends_on",
@@ -25139,6 +25453,12 @@
       "metadata": {}
     },
     {
+      "source": "3f0de07d6842",
+      "target": "c4933f93d9ed",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
       "source": "5e311b56d8ef",
       "target": "418ee149ca3b",
       "kind": "depends_on",
@@ -25645,6 +25965,12 @@
     {
       "source": "8513e7e01550",
       "target": "6fccb1bf47c8",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
+      "source": "8d6de6b90752",
+      "target": "493125e0cd98",
       "kind": "depends_on",
       "metadata": {}
     },
@@ -30203,6 +30529,12 @@
       "metadata": {}
     },
     {
+      "source": "90cb8f1b0f31",
+      "target": "0406d877f6a8",
+      "kind": "depends_on",
+      "metadata": {}
+    },
+    {
       "source": "7a6c132192ae",
       "target": "40489dfdce58",
       "kind": "depends_on",
@@ -31020,6 +31352,12 @@
     },
     {
       "source": "91c598dea98d",
+      "target": "9681323c8246",
+      "kind": "related_to",
+      "metadata": {}
+    },
+    {
+      "source": "9681323c8246",
       "target": "1a4d1538d8fe",
       "kind": "related_to",
       "metadata": {}
@@ -31050,6 +31388,12 @@
     },
     {
       "source": "2bc93cb9b591",
+      "target": "8c0ee5f6c271",
+      "kind": "related_to",
+      "metadata": {}
+    },
+    {
+      "source": "8c0ee5f6c271",
       "target": "352980e82ca3",
       "kind": "related_to",
       "metadata": {}
@@ -32622,6 +32966,12 @@
     },
     {
       "source": "accae84eb631",
+      "target": "c4933f93d9ed",
+      "kind": "related_to",
+      "metadata": {}
+    },
+    {
+      "source": "c4933f93d9ed",
       "target": "97b0ff5b96a9",
       "kind": "related_to",
       "metadata": {}
@@ -33624,6 +33974,12 @@
     },
     {
       "source": "8513e7e01550",
+      "target": "8d6de6b90752",
+      "kind": "related_to",
+      "metadata": {}
+    },
+    {
+      "source": "8d6de6b90752",
       "target": "e5c8d44636e3",
       "kind": "related_to",
       "metadata": {}
@@ -34824,6 +35180,12 @@
     },
     {
       "source": "14c63e108d67",
+      "target": "90cb8f1b0f31",
+      "kind": "related_to",
+      "metadata": {}
+    },
+    {
+      "source": "90cb8f1b0f31",
       "target": "7a6c132192ae",
       "kind": "related_to",
       "metadata": {}
@@ -35160,19 +35522,19 @@
     }
   ],
   "stats": {
-    "node_count": 1491,
-    "edge_count": 3916,
-    "skill_count": 678,
-    "trigger_count": 2092,
+    "node_count": 1511,
+    "edge_count": 3953,
+    "skill_count": 683,
+    "trigger_count": 2107,
     "phase_count": 6,
     "category_count": 5,
-    "depends_on_count": 1685,
-    "related_to_count": 692,
+    "depends_on_count": 1697,
+    "related_to_count": 697,
     "edge_types": {
-      "contains": 678,
-      "triggers": 861,
-      "depends_on": 1685,
-      "related_to": 692
+      "contains": 683,
+      "triggers": 876,
+      "depends_on": 1697,
+      "related_to": 697
     }
   }
 }

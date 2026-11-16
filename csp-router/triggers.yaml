@@ -6349,6 +6349,53 @@ trigger_index:
   "typescript-reviewer":
     skills: [csp-typescript-reviewer]
     weight: 40
+
+  # ─── auto-generated triggers (generate-triggers.mjs) ───
+  "constraints":
+    skills: [csp-constraints]
+    weight: 40
+  "drawio":
+    skills: [csp-drawio]
+    weight: 40
+  "fix constraints":
+    skills: [csp-constraints]
+    weight: 40
+  "fix drawio":
+    skills: [csp-drawio]
+    weight: 40
+  "fix grilling":
+    skills: [csp-grilling]
+    weight: 40
+  "fix handoff":
+    skills: [csp-handoff]
+    weight: 40
+  "fix wizard":
+    skills: [csp-wizard]
+    weight: 40
+  "grilling":
+    skills: [csp-grilling]
+    weight: 40
+  "handoff":
+    skills: [csp-handoff]
+    weight: 40
+  "review constraints":
+    skills: [csp-constraints]
+    weight: 40
+  "review drawio":
+    skills: [csp-drawio]
+    weight: 40
+  "review grilling":
+    skills: [csp-grilling]
+    weight: 40
+  "review handoff":
+    skills: [csp-handoff]
+    weight: 40
+  "review wizard":
+    skills: [csp-wizard]
+    weight: 40
+  "wizard":
+    skills: [csp-wizard]
+    weight: 40
 stack_rules:
   python:
     files: ["pyproject.toml", "setup.py", "requirements.txt", "Pipfile"]
