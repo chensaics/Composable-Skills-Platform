@@ -327,6 +327,11 @@ After a direction is killed, guide the user into a 24h cooldown (avoid emotional
 
 35+ core methodologies (market & scale, customer & demand, competition & differentiation, team & advantage, unit economics, growth & risk, research quality): [methodology.md](references/methodology.md).
 
+## 产物路径
+
+- 产品调研报告：`docs/analysis/product-research-{date}.md`
+- 运行时缓存：`.csp/research/product-{topic-slug}/`（可 gitignore）
+
 ## Related Skills
 
 - [[csp-market-research]] — long-form consulting-style market report (50+ pages, LaTeX)

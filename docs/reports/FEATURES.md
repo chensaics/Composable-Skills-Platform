@@ -147,9 +147,9 @@
 |---|---|---|---|---|---|
 | 架构 | 五层分层架构（L0-L4） | token 优化分片加载 | ✅ | CHANGELOG [0.2.0] | 基础 |
 | 路由 | csp-router | 509-skill registry + 多信号触发匹配 | ✅ | CHANGELOG [0.2.0] | — |
-| 元技能 | csp-meta | 14 个元技能（TDD/debugging/planning/brainstorming） | ✅ | CHANGELOG [0.2.0] | — |
-| 工作流 | csp-workflow | 94 个 GSD 工作流覆盖全项目生命周期 | ✅ | CHANGELOG [0.2.0] | — |
-| 模式 | csp-patterns | ~200 skills（reviewers/build-resolvers/15+ 语言） | ✅ | CHANGELOG [0.2.0] | — |
+| 元技能 | csp-meta | 15 个元技能（TDD/debugging/planning/brainstorming） | ✅ | CHANGELOG [0.2.0] | — |
+| 工作流 | csp-workflow | 33 个 agent 覆盖全项目生命周期 | ✅ | CHANGELOG [0.2.0] | — |
+| 模式 | csp-patterns | 314 skills（reviewers/build-resolvers/15+ 语言） | ✅ | CHANGELOG [0.2.0] | — |
 | 运行时 | csp-runtime | 19 agents + 28 commands（autopilot/wiki/remember/self-improve） | ✅ | CHANGELOG [0.2.0] | — |
 | 文档 | SKILL-INDEX/ARCHITECTURE/MIGRATION/USER-GUIDE/CLAUDE.md | 全套项目文档 | ✅ | CHANGELOG [0.2.0] | — |
 

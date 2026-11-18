@@ -11,7 +11,7 @@ category: patterns
 type: workflow
 phase: build
 domain: devops
-role: orchestrator
+role: specialist
 scope: implementation
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 related_skills:

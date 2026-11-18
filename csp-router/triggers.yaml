@@ -5920,7 +5920,7 @@ trigger_index:
     skills: [csp-integration-review]
     weight: 40
   "prompt":
-    skills: [csp-prompt-optimizer]
+    skills: [csp-prompt-optimizer, csp-prompt-builder]
     weight: 40
   "prompt optimizer":
     skills: [csp-prompt-optimizer]
@@ -6396,6 +6396,278 @@ trigger_index:
   "wizard":
     skills: [csp-wizard]
     weight: 40
+
+  # ─── auto-generated triggers (generate-triggers.mjs) ───
+  "beautiful":
+    skills: [csp-beautiful-article]
+    weight: 40
+  "beautiful article":
+    skills: [csp-beautiful-article]
+    weight: 40
+  "beautiful-article":
+    skills: [csp-beautiful-article]
+    weight: 40
+  "break":
+    skills: [csp-break-ui]
+    weight: 40
+  "break ui":
+    skills: [csp-break-ui]
+    weight: 40
+  "break-ui":
+    skills: [csp-break-ui]
+    weight: 40
+  "business":
+    skills: [csp-business-seo]
+    weight: 40
+  "business seo":
+    skills: [csp-business-seo]
+    weight: 40
+  "business-seo":
+    skills: [csp-business-seo]
+    weight: 40
+  "contract code review":
+    skills: [csp-contract-review]
+    weight: 40
+  "contract review":
+    skills: [csp-contract-review]
+    weight: 40
+  "contract 审查":
+    skills: [csp-contract-review]
+    weight: 40
+  "contract-review":
+    skills: [csp-contract-review]
+    weight: 40
+  "creator auto publish":
+    skills: [csp-creator-auto-publish]
+    weight: 40
+  "creator carousel":
+    skills: [csp-creator-carousel]
+    weight: 40
+  "creator content strategy":
+    skills: [csp-creator-content-strategy]
+    weight: 40
+  "creator image prompt":
+    skills: [csp-creator-image-prompt]
+    weight: 40
+  "creator orchestrator":
+    skills: [csp-creator-orchestrator]
+    weight: 40
+  "creator podcast":
+    skills: [csp-creator-podcast]
+    weight: 40
+  "creator publish pipeline":
+    skills: [csp-creator-publish-pipeline]
+    weight: 40
+  "creator short video":
+    skills: [csp-creator-short-video]
+    weight: 40
+  "creator thumbnail":
+    skills: [csp-creator-thumbnail]
+    weight: 40
+  "creator vision":
+    skills: [csp-creator-vision]
+    weight: 40
+  "creator-auto-publish":
+    skills: [csp-creator-auto-publish]
+    weight: 40
+  "creator-carousel":
+    skills: [csp-creator-carousel]
+    weight: 40
+  "creator-content-strategy":
+    skills: [csp-creator-content-strategy]
+    weight: 40
+  "creator-image-prompt":
+    skills: [csp-creator-image-prompt]
+    weight: 40
+  "creator-orchestrator":
+    skills: [csp-creator-orchestrator]
+    weight: 40
+  "creator-podcast":
+    skills: [csp-creator-podcast]
+    weight: 40
+  "creator-publish-pipeline":
+    skills: [csp-creator-publish-pipeline]
+    weight: 40
+  "creator-short-video":
+    skills: [csp-creator-short-video]
+    weight: 40
+  "creator-thumbnail":
+    skills: [csp-creator-thumbnail]
+    weight: 40
+  "creator-vision":
+    skills: [csp-creator-vision]
+    weight: 40
+  "deliberate":
+    skills: [csp-deliberate]
+    weight: 40
+  "devops":
+    skills: [csp-devops]
+    weight: 40
+  "dogfood":
+    skills: [csp-dogfood]
+    weight: 40
+  "fix beautiful article":
+    skills: [csp-beautiful-article]
+    weight: 40
+  "fix break ui":
+    skills: [csp-break-ui]
+    weight: 40
+  "fix business seo":
+    skills: [csp-business-seo]
+    weight: 40
+  "fix creator auto publish":
+    skills: [csp-creator-auto-publish]
+    weight: 40
+  "fix creator carousel":
+    skills: [csp-creator-carousel]
+    weight: 40
+  "fix creator content strategy":
+    skills: [csp-creator-content-strategy]
+    weight: 40
+  "fix creator image prompt":
+    skills: [csp-creator-image-prompt]
+    weight: 40
+  "fix creator orchestrator":
+    skills: [csp-creator-orchestrator]
+    weight: 40
+  "fix creator podcast":
+    skills: [csp-creator-podcast]
+    weight: 40
+  "fix creator publish pipeline":
+    skills: [csp-creator-publish-pipeline]
+    weight: 40
+  "fix creator short video":
+    skills: [csp-creator-short-video]
+    weight: 40
+  "fix creator thumbnail":
+    skills: [csp-creator-thumbnail]
+    weight: 40
+  "fix creator vision":
+    skills: [csp-creator-vision]
+    weight: 40
+  "fix data":
+    skills: [csp-data]
+    weight: 40
+  "fix deliberate":
+    skills: [csp-deliberate]
+    weight: 40
+  "fix devops":
+    skills: [csp-devops]
+    weight: 40
+  "fix dogfood":
+    skills: [csp-dogfood]
+    weight: 40
+  "fix learn taste":
+    skills: [csp-learn-taste]
+    weight: 40
+  "fix micro product scout":
+    skills: [csp-micro-product-scout]
+    weight: 40
+  "fix prompt builder":
+    skills: [csp-prompt-builder]
+    weight: 40
+  "fix quality":
+    skills: [csp-quality]
+    weight: 40
+  "fix teach":
+    skills: [csp-teach]
+    weight: 40
+  "learn taste":
+    skills: [csp-learn-taste]
+    weight: 40
+  "learn-taste":
+    skills: [csp-learn-taste]
+    weight: 40
+  "micro":
+    skills: [csp-micro-product-scout]
+    weight: 40
+  "micro product scout":
+    skills: [csp-micro-product-scout]
+    weight: 40
+  "micro-product-scout":
+    skills: [csp-micro-product-scout]
+    weight: 40
+  "prompt builder":
+    skills: [csp-prompt-builder]
+    weight: 40
+  "prompt-builder":
+    skills: [csp-prompt-builder]
+    weight: 40
+  "quality 质量":
+    skills: [csp-quality]
+    weight: 40
+  "review beautiful article":
+    skills: [csp-beautiful-article]
+    weight: 40
+  "review break ui":
+    skills: [csp-break-ui]
+    weight: 40
+  "review business seo":
+    skills: [csp-business-seo]
+    weight: 40
+  "review contract code":
+    skills: [csp-contract-review]
+    weight: 40
+  "review creator auto publish":
+    skills: [csp-creator-auto-publish]
+    weight: 40
+  "review creator carousel":
+    skills: [csp-creator-carousel]
+    weight: 40
+  "review creator content strategy":
+    skills: [csp-creator-content-strategy]
+    weight: 40
+  "review creator image prompt":
+    skills: [csp-creator-image-prompt]
+    weight: 40
+  "review creator orchestrator":
+    skills: [csp-creator-orchestrator]
+    weight: 40
+  "review creator podcast":
+    skills: [csp-creator-podcast]
+    weight: 40
+  "review creator publish pipeline":
+    skills: [csp-creator-publish-pipeline]
+    weight: 40
+  "review creator short video":
+    skills: [csp-creator-short-video]
+    weight: 40
+  "review creator thumbnail":
+    skills: [csp-creator-thumbnail]
+    weight: 40
+  "review creator vision":
+    skills: [csp-creator-vision]
+    weight: 40
+  "review data":
+    skills: [csp-data]
+    weight: 40
+  "review deliberate":
+    skills: [csp-deliberate]
+    weight: 40
+  "review devops":
+    skills: [csp-devops]
+    weight: 40
+  "review dogfood":
+    skills: [csp-dogfood]
+    weight: 40
+  "review learn taste":
+    skills: [csp-learn-taste]
+    weight: 40
+  "review micro product scout":
+    skills: [csp-micro-product-scout]
+    weight: 40
+  "review prompt builder":
+    skills: [csp-prompt-builder]
+    weight: 40
+  "review quality":
+    skills: [csp-quality]
+    weight: 40
+  "review teach":
+    skills: [csp-teach]
+    weight: 40
+  "teach":
+    skills: [csp-teach]
+    weight: 40
 stack_rules:
   python:
     files: ["pyproject.toml", "setup.py", "requirements.txt", "Pipfile"]
@@ -6839,7 +7111,7 @@ stack_rules:
 #     skills: [csp-data-engineer] # FIXED: all skill references invalid, commented out
     weight: 40
   "data":
-    skills: [ csp-data-analysis]
+    skills: [csp-data-analysis, csp-data]
     weight: 40
   "模式":
     skills: [csp-data-pipeline-patterns]
@@ -7400,7 +7672,7 @@ stack_rules:
     skills: [csp-skill-creator]
     weight: 45
   "creator":
-    skills: [csp-skill-creator]
+    skills: [csp-skill-creator, csp-creator-auto-publish, csp-creator-carousel, csp-creator-content-strategy, csp-creator-image-prompt, csp-creator-orchestrator, csp-creator-podcast, csp-creator-publish-pipeline, csp-creator-short-video, csp-creator-thumbnail, csp-creator-vision]
     weight: 40
   "csp-skill-creator":
     skills: [csp-skill-creator]

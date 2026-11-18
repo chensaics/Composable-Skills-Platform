@@ -425,6 +425,12 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 | **视觉测试** | Testing TV | `.csp/artifacts/verify/evidence/visual-diff/`（或登记既有位置） | 内部 |
 | **E2E 测试** | Testing TE | `.csp/artifacts/verify/ui-test-report.md`（或登记既有位置） | 内部 |
 | **测试复盘** | Testing TQ | `docs/analysis/test-retro-{version}.md` | ✅ |
+| **TMS 基线** | Testing TD | `.csp/test-spec/{module}/` | 内部 |
+| **系统审计** | Testing TA | `.csp/audit/AUDIT-FINDINGS.json` + `.csp/gap-analysis/` | 内部 |
+| **UI 对齐审查** | Testing TV | `.csp/design-qa/` | 内部 |
+| **H5 视觉测试** | Testing TV | `.csp/artifacts/verify/h5-test/` | 内部 |
+| **市场调研（深度）** | Planning Phase R | `docs/market-research/{topic-slug}/` | ✅ |
+| **深度市场报告** | Planning Phase R | `docs/market-reports/{topic-slug}/` | ✅ |
 
 ### G2.2 测试产物分层约定
 
@@ -436,7 +442,8 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 | **固定 fixtures/契约源** | 项目既有 fixtures/pacts 源目录 | 开发者与 CI | 可复现、为验证所需时提交，不把全部 pacts 当临时垃圾 |
 | **测试依据、用例、追溯** | 项目人读 docs 的 `test-basis-*`、`test-cases-*`、`traceability-*` | 人审阅 | 依项目文档策略提交，发布范围另判定 |
 | **TMS 基线** | `.csp/test-spec/{module}/` | Agent 消费 | 随模块维护，manifest 索引 |
-| **E2E/视觉/覆盖率等运行结果** | `.csp/artifacts/verify/evidence/` 默认；已存在的 `verify/` 可映射 | 内部验证 | 可重建输出按项目策略忽略或 CI 留存；被 findings/发布引用的证据须保留 |
+| **视觉 diff 结果** | `.csp/artifacts/verify/evidence/visual-diff/`（截图对比/视觉回归结果）；已存在的 `verify/` 可映射 | 内部验证 | 被 findings/发布引用的视觉证据须保留 |
+| **E2E/覆盖率等运行结果** | `.csp/artifacts/verify/evidence/` 默认；已存在的 `verify/` 可映射 | 内部验证 | 可重建输出按项目策略忽略或 CI 留存；被 findings/发布引用的证据须保留 |
 | **审计 findings** | `.csp/audit/`、`.csp/review/` 等现有注册来源 | Agent 消费 | 未关闭项与引用证据不得按日期或大小清除 |
 
 **测试代码组织**：沿用语言与仓库约定；`tests/unit/auth.service.test.ts`、`apps/web/src/Auth.test.tsx`、`backend/tests/test_auth.py` 都可能合理。要求测试 runner 能发现、每个变更可定位到被测模块和 AC，新增测试随代码一起提交。E2E 放在可访问的应用或项目级测试根，跨包测试放在有消费责任的套件；共享 fixtures 要明确所有者，避免把运行输出当源 fixture。
@@ -452,6 +459,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 - **机器证据**：默认 `.csp/artifacts/verify/evidence/`；既有 `verify/` 可登记映射，迁移须先修改运行工具与消费者。
 - **测试代码**：沿用项目实际语言/框架与 monorepo 规则，可紧邻源码或镜像目录；有 runner 发现与需求追溯，不强制另建根 `tests/`。
 - **产物命名带 scope 标识**：`{function}-{scope}.md`，避免 `test-cases.md` 这类无 scope 的文件散落
+- **禁止在测试源码目录下嵌套 `.csp/`**：`src/__tests__/.csp/`、`tests/.csp/` 等路径违反 `.csp/` 应在项目根的约定，agent 产物统一从项目根 `.csp/` 读写
 
 ---
 

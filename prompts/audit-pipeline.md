@@ -1,62 +1,94 @@
-对当前项目跑一次全链路审计 pipeline，串联六个审查提示词，按"体检 → 实机验证 → UI/UX 专项审查 → 产品批评 → 缺口补强 → 演进交棒"顺序推进，互不重复劳动。
+# 全链路审计编排器（Audit Pipeline Orchestrator）
 
-## 运行时模式检测（强制前置——Step 0）
+> **定位**：独立于 00–07 链路（与 audit / feature-gap / critic 同级），将六份独立审查提示词按去重顺序串联为一次全链路审计——**编排器只做路由、聚合、去重裁决，不做具体审查**（审查方法论全在各提示词内部，编排器不重复嵌入）。存量仓库"深挖问题 → 修复 → 上线"的发现层一键入口。
+>
+> **这是编排器，不是审查方法论。** 六步各自的方法论、检查清单、设计判定卡（M1–M8）、Nielsen 10 速查等均在对应提示词文件中，编排器只声明"调哪份提示词、产什么、上下游谁消费、不重复跑什么"。如果你在找具体怎么审某个维度，去读对应的提示词文件，别在本文件里找。
 
-**在 Step 1 开始前必须完成以下检测，决定运行模式：**
+---
+
+## Pipeline 总览
+
+```
+ Step 1               Step 2               Step 3               Step 4              Step 5              Step 6
+ audit.md        e2e-deep-audit.md   ui-review-to-           product-critic-     feature-gap-        product-audit-to-
+ 工程体检          实机验证             iteration.md           review.md           analysis.md         roadmap.md
+                                      UI/UX 八镜头           产品总监七镜头        单模块缺口深潜       聚合交棒 roadmap
+    │                   │                   │                    │                   │                   │
+    ├─ 模块化           ├─ 全路由 sweep     ├─ 视觉层级/布局      ├─ 重复冗余(A)       ├─ F1-F12 通用面    ├─ 四角度审查
+    ├─ Nielsen 10       ├─ 按钮点击审计     ├─ 交互模式/反馈      ├─ 信息架构(B)       ├─ U1-U7 UI维度     ├─ 主题候选提炼
+    ├─ 四层联动测试     ├─ 孤儿路由确认     ├─ IA/导航(M7引用)    ├─ 视觉交互一致(C)    ├─ 领域增强目录      ├─ Phase 2.5审视
+    └─ 裁决报告         └─ 结构健康核查     └─ 版本迭代路线图      └─ (D-G七镜头)       └─ 联动检查          └─ 交棒清单
+```
+
+**去重契约**：六步走同一批模块/页面，各审各的维度，互不重复——每步有明确的"主跑项"和"引用项"。谁主跑谁出 finding；引用方只读上游 finding ID 做交叉引用，不重复报同一问题。
+
+---
+
+## 一、红线
+
+1. **编排器不改代码不发版**：六步均只产审查 + 建议；P0 findings 标 `快速修复=true` → 直发 04 拆 fix task → 05 → 06（quick-fix 跳过 roadmap/01，不跳 04/05/06）。
+2. **去重即契约**：每步主跑归属不可越界重跑；引用上游结论时附 finding ID 指针（`AUDIT-F-NN` / `UI-F-NN` / `CRITIC-F-NN` / `GAP-F-NN`）。
+3. **禁止降级审计**：工具/浏览器不可用 → 报 BLOCKED + 停手 + 重试，不产出降级报告。
+4. **留尾纪律**：findings 只能 `open` / `BLOCKED`（附阻塞+谁解除）/ `deferred`（附解除条件）。
+5. **产品 sense rationale 必填**（Step 3/4/5）：不止说"不一致/重复"，要论证对用户认知/效率/信任/产品定位的具体伤害。
+6. **证据先于断言**：每条 finding 带 `file:line` / 截图 / 路由 / 命令输出；"应该/大概/看着"即停。
+
+---
+
+## 二、触发与路由
+
+**触发词**：全链路审计 / audit pipeline / 六步审计 / 全面体检 / 深挖问题修复上线
+
+- **全量（默认）**：从路由表 + `.csp/product-spec/` + `.csp/code-spec/entry-points.jsonl` + `docs/FEATURES.md` 自动枚举全部模块 → Step 1–6 全跑。
+- **增量**：已跑过 → 读既有 findings（`AUDIT-F`/`UI-F`/`CRITIC-F`/`GAP-F`），只审 delta + 状态变化。
+- **知识中枢前置**：`.csp/AGENTS.md` 不存在 → 提示先跑 00。
+
+---
+
+## 三、前置准备（Step 0.x，进入 Step 1 前必须完成）
+
+### Step 0.0 — 运行时模式检测
 
 ```bash
-# 检测 1: Agent 工具是否可用（检查 subagent_type 是否可被调起）
+# Agent 工具是否可用
 AGENT_AVAILABLE=true
 SUBAGENT_FILES=$(ls ~/.claude/agents/*.md 2>/dev/null | wc -l)
 if [ "$SUBAGENT_FILES" -eq 0 ]; then AGENT_AVAILABLE=false; fi
-
-# 检测 2: 尝试轻量 Agent 调用验证（如果工具存在但配置失效，会在这里暴露）
-# 用最小的 subagent_type 做一次 ping——失败即 fallback
 ```
 
-**两种模式：**
+| 模式 | 条件 | 执行方式 |
+|------|------|---------|
+| **标准模式** | Agent 工具可用 + subagent 定义存在 | 每步深度分析由 subagent 承载，主 agent 做路由聚合 |
+| **Fallback 模式** | 上述任一不满足 | 主 agent 串行执行全部 Step，须遵守 Fallback 完整性门控（见 §十） |
 
-| 模式 | 条件 | 执行方式 | 门控强度 |
-|------|------|---------|---------|
-| **标准模式** | `Agent` 工具可用 + subagent 定义存在 + 模型配置有效 | 每个 Step 的深度分析由对应 subagent 独立窗口承载，主 agent 只做路由和聚合 | 常规门控 |
-| **Fallback 模式** | 上述任一不满足 | 主 agent 串行执行全部 Step，**必须遵守 Fallback 模式完整性门控**（见下文），禁止用批量文件读取替代深度分析 | **硬门控**（每步自检，不通过即 BLOCKED） |
-
-**模式声明（进入 Step 1 前必须输出）：**
-
+**模式声明（强制输出）**：
 ```
 🔍 运行时检测: Agent 工具={可用/不可用} | Subagent 定义={N 个/缺失} | 模式={标准/Fallback}
 ```
 
-> ⚠️ **Fallback 模式下，"gate 即授权"语义不变——但 gate 增加了产物完整性校验**（不是"信任串行执行就能覆盖"）。详见「Fallback 模式完整性门控」。
-
-### Step 0.5 — 环境自检 + 会话重建（防止 E2E 依赖断裂）
-
-> **本轮实证**: 实机验证因 docker + 后端 + storageState 三重依赖未启动而 BLOCKED（会话过期 + 依赖栈未起）。审计 pipeline 缺"环境自检 + 会话自动重建"前置步骤。
+### Step 0.5 — 环境自检 + 会话重建
 
 ```bash
-# === 环境自检 ===
-# 1. 基础设施探活（DB/缓存等）
+# 基础设施探活
 pg_isready -h localhost -p 5432 2>/dev/null && echo "DB: OK" || echo "DB: DOWN"
 redis-cli ping 2>/dev/null && echo "Redis: OK" || echo "Redis: DOWN"
 
-# 2. 后端健康检查（不要凭端口号认——同机可能有无关服务占用相近端口）
+# 后端健康检查（按健康检查路径+响应体确认，不凭端口号认）
 BACKEND_URL=$(grep -r 'NEXT_PUBLIC_API_URL\|VITE_API_URL\|API_BASE' .env* 2>/dev/null | head -1 | cut -d= -f2)
 curl -sf "${BACKEND_URL}/health" 2>/dev/null && echo "Backend: OK" || echo "Backend: DOWN"
 
-# 3. 前端 dev server
+# 前端 dev server
 curl -sf "http://localhost:3000" 2>/dev/null && echo "Frontend: OK" || echo "Frontend: DOWN"
 ```
 
-**一键起栈**（如果上述任一 DOWN）：
+**一键起栈**（任一 DOWN 时）：
 ```bash
-# 用 auth.setup 序列自动重建会话——不是手动登 UI 登录
 docker compose up -d 2>/dev/null || echo "No docker-compose.yml"
 npx playwright test tests/e2e/auth.setup.ts --project=setup 2>/dev/null
 ```
 
 **会话有效性检查**：
 ```bash
-# storageState 是否过期（Playwright 的 auth.json）
 if [ -f "tests/e2e/.auth/auth.json" ]; then
   EXPIRY=$(node -e "const s=require('./tests/e2e/.auth/auth.json'); console.log(s.cookies?.[0]?.expires||'unknown')" 2>/dev/null)
   echo "Auth expiry: $EXPIRY"
@@ -65,24 +97,18 @@ else
 fi
 ```
 
-**环境自检结论（强制输出）**：
+**强制输出**：
 ```
 🔧 环境自检: DB={OK/DOWN} | Backend={OK/DOWN} | Frontend={OK/DOWN} | Auth={VALID/EXPIRED/MISSING}
    → 全绿 → 继续 Step 1
-   → 有 DOWN → 尝试一键起栈（docker compose up + auth.setup）
-   → 起栈失败 → 登记 BLOCKED 原因 + 解除条件，不静默跳过 E2E 相关步骤
+   → 有 DOWN → 尝试一键起栈
+   → 起栈失败 → 登记 BLOCKED，不静默跳过 E2E 相关步骤
 ```
 
-### Step 0.6 — 既有 findings 基线强制回读（防止重复侦查）
-
-> **本轮实证**: cookie-health/sre 其实早已在之前登记（GAP-001/002），但花了几轮侦查才交叉到。Pipeline 必须在当前审查 session 开始前，把所有既有 findings 汇聚成一份基线。
+### Step 0.6 — 既有 findings 基线回读
 
 ```bash
-# 汇聚既有 findings（跨前缀、跨路径）
 echo "# PRIOR-FINDINGS-BASELINE $(date +%Y-%m-%d)" > .csp/audit/PRIOR-FINDINGS-BASELINE.md
-echo "" >> .csp/audit/PRIOR-FINDINGS-BASELINE.md
-
-# 按前缀汇聚
 for dir in .csp/audit .csp/ui-review .csp/critic .csp/gap-analysis .csp/review; do
   if [ -d "$dir" ]; then
     echo "## ${dir}" >> .csp/audit/PRIOR-FINDINGS-BASELINE.md
@@ -93,392 +119,302 @@ for dir in .csp/audit .csp/ui-review .csp/critic .csp/gap-analysis .csp/review; 
 done
 ```
 
-**基线回读后必须输出摘要**：
+**强制输出**：
 ```
 📋 既有 findings 基线: AUDIT-F N 条 | UI-F N 条 | CRITIC-F N 条 | GAP-F N 条 | REV-F N 条
-   → Step 1-5 审查时：已有登记的不重复报，只报状态变化（resolved→reopened / open→worsened）
-   → 引用既有 finding 时附 ID 指针 + 来源文件路径
+   → Step 1–5 审查时：已有登记的不重复报，只报状态变化
 ```
 
-### Step 0.7 — 注册预防规范（开发期引用）
-
-本轮 findings 的根因分类与预防规范已写入 `prompts/prevention-norms.md`（8 条编码规范 + 5 个 CI 门禁 + 7 项审查链路增强）。在进入具体 Step 前，确保理解每条 finding 都有一个对应的**机器可查的预防手段**——审查不是终点，预防才是。
-
-### Step 0.8 — 自动化门禁快照（机器证据前置）
-
-> 详见 `automation-validation.md`。在人工审查前，先跑确定性门禁拿机器证据，避免 agent 用 grep 凑数。
+### Step 0.8 — 自动化门禁快照
 
 ```bash
 python scripts/validate_gates.py --json > .csp/audit/GATE-SNAPSHOT-{date}.json 2>&1
 python scripts/validate_gates.py   # 人类可读摘要
 ```
 
-**消费规则**：
-- 9 个门禁（G-POS/G-NAV/G-DOC/G-FLAG/G-PLACEHOLDER/G-DUAL-NAV/G-CONTRACT/G-BUTTON/G-LAYER）映射五类根因 Pattern A-E
-- `verdict == "BLOCKED"` → 这些阻断项成为 Step 1-5 的**优先审查目标**（机器已定位，人工深挖 product sense）
-- 各 Step 引用门禁 metrics 作为证据（如 Step 3 ui-review 镜头 3 引用 G-NAV 的"11 sections > 7"），不重复计数
-- 脚本不存在 → 标 SKIPPED + 解除条件，降级为人工检查但须声明"无机器证据"
-- 门禁报告与 Step 1-5 的 findings 交叉验证：机器报 ERROR 但人工判误报 → 记入"门禁校准"反馈，调阈值或白名单
+> 9 个门禁映射五类根因 Pattern A–E。`verdict == "BLOCKED"` → 成为 Step 1–5 优先审查目标。脚本不存在 → 标 SKIPPED，降级人工检查但声明"无机器证据"。
 
 ---
 
-## 调用顺序与去重归属
+## 四、六步编排
 
-### Step 1 — 工程结构体检（主跑：Nielsen 可用性 + 四层测试 + 模块化）
-调用 `prompts/audit.md`，跑全量审计 Phase 0–7。
-产出：`.csp/audit/MODULE-LIST` / `USABILITY-REPORT` / `AUDIT-VERDICT` / `AUDIT-FINDINGS.json`（前缀 `AUDIT-F-NN`）。
-主跑项（后续步骤引用、不重跑）：
-- Nielsen 10 可用性 Mode A/B + 状态覆盖（Step 4 critic 镜头 F/G、Step 3 ui-review 镜头 7/8 均引用，不重跑）
-- 模块化 + 联动四层测试（裁决报告）
-- 结构审计只标"疑似"孤儿路由/隐藏后端/死按钮，交 Step 2 实机确认（不据静态扫描直接报数）
+### Step 1 — 工程结构体检
 
-### Step 2 — 实机验证（主跑：结构审计实机 + E2E 全页面）
-调用 `prompts/e2e-deep-audit.md`，走 M4 深度产品审计。
-入口：消费 Step 1 audit 标的"疑似孤儿/隐藏后端/死按钮"线索 → 在此实机确认后才成 finding。
-主跑项（后续步骤引用、不重跑）：
-- 全路由 sweep + 按钮级点击审计 + 孤儿路由 + 隐藏后端功能（Step 3 ui-review 镜头 3 IA、Step 4 critic 镜头 B、Step 5 gap Phase 4 均引用此结构 findings，不自行做按钮级/路由级实机审计）
+| 项 | 值 |
+|----|-----|
+| **调用** | `prompts/audit.md`（Phase 0–7 全量） |
+| **角色** | 模块化审计 + Nielsen 10 可用性 + 四层联动测试 + 裁决报告 |
+| **产出** | `.csp/audit/MODULE-LIST-{milestone-slug}.md` / `USABILITY-REPORT-{module}.md`（逐模块） / `AUDIT-VERDICT-{milestone-slug}.md` / `AUDIT-FINDINGS-{milestone-slug}.json` / `docs/analysis/AUDIT-SUMMARY-{milestone-slug}.md` |
+| **前缀** | `AUDIT-F-NN` |
+
+**主跑项**（后续步骤引用，不重跑）：
+- Nielsen 10 可用性 Mode A/B + 状态覆盖
+- 模块化拆解 + 联动四层测试
+- 结构审计只标"疑似"孤儿路由/隐藏后端/死按钮 → 交 Step 2 实机确认
+
+### Step 2 — 实机验证
+
+| 项 | 值 |
+|----|-----|
+| **调用** | `prompts/e2e-deep-audit.md`（M4 深度审计） |
+| **角色** | 全路由 sweep + 按钮级点击审计 + 孤儿路由确认 + 结构健康核查 |
+| **产出** | `verify/ui-test-report.md` / `verify/evidence/`（截图等四类证据） / `gap-analysis/GAP-REPORT-*.md`（结构性 gap 登记） / `/tmp/button_audit*.jsonl`（按钮审计流式记录） |
+| **前缀** | 无独立前缀（结构 findings 被下游引用） |
+
+**主跑项**（后续步骤引用，不重跑）：
+- 全路由 sweep + 按钮级点击审计
+- 消费 Step 1 "疑似"线索 → 实机确认孤儿/隐藏/死按钮
 - 结构健康核查（schema drift / tsc / mock 债务）
-产出：`verify/ui-test-report.md` + `gap-analysis/GAP-REPORT` + 证据。
 
-### Step 3 — UI/UX 设计总监审查（主跑：八镜头系统化 UI/UX 审查 → 提升点分级 → 落实到文档 → 版本迭代）
-调用 `prompts/ui-review-to-iteration.md`，逐模块过八镜头 1–8 + 跨模块聚合 + 提升点到文档映射 + 版本迭代路线图。
-主跑项（后续步骤引用、不重跑）：
-- 镜头 1 视觉层级与布局（M1 设计原则判定）→ **本流程主跑**，Step 4 critic 镜头 C 引用
-- 镜头 2 交互模式与反馈（M2 UI 模式清单）→ **本流程主跑**，Step 4 critic 镜头 D 引用
-- 镜头 3 信息架构与导航（M7 限界上下文判散乱）→ 引用 Step 2 e2e 结构 findings，不自行做实机审计；跨模块散乱在 Phase 3 聚合阶段裁决
-- 镜头 4 视觉与交互一致性（M5 视觉基线对比）→ **本流程主跑**：设计 Token 漂移对照表 + 跨模块一致性批次。Step 4 critic 镜头 C、Step 5 gap U3/U4 均引用此一致性 findings
-- 镜头 5 用户习惯与认知（Nielsen ①⑥）→ **本流程主跑**
-- 镜头 6 响应式与多端适配（M3 响应式清单）→ **本流程主跑**，Step 5 gap U7 引用
-- 镜头 7 可访问性（M6 a11y 清单 + WCAG 2.1）→ **本流程主跑**，Step 5 gap F5 引用
-- 镜头 8 状态覆盖与边界 → 引用 Step 1 audit Nielsen/状态覆盖结论，不重跑 Mode A/B；本流程专注 UI 层面的 loading/empty/error/success 态表现
-- **落实文档**：产出版本迭代路线图 + PRD/Spec/Task UI 映射格式
-去重契约（不重跑）：
-- Step 1 audit 的 Nielsen/状态覆盖 → 本流程镜头 7/8 引用 `AUDIT-F`，不重跑
-- Step 2 e2e 的结构 findings → 本流程镜头 3 IA 引用，不自行做实机审计
-产出：`.csp/ui-review/UI-REVIEW-REPORT` + `UI-FINDINGS.json`（前缀 `UI-F-NN`）+ `CROSS-MODULE-UI` + `docs/analysis/UI-VERSION-PLAN` 版本迭代路线图。
+### Step 3 — UI/UX 设计总监审查
 
-### Step 4 — 产品总监批评性审查（主跑：重复/散乱/定位挑刺 + 跨模块聚合）
+| 项 | 值 |
+|----|-----|
+| **调用** | `prompts/ui-review-to-iteration.md`（八镜头 + 版本迭代路线图） |
+| **角色** | 视觉层级/交互模式/一致性/用户习惯/响应式/可访问性/状态覆盖 |
+| **产出** | `.csp/ui-review/UI-REVIEW-REPORT-{date}.md` / `UI-FINDINGS-{date}.json` / `CROSS-MODULE-UI-{date}.md` / `docs/analysis/UI-VERSION-PLAN-{date}.md` / `docs/analysis/UI-TO-ROADMAP-{date}.md` |
+| **前缀** | `UI-F-NN` |
 
-调用 `[[agent:csp-product-lens-reviewer]]` 做前提挑战 + 战略后果 + 替代方案 + 目标对齐审查，再按以下**任务指示**逐模块过七镜头批评审查 + 跨模块聚合。
+**主跑项**：镜头 1 视觉层级（M1）、镜头 2 交互模式（M2）、镜头 4 一致性（M5 Token 漂移对照表）、镜头 5 用户习惯、镜头 6 响应式（M3）、镜头 7 可访问性（M6）
 
-#### 七镜头审查任务指示
+**引用项**（不重跑）：镜头 3 IA → 引用 Step 2 结构 findings；镜头 8 状态覆盖 → 引用 Step 1 AUDIT-F
 
-**前置**：先建能力点矩阵（逐模块枚举对外能力点：按钮/操作/字段/配置项/状态，标 file:line + UI 入口），同一能力出现在多模块即重复候选。
+### Step 4 — 产品总监批评性审查
 
-**镜头 A — 重复与冗余**（五类，跨模块聚合阶段裁决）：
-- A1 功能重复：同一能力在多模块 UI 出现且语义/实现重复。检测：能力矩阵次数 >1 的能力。裁决：按"模块=限界上下文"判归属，合并到单一入口
-- A2 配置/设置重复：同一配置项在多处设置入口或多处定义。检测：全局搜配置 key/环境变量/feature flag，标出现位置 >1。裁决：单一真相源，每类配置只在一处可改
-- A3 实现重复：相同逻辑多份实现（前端同类组件/后端同类 helper）。裁决：抽到单一组件/工具方法
-- A4 入口重复：同一动作多入口且行为不一致。裁决：统一主入口 + 快捷入口，行为/权限/反馈口径一致
-- A5 历史增量叠加：新入口上线但旧入口未退役（多层叠加）。检测：新旧路径并存/301 转发表超 2 个 MINOR 版本未清理。裁决：入口生命周期——上线/维护/deprecation(附 TTL)/退役
+| 项 | 值 |
+|----|-----|
+| **调用** | `prompts/product-critic-review.md`（七镜头 + 跨模块聚合） |
+| **角色** | 重复冗余/信息架构/一致性/用户习惯/定位/完整性/状态覆盖 |
+| **产出** | `.csp/critic/PRODUCT-CRITIC-REPORT-{date}.md` / `CRITIC-FINDINGS-{date}.json` / `CROSS-MODULE-{date}.md` / `.csp/critic/recon-{slug}.md`（逐模块现状重建） / `docs/analysis/CRITIC-SUMMARY-{date}.md` / `docs/analysis/CRITIC-TO-ROADMAP-{date}.md` |
+| **前缀** | `CRITIC-F-NN` |
 
-**镜头 B — 信息架构与模块组织**：
-- 相似功能散落多入口；模块边界与职责混乱；层级过深（核心动作 >3 次点击）或过浅（无主次）；导航分类口径不一；面包屑/返回缺失；跨模块任务无连续上下文
-- 判散乱法（M7 限界上下文）：功能应归入术语/职责所属上下文模块；散乱即记"疑似散乱，归属 MOD-xx"；重组归并到单一入口
+**主跑项**：镜头 A 重复与冗余（A1–A5）、镜头 B IA 散乱裁决、镜头 E 宏观定位、跨模块聚合
 
-**镜头 C — 视觉与交互一致性**（对照 M1/M2/M5）：
-- 视觉（M1+M5）：组件/间距/字体/圆角/阴影/图标风格不统一；自造样式绕过设计系统；Token 漂移逐条记 file:line + 实际值 vs token 值；暗色模式缺失
-- 交互（M2）：相同操作不同反馈（有的 toast 有的弹窗）；按钮主次不分（双主 CTA 抢焦点）；destructive 操作未着色/未确认；加载态不一致
-- 反模式即报：双主 CTA、藏 destructive 于普通按钮、无可供性可点区、toast 堆叠、模态叠模态
+**引用项**（不重跑）：镜头 C/D 视觉交互一致性 → 引用 Step 3 UI-F；镜头 F/G 可用性违例 → 引用 Step 1 AUDIT-F
 
-**镜头 D — 用户习惯与认知**（Nielsen ①⑥）：
-- 强迫记忆操作；违反平台惯例（web/mobile 习惯不同）；图标无文字；状态不可见；高频操作藏太深
-- 系统状态可见性（Nielsen ①）：操作后用户是否知道发生了什么/进度到哪/结果如何
-- 识别而非回忆（Nielsen ⑥）：选项/上下文是否界面可见，不需用户回忆
+### Step 5 — 单模块缺口与增强深潜
 
-**镜头 E — 宏观定位与产品阶段对齐**：
-- 首屏重点错位（高价值入口不显眼，次要功能放上位）；与产品阶段不匹配（验证期过度设计/增长期欠设计）；每页是否服务北极星——不服务的降权或砍
-- 开发视角泄漏：内部代号/批次名直接面向用户；功能命名与既有功能谱系重叠（立项时未做同义动词+名词交叉查重）
+| 项 | 值 |
+|----|-----|
+| **调用** | `prompts/feature-gap-analysis.md`（全界面自动巡检） |
+| **角色** | 通用面 F1–F12 + UI 维度 U1–U7 + 领域增强目录 + 联动检查 |
+| **产出** | `.csp/gap-analysis/SCAN-LIST-{date}.md` / `.csp/gap-analysis/GAP-REPORT-{slug}.md`（逐模块） / `GAP-FINDINGS-{slug}.json`（逐模块） / `.csp/gap-analysis/recon-{slug}.md`（逐模块现状重建） / `.csp/gap-analysis/CROSS-MODULE-UI-{date}.md` / `.csp/gap-analysis/GAP-FINDINGS-_aggregate.json`（统一 findings） / `docs/analysis/GAP-SUMMARY-{slug}.md` / `docs/analysis/GAP-TO-ROADMAP-{slug}-{date}.md` |
+| **前缀** | `GAP-F-NN` |
 
-**镜头 F — 功能完整性与可用性违例**（F1-F12 横切 + Nielsen 10 + 领域目录）：
-- F1 输入校验（必填/格式/长度/范围/大小写/唯一，前后端一致）
-- F2 状态覆盖（loading/empty/error/disabled/success/无权限 各有界面）
-- F3 错误处理（可操作、不泄漏敏感信息、可重试、有兜底）
-- F4 安全防滥用（频率限制/验证码/锁定/IDOR/XSS/脱敏）
-- F6 边界极端（0/负数/超长/特殊字符/空/重复提交/并发/离线）
-- F7 一致性（与镜头 C 去重合并）
-- F12 防误操作与可逆（二次确认/撤销/草稿保存/危险操作着色）
-- Nielsen 10 全量（①系统状态 ②系统与现实匹配 ③用户控制权 ④一致性与标准 ⑤错误预防 ⑥识别vs回忆 ⑦灵活性与效率 ⑧美学与极简 ⑨帮助诊断恢复 ⑩帮助文档）
+**主跑项**：F1–F12 通用面（功能缺口部分）、领域增强目录、Phase 4 联动
 
-**镜头 G — 状态覆盖与边界**：
-- 每个数据驱动区域：loading（骨架优于 spinner）/ empty（引导+下一步）/ error（可操作重试）/ success（明确反馈）/ disabled（说明为何禁用）/ 无权限
-- 危险操作二次确认 + 着色 + 撤销路径
+**引用项**（不重跑）：U1–U7 UI 维度 → 引用 Step 3 UI-F；F2/F5 状态覆盖/a11y → 引用 Step 1 AUDIT-F + Step 3 UI-F
 
-#### M1-M8 设计判定可执行清单
+### Step 6 — 产品演进交棒
 
-审查 UI 时逐条对照，命中即成 finding 依据：
+| 项 | 值 |
+|----|-----|
+| **调用** | `prompts/product-audit-to-roadmap.md`（四角度 + 主题提炼 + 集成必要性审视） |
+| **角色** | 聚合 Step 1–5 全部 findings → 主题候选 → roadmap |
+| **产出** | `docs/audit/PRODUCT-AUDIT-{date}.md` / `REVIEW-FINDINGS-{audit-slug}.json`（前缀 `AUDIT-F-NN` 同族） / `docs/analysis/AUDIT-TO-ROADMAP-{date}.md` |
+| **前缀** | `AUDIT-F-NN`（同族） |
 
-- **M1 视觉层级/布局**：一页一个主焦点，主 CTA 最显眼；统一栅格/间距 token；字体 ≤4 级靠字重/字号/行高建立层级；首屏聚焦核心任务，渐进式披露；可点元素显式 affordance
-- **M2 交互模式**：成功用 toast（非阻塞），破坏性用 modal（阻塞），表单 inline 即时校验；空/错/无权限各有引导+下一步；长任务显进度+可取消
-- **M3 响应式**：320/768/1024/1440 各能跑无横向滚动；触控目标 ≥44px；窄屏聚焦核心路径
-- **M4 原型验证法**：UI 改动建议前先出 before/after 原型/截图对照，原型截图作 finding 证据；复杂 IA 重组必须配原型
-- **M5 视觉基线对比**：逐页对比实现是否偏离 token，漂移逐条记 file:line + 实际值 vs token 值；无设计系统以"系统内频次最高样式"作事实基线
-- **M6 可访问性**：语义标签优先 div+onclick；H1→Hn 不跳级；label 显式关联；对比 ≥4.5:1；全键盘可达+可见焦点框；尊重 prefers-reduced-motion
-- **M7 限界上下文判散乱**：功能应归入术语/职责所属上下文；散乱信号=同名词多模块+跨模块任务切换+贫血模块+跨模块同操作不同口径
-- **M8 图表规范**（命中 Dashboard 时）：分类→柱/条，时序→折线，构成→堆叠；分类用受限调色板非彩虹；轴标单位/刻度；不靠颜色区分系列
+**输入**：聚合 AUDIT-F / UI-F / CRITIC-F / GAP-F 全部 findings，按前缀路由来源。
 
-#### 跨模块聚合（全部模块审完后，barrier 阶段）
-- 功能/配置/实现/入口重复（镜头 A）：按 M7 判归属，出合并/单一真相源建议
-- 跨模块一致性违反（视觉 C / 交互 D / 文案 / 状态色 / 导航口径）：汇总成一致性批次
-- 信息架构/导航口径不一：整体 IA 调整建议
-- 设计 Token 漂移（M5）：全局视觉治理建议
-- 宏观定位（E）跨模块复检：各页首屏是否都服务北极星
-
-#### 优先级矩阵
-
-| 优先级 | 判定 | 处置 |
-|--------|------|------|
-| P0 | 安全/数据损坏/核心路径静默失效/阻断主流程 UI 缺陷 | `快速修复=true`，直发 04 拆 fix task（`fix(critic-F-NN)`）→ 05 → 06 |
-| P1 | 系统性重复/一致性违反/高频反馈/转化路径高价值问题/IA 重组 | 攒批进下一 MINOR 版本，经 Phase 2.5 审视，走 01→04→05 |
-| P2 | 体验/一致性/边界补强/UI 视觉迭代 | 排期进 roadmap 版本-主题表 |
-| P3 | 锦上添花/低频/纯风格 | 记录备查，不强制排期 |
-
-> 每条 finding 必带 `产品sense_rationale`：不止说"不一致/重复"，要论证**对用户认知/效率/信任/产品定位的具体伤害**。UI 改动建议先按 M4 出原型/截图对照，不悬空提。"
-
-去重契约（不重跑）：
-- 镜头 F/G 可用性违例 → 引用 Step 1 audit 的 `AUDIT-F`，不重跑 Nielsen；本流程专注重复/散乱/定位
-- 镜头 C/D 视觉交互一致性 → 引用 Step 3 ui-review 的 `UI-F` 一致性 findings，不重跑逐模块审查；只做跨模块聚合
-- 镜头 B IA → 引用 Step 2 e2e 结构 findings，不自行做实机审计
-产出：`.csp/critic/PRODUCT-CRITIC-REPORT` + `CRITIC-FINDINGS.json`（前缀 `CRITIC-F-NN`）+ `CROSS-MODULE`。
-
-### Step 5 — 单模块缺口与增强深潜（主跑：逐模块功能缺口 + 领域增强目录）
-调用 `prompts/feature-gap-analysis.md`，全界面自动巡检，逐模块深潜。
-去重契约（不重跑）：
-- U1–U7 + M1–M8 逐模块命中 → 引用 Step 3 ui-review 的 `UI-F` 按维度引用已有结论、不重跑逐模块 UI 审查；本流程专注"还缺什么功能/能加什么功能"（Step 3 不做的功能缺口部分）
-- F2/F5 状态覆盖/a11y → 引用 Step 1 audit + Step 3 ui-review 结论、不重跑；本流程专注功能缺口
-- Phase 4 联动检查 → 引用 Step 2 e2e 结构 findings，不自行做实机审计
-产出：`.csp/gap-analysis/GAP-REPORT-{slug}` + `GAP-FINDINGS-{slug}.json`（前缀 `GAP-F-NN`）+ `CROSS-MODULE-UI`。
-
-### Step 6 — 产品演进交棒（聚合全部 findings → roadmap）
-调用 `[[workflow:csp-roadmap-planner]]`（多角度审查 + 主题候选提炼 + 集成必要性审视），输出交棒清单 → 过 Phase 2.5 审视 gate。
-输入：聚合 Step 1–5 全部 findings（`AUDIT-F` / `UI-F` / `CRITIC-F` / `GAP-F` 前缀不同，可并存去重，按前缀路由来源）。
-特别处理：Step 3 ui-review 产出的 `docs/analysis/UI-VERSION-PLAN-{date}.md` 版本迭代路线图直接作为本步骤的 UI 主题候选输入，其中的 P0/P1/P2 分级与版本批次建议供 roadmap 消费。
-产出：`docs/audit/PRODUCT-AUDIT` + `docs/analysis/AUDIT-TO-ROADMAP` 交棒清单 → `csp-roadmap-update` / `roadmap-planner`（过 Phase 2.5 集成必要性审视）。
-
-## 全局纪律
-- **证据先于断言**：每条 finding 带 `file:line` / 截图 / 路由 / 命令输出 / Token 漂移对比；"应该/大概/看着"即停。
-- **去重即契约**：上述每处主跑归属不可越界重跑；引用上游结论时附 finding ID 指针（`AUDIT-F-NN` / `UI-F-NN` / `CRITIC-F-NN` / `GAP-F-NN`）。
-- **禁止降级审计**：工具/浏览器不可用 → 报 BLOCKED + 停手 + 重试，不产出降级报告；预算耗尽标"未验证-预算不足"出部分报告，剩余显式列出未审。
-- **不改代码不发版**：六步均只产审计 + 建议；P0 findings 标 `快速修复=true` 直发 04 拆 fix task → 05 → 06（quick-fix 通道只跳 roadmap/01，不跳 04/05/06）。
-- **留尾纪律**：findings 只能 `open` / `BLOCKED`（附阻塞+谁解除）/ `deferred`（附解除条件）；禁止"下轮再补/性价比延后/目录式凑数/纯审美占高优"。
-- **gate 即授权**：顺序、范围、去重归属、严重度校准、P0–P3 分级、deferred 取舍自己拍板，记 DEV-LOG，不逐步问我；仅在审查清单真模糊且问询后仍不明 / 基线全缺且无法限定降级 / 真破坏操作（改代码删文档）/ 无法 auto-resolve 的报错 这几类才打断我。
-- **Fallback 模式必须遵守完整性门控**（见下文），不因"主 agent 串行执行"而降低产物质量标准。
+> ⚠️ Step 3 的 `docs/analysis/UI-VERSION-PLAN-{date}.md` 直接作为 UI 主题候选输入。
 
 ---
 
-## Fallback 模式完整性门控（当 Agent 工具不可用时激活）
+## 五、去重契约
 
-> 子代理不可用时，主 agent 串行执行全部 Step。**最大风险不是"没跑"，而是"跑了一半、用批量文件读取替代了深度分析、产物结构不符合预期"**。以下门控是 **硬约束**——每步完成后必须自检，任一不通过即标 `BLOCKED`、不进入下一步。
+| 审查维度 | 主跑方 | 引用方（不重跑） |
+|---------|--------|-----------------|
+| **Nielsen 10 可用性 + 状态覆盖** | Step 1 audit（Phase 4 Mode A/B） | Step 3 镜头 7/8、Step 4 镜头 F/G |
+| **结构审计（孤儿/隐藏/死按钮）** | Step 2 e2e（L4 实机确认） | Step 1 只标疑似、Step 3 镜头 3、Step 4 镜头 B、Step 5 Phase 4 |
+| **视觉层级与布局（M1）** | Step 3 ui-review 镜头 1 | Step 4 镜头 C、Step 5 U3/U5 |
+| **交互模式与反馈（M2）** | Step 3 ui-review 镜头 2 | Step 4 镜头 C/D、Step 5 U4 |
+| **Token 漂移对照（M5）** | Step 3 ui-review 镜头 4 | Step 4 镜头 C、Step 5 U3 |
+| **可访问性 a11y（M6）** | Step 3 ui-review 镜头 7 | Step 5 F5 |
+| **响应式（M3）** | Step 3 ui-review 镜头 6 | Step 5 U7 |
+| **模块散乱判归属（M7）** | Step 4 critic 镜头 A/B 聚合 | Step 3 镜头 3、Step 5 U2 只记"疑似" |
+| **功能缺口（F1–F12 + 领域目录）** | Step 5 gap | Step 4 镜头 F 引用可用性部分 |
+| **产品定位对齐 + 北极星** | Step 4 critic 镜头 E | Step 5 U1 |
 
-### F-0: Fallback 模式总纲
+> 引用时附 finding ID 指针（如 `AUDIT-F-NN` 见 `.csp/audit/AUDIT-FINDINGS-{milestone-slug}.json`），不自行重跑同一维度。
 
+---
+
+## 六、Finding 前缀路由
+
+| 来源 | 前缀 | 焦点 | 主要产物文件 |
+|------|------|------|------------|
+| Step 1 audit | `AUDIT-F-NN` | 工程结构 / 可用性 / Nielsen | `.csp/audit/AUDIT-FINDINGS-{milestone-slug}.json` |
+| Step 2 e2e | — | 实机验证（被下游引用） | `verify/ui-test-report.md` |
+| Step 3 ui-review | `UI-F-NN` | UI/UX 八镜头 | `.csp/ui-review/UI-FINDINGS-{date}.json` |
+| Step 4 critic | `CRITIC-F-NN` | 产品批评（重复/散乱/定位） | `.csp/critic/CRITIC-FINDINGS-{date}.json` |
+| Step 5 gap | `GAP-F-NN` | 功能缺口与增强 | `.csp/gap-analysis/GAP-FINDINGS-{slug}.json` + `GAP-FINDINGS-_aggregate.json` |
+| Step 6 product-audit | `AUDIT-F-NN`（同族） | 聚合交棒 | `docs/audit/REVIEW-FINDINGS-{audit-slug}.json` |
+
+> ⚠️ **已知不一致**：Step 6 的 `product-audit-to-roadmap.md` 自身产出文件名为 `REVIEW-FINDINGS-{audit-slug}.json`（含 `REVIEW` 字样），但其内部 finding 前缀声明为 `AUDIT-F-NN` 同族。这是上游提示词的历史遗留问题——编排器按前缀路由消费，不受文件名影响。
+
+---
+
+## 七、并行优化
+
+| Wave | 步骤 | 依赖关系 |
+|------|------|---------|
+| **Wave 1** | Step 1 + Step 2 并行 | 互不阻塞（静态 vs 实机） |
+| **Wave 2** | Step 3 | barrier：等 Step 1 + Step 2 完成 |
+| **Wave 3** | Step 4 + Step 5 并行 | barrier：等 Step 3 完成；二者互不阻塞 |
+| **Wave 4** | Step 6 | barrier：等 Step 4 + Step 5 完成 |
+
+> ⚠️ Fallback 模式不适用并行——主 agent 串行按 Step 1→6 推进。
+
+---
+
+## 八、进度播报
+
+**标准模式**（每步完成）：
 ```
-🚨 FALLBACK 模式激活。以下规则覆盖"全局纪律"中的对应条目：
-   1. 每步必须产独立的文件（不允许合并到"总报告"）
-   2. 每步必须产出独立的 findings JSON（不允许共用）
-   3. finding 前缀必须与标准模式一致（不允许混编）
-   4. 批量文件读取只能用于 Phase 1 现状重建，不能替代 Phase 2+ 的逐镜头/逐面深度分析
-   5. 每步完成后必须先自检（下文 F-GATE 清单），自检通过才播报进度条、进入下一步
-   6. 自检不通过 → 标 BLOCKED（附缺失项清单），不强行进入下一步
-```
-
-### F-GATE: 逐步完整性自检清单
-
-每步完成后，**必须输出以下自检表**（不是可选的，是强制输出）。任一 `❌` 即 BLOCKED。
-
-#### Step 1 自检（audit）
-
-```markdown
-### F-GATE Step 1: audit 完整性自检
-
-| 检查项 | 判定 | 实际值 |
-|--------|------|--------|
-| `.csp/audit/AUDIT-FINDINGS.json` 存在 | ✅/❌ | |
-| JSON 中 `finding_id` 前缀为 `AUDIT-F-` | ✅/❌ | |
-| finding 总数 > 0（若为 0 须有"经审查无问题"的逐模块声明） | ✅/❌ | N = __ |
-| Nielsen 10 每项有 Mode A/B 判定记录（命中/未命中/不适用） | ✅/❌ | |
-| MODULE-LIST 覆盖预先枚举的全部模块 | ✅/❌ | N 个模块 |
-| 每条 finding 含 ≥1 条 `evidence`（`file:line`/截图/命令输出） | ✅/❌ | |
-| 无"应该/大概/看着"类无依据断言 | ✅/❌ | |
-
-**自检结论**: PASS / BLOCKED（原因: ___）
-```
-
-#### Step 2 自检（e2e-deep-audit）
-
-```markdown
-### F-GATE Step 2: e2e 完整性自检
-
-| 检查项 | 判定 | 实际值 |
-|--------|------|--------|
-| `verify/ui-test-report.md` 存在 | ✅/❌ | |
-| L2 全路由 sweep 覆盖 ___ 个路由（从路由表枚举） | ✅/❌ | ___ 个 |
-| L3 按钮级审计 JSONL 非空（若浏览器不可用 → BLOCKED 而非跳过） | ✅/❌ | ___ 条 |
-| L4 孤儿路由/隐藏后端载入 finding 列表（引用 Step 1 "疑似" + 本步确认结论） | ✅/❌ | ___ 个 |
-| 死按钮候选列表（有 handler 核验结论，非仅 `NONE` 猜测） | ✅/❌ | ___ 个 |
-| L5 schema drift / tsc / mock 债务有执行记录（ran: 命令 exit 码） | ✅/❌ | |
-| 每条 finding 含执行证据（snapshot/network/console/screenshot ≥1 类） | ✅/❌ | |
-
-**自检结论**: PASS / BLOCKED（原因: ___）
+📊 pipeline [Step i/6 {slug}] [就绪✓][主跑✓][去重引用✓][findings✓][交棒✓]
 ```
 
-#### Step 3 自检（ui-review）
+**六步全跑完**：输出总 findings 清单（按 AUDIT-F / UI-F / CRITIC-F / GAP-F + 跨模块重组批次分组，附产物路径）。
 
-```markdown
-### F-GATE Step 3: ui-review 完整性自检
-
-| 检查项 | 判定 | 实际值 |
-|--------|------|--------|
-| `.csp/ui-review/UI-FINDINGS.json` 存在 | ✅/❌ | |
-| JSON 中 `finding_id` 前缀为 `UI-F-` | ✅/❌ | |
-| finding 总数 > 0（若某镜头无发现须有"本镜头经逐项对照无 issue"声明） | ✅/❌ | N = __ |
-| 8 个镜头每镜头有独立成节的审查记录（不是合并描述） | ✅/❌ | ___/8 |
-| 镜头 4 含 Token 漂移对照表（设计值 vs 实际值 vs file:line） | ✅/❌ | ___ 条漂移 |
-| `.csp/ui-review/CROSS-MODULE-UI-{date}.md` 存在且含： | ✅/❌ | |
-|   - 跨模块一致性批次列表（≥1 批） | ✅/❌ | ___ 批 |
-|   - 信息架构重组建议（按 M7 限界上下文法） | ✅/❌ | |
-| `docs/analysis/UI-VERSION-PLAN-{date}.md` 存在且含： | ✅/❌ | |
-|   - P0/P1/P2/P3 四级分组 | ✅/❌ | |
-|   - 版本批次对应表 | ✅/❌ | |
-| 每条 finding 含 `user_impact` 字段（对用户的具体伤害论证） | ✅/❌ | |
-| UI 改动建议附原型/截图对照（M4），无悬空提建议 | ✅/❌ | |
-| 引用 Step 1 `AUDIT-F` + Step 2 e2e findings 处有明确指针（ID+文件路径） | ✅/❌ | |
-
-**自检结论**: PASS / BLOCKED（原因: ___）
-```
-
-#### Step 4 自检（critic）
-
-```markdown
-### F-GATE Step 4: critic 完整性自检
-
-| 检查项 | 判定 | 实际值 |
-|--------|------|--------|
-| `.csp/critic/CRITIC-FINDINGS.json` 存在 | ✅/❌ | |
-| JSON 中 `finding_id` 前缀为 `CRITIC-F-` | ✅/❌ | |
-| 七镜头 A-G 每镜头有独立 findings（若无发现须声明） | ✅/❌ | ___/7 |
-| 镜头 A 重复与冗余分 A1/A2/A3/A4 四类独立审查 | ✅/❌ | |
-| finding 含 `产品sense_rationale` 字段（不是"看着不对"） | ✅/❌ | |
-| 引用 Step 3 `UI-F` 一致性 findings 处有明确指针 | ✅/❌ | |
-| 引用 Step 1 `AUDIT-F` Nielsen findings 处有明确指针 | ✅/❌ | |
-| `.csp/critic/CROSS-MODULE-{date}.md` 存在（跨模块聚合裁决） | ✅/❌ | |
-| P0 findings 标 `快速修复=true` | ✅/❌ | |
-
-**自检结论**: PASS / BLOCKED（原因: ___）
-```
-
-#### Step 5 自检（gap）
-
-```markdown
-### F-GATE Step 5: gap 完整性自检
-
-| 检查项 | 判定 | 实际值 |
-|--------|------|--------|
-| 每个枚举模块有独立 `GAP-REPORT-{slug}.md` | ✅/❌ | ___/___ 模块 |
-| 每个模块有对应 `GAP-FINDINGS-{slug}.json`（前缀 `GAP-F-`） | ✅/❌ | |
-| F1–F12 通用面每面有判定记录（"命中 N 条"或"本面无缺口"） | ✅/❌ | ___/12 |
-| U1–U7 维度：引用 Step 3 `UI-F` 已有结论，专注功能缺口 | ✅/❌ | |
-| 功能原型目录对照：按模块原型选命中目录，不无脑全报 | ✅/❌ | |
-| `.csp/gap-analysis/CROSS-MODULE-UI-{date}.md` 存在 | ✅/❌ | |
-| 每条 finding 带依据（file:line/截图/反馈/指标 ≥1 类） | ✅/❌ | |
-
-**自检结论**: PASS / BLOCKED（原因: ___）
-```
-
-#### Step 6 自检（product-audit）
-
-```markdown
-### F-GATE Step 6: product-audit 完整性自检
-
-| 检查项 | 判定 | 实际值 |
-|--------|------|--------|
-| `docs/audit/PRODUCT-AUDIT-{date}.md` 存在 | ✅/❌ | |
-| 聚合了 Step 1–5 的全部前缀（AUDIT-F/UI-F/CRITIC-F/GAP-F） | ✅/❌ | 4/4 |
-| 角度 A-D 必选四角度有独立审查（增强/功能迭代/模块重组/界面规划） | ✅/❌ | 4/4 |
-| `docs/analysis/AUDIT-TO-ROADMAP-{date}.md` 存在 | ✅/❌ | |
-| 主题候选以模块为单位聚合（遵循 roadmap 攒批原则） | ✅/❌ | ___ 个主题 |
-| 每条主题候选含 SemVer 性质标注（minor/major/patch） | ✅/❌ | |
-| 跨步骤去重声明：列出合并/引用的 finding ID 对应 | ✅/❌ | |
-
-**自检结论**: PASS / BLOCKED（原因: ___）
-```
-
-### F-BLOCKED 处理规则
-
-```
-自检 BLOCKED 时：
-  1. 停止继续下一步
-  2. 输出 BLOCKED 原因 + 缺失项的具体清单
-  3. 不产出"合并总报告"作为替代——那比不报告更危险（制造"已完成"假象）
-  4. BLOCKED 解除条件：补全缺失项后重新自检 PASS
-  5. 同一步骤最多 BLOCKED 2 次；第 3 次仍不通过 → 标 PERMANENTLY_BLOCKED
-     并列出"当前模式下无法完成的部分 vs 仍需完成的部分"
-     用户决定：修复环境后重试 / 接受部分报告（显式 scope down）
-
-PERMANENTLY_BLOCKED 不是降级审计——是诚实声明"在当前约束下，以下维度无法获得可信结论"。
-```
-
-### F-PROGRESS: Fallback 模式进度播报
-
-每步完成后必须播报（标准进度条 + 自检结论）：
-
+**Fallback 模式**（每步完成，含自检结论）：
 ```
 📊 pipeline [Step i/6 {slug}] [模式:FALLBACK] [就绪✓][重建✓][深度分析✓][自检:PASS✓][交棒✓]
 ```
 
-若自检 BLOCKED：
+---
+
+## 九、产物路径（逐步骤精确文件名）
 
 ```
-⛔ pipeline [Step i/6 {slug}] [模式:FALLBACK] [自检:BLOCKED] — 缺失: {清单}
-   → 不进入 Step i+1。BLOCKED 原因: ___
+# Step 1 — audit
+.csp/audit/
+├── MODULE-LIST-{milestone-slug}.md           # 模块清单（含 DB 模块）
+├── USABILITY-REPORT-{module}.md              # 逐模块可用性报告
+├── AUDIT-VERDICT-{milestone-slug}.md         # 裁决报告
+├── AUDIT-FINDINGS-{milestone-slug}.json      # 结构化 findings（前缀 AUDIT-F-NN）
+├── heuristic-scan-{milestone-slug}.txt       # 预扫描原始数据
+└── PRIOR-FINDINGS-BASELINE.md                # Step 0.6 基线
+docs/analysis/
+└── AUDIT-SUMMARY-{milestone-slug}.md         # 人类可读摘要
+
+# Step 2 — e2e-deep-audit
+verify/
+├── ui-test-report.md                         # 测试结论报告
+└── evidence/                                 # 截图等四类证据
+gap-analysis/
+└── GAP-REPORT-*.md                           # 结构性 gap 登记（孤儿/隐藏/IA）
+/tmp/
+└── button_audit*.jsonl                       # 按钮审计流式记录
+
+# Step 3 — ui-review
+.csp/ui-review/
+├── UI-REVIEW-REPORT-{date}.md                # 审查报告正文
+├── UI-FINDINGS-{date}.json                   # 结构化 findings（前缀 UI-F-NN）
+└── CROSS-MODULE-UI-{date}.md                 # 跨模块聚合裁决
+docs/analysis/
+├── UI-VERSION-PLAN-{date}.md                 # 版本迭代路线图
+└── UI-TO-ROADMAP-{date}.md                   # 版本迭代交棒清单
+
+# Step 4 — critic
+.csp/critic/
+├── PRODUCT-CRITIC-REPORT-{date}.md           # 批评审查报告
+├── CRITIC-FINDINGS-{date}.json               # 结构化 findings（前缀 CRITIC-F-NN）
+├── CROSS-MODULE-{date}.md                    # 跨模块聚合裁决
+├── SCAN-LIST-{date}.md                       # 审查清单
+└── recon-{slug}.md                           # 逐模块现状重建
+docs/analysis/
+├── CRITIC-SUMMARY-{date}.md                  # 人类可读摘要
+└── CRITIC-TO-ROADMAP-{date}.md               # 主题候选交棒清单
+
+# Step 5 — feature-gap
+.csp/gap-analysis/
+├── SCAN-LIST-{date}.md                       # 巡检清单
+├── GAP-REPORT-{slug}.md                      # 逐模块增强深潜报告
+├── GAP-FINDINGS-{slug}.json                  # 逐模块结构化发现（前缀 GAP-F-NN）
+├── GAP-FINDINGS-_aggregate.json              # 统一 aggregated findings
+├── recon-{slug}.md                           # 逐模块现状重建
+└── CROSS-MODULE-UI-{date}.md                 # 跨模块 UI 聚合
+docs/analysis/
+├── GAP-SUMMARY-{slug}.md                     # 人类可读摘要
+└── GAP-TO-ROADMAP-{slug}-{date}.md           # 主题候选交棒清单
+
+# Step 6 — product-audit
+docs/audit/
+├── PRODUCT-AUDIT-{date}.md                   # 多角度审查报告
+└── REVIEW-FINDINGS-{audit-slug}.json         # 结构化发现（前缀 AUDIT-F-NN 同族）
+docs/analysis/
+└── AUDIT-TO-ROADMAP-{date}.md                # 交棒清单
 ```
-
-### F-ANTI: Fallback 模式反模式清单
-
-| 反模式 | 症状 | 为什么危险 | 正确做法 |
-|--------|------|-----------|---------|
-| **批量收集替代深度分析** | 大量 `grep`/`glob` 后输出"经审查发现以下问题"类泛泛总结 | 看起来做了很多工作，实际上跳过了所有 lens 维度的结构化判定 | 每 lens 必须逐条对照检查项列表，每条 finding 带 product rationale |
-| **合并产物** | 6 个 Step 产出 1 个合并 report | 下游无法按前缀路由，去重契约崩溃 | 每步必须产独立文件（路径+前缀与标准模式一致） |
-| **跳过自检** | 不输出 F-GATE 自检表 | 无法验证产物是否完整，质量退化成"感觉跑完了" | F-GATE 自检表是强制输出，不是建议 |
-| **空 findings 伪装完整** | JSON 文件存在但 findings 数组为空，没有"经审查无问题"的逐模块声明 | 无法区分"真的没问题"和"没做审查" | finding 数=0 时必须有逐模块/逐镜头声明 |
-| **Token 漂移对照表为空壳** | 写了"Token 漂移对照表"标题但无实际 file:line 对比 | 镜头 4 的主跑项实质未执行 | 必须含 ≥1 条具体漂移记录（设计值 vs 实际值 vs 位置），或声明"经逐页对比，无不一致" |
-| **跨模块聚合节为泛泛之谈** | CROSS-MODULE 文件只写"发现了一些不一致"无具体列表 | 聚合裁决阶段的核心产出全部缺失 | 必须含具体批次列表（每批：涉及的模块、具体的 finding IDs、裁决结论） |
-| **忽略"自检不通过 → BLOCKED"** | 自检有 ❌ 但结论写了 PASS | 最危险的模式——制造"已完成"假象 | 任一 ❌ 即 BLOCKED，不允许自检结论与检查项矛盾 |
 
 ---
 
-## 进度播报（标准模式）
-每完成一步按进度条播报：
-`📊 pipeline [Step i/6 {slug}] [就绪✓][主跑✓][去重引用✓][findings✓][交棒✓]`
-六步全跑完，输出总 findings 清单（按 `AUDIT-F` / `UI-F` / `CRITIC-F` / `GAP-F` + 跨模块重组批次分组，附产物路径），再停。
+## 十、Fallback 模式
 
-> Fallback 模式进度播报格式见上文 F-PROGRESS。
+> 当 Agent 工具不可用时激活。最大风险不是"没跑"，而是"跑了一半、用批量文件读取替代了深度分析、产物结构不符合预期"。
 
-## 并行优化
-**Wave 1（可并行）**：Step 1 audit（静态扫）+ Step 2 e2e（实机跑）互不阻塞，可并行起跑。
+### F-0 总纲
 
-**Wave 2（barrier 后跑）**：Step 1 + Step 2 均完成后，Step 3 ui-review 启动（需消费 Step 1 的 Nielsen/状态覆盖结论 + Step 2 的结构 findings）。
+1. 每步必须产独立文件（不允许合并到"总报告"）
+2. 每步必须产独立 findings JSON（不允许共用）
+3. finding 前缀必须与标准模式一致
+4. 批量文件读取只能用于现状重建，不能替代逐镜头/逐面深度分析
+5. 每步完成后必须先自检（F-GATE），通过才进入下一步
+6. 自检不通过 → BLOCKED（附缺失项清单），不强行进入下一步
 
-**Wave 3（barrier 后跑）**：Step 3 ui-review 完成后，Step 4 critic 与 Step 5 gap 可并行起跑——二者均消费 Step 1/2/3 的不同维度结论，各自专注不同领域（critic 做产品定位批评、gap 做功能缺口补强），互不阻塞。
+### F-GATE 自检（每步完成后强制输出）
 
-**Wave 4（barrier 后跑）**：Step 4 + Step 5 均完成后，Step 6 product-audit 聚合全部 findings 交棒 roadmap。
+任一 `❌` 即 BLOCKED。每步检查项见下方速查表。完整自检表格式参见各提示词文件内的 F-GATE 模板。
 
-> ⚠️ **Fallback 模式下不适用并行优化**——主 agent 串行执行，必须严格按 Step 顺序推进并逐步自检。Wave 优化仅供标准模式使用。
+**Step 1 自检**：`AUDIT-FINDINGS-{milestone-slug}.json` 存在 / finding_id 前缀为 `AUDIT-F-` / finding >0 / Nielsen 10 逐项有判定 / `MODULE-LIST-{milestone-slug}.md` 覆盖全模块 / 每条含 evidence / 无"应该/大概"断言
 
-## Finding 前缀路由速查
+**Step 2 自检**：`verify/ui-test-report.md` 存在 / 全路由 sweep / 按钮审计 JSONL 非空 / 孤儿/隐藏确认 / 死按钮有 handler 核验 / schema drift/tsc 有执行记录 / 每条含执行证据
 
-| 来源 (Step) | 前缀 | 焦点 | 产物路径 |
-|------------|------|------|---------|
-| Step 1 audit | `AUDIT-F-NN` | 工程结构/可用性/Nielsen | `.csp/audit/` |
-| Step 2 e2e | — | 实机验证/死按钮/结构健康 | `verify/` |
-| Step 3 ui-review | `UI-F-NN` | UI/UX 专项（8 镜头） | `.csp/ui-review/` |
-| Step 4 critic | `CRITIC-F-NN` | 产品批评（重复/散乱/定位） | `.csp/critic/` |
-| Step 5 gap | `GAP-F-NN` | 功能缺口与增强 | `.csp/gap-analysis/` |
-| Step 6 product-audit | `AUDIT-F-NN`（同族） | 产品演进交棒 | `docs/audit/` |
+**Step 3 自检**：`UI-FINDINGS-{date}.json` 存在 / 前缀为 `UI-F-` / 8 镜头每镜头独立成节 / 镜头 4 含 Token 漂移对照表 / `CROSS-MODULE-UI-{date}.md` 含批次列表+IA 重组 / `UI-VERSION-PLAN-{date}.md` 含四级分组+版本批次 / 每条含 user_impact / UI 建议附原型对照 / 引用上游有明确指针
 
-## 自动发现
-未指定范围时：从路由表 + `.csp/product-spec/` 模块清单 + `.csp/code-spec/entry-points.jsonl` + `docs/FEATURES.md` 枚举全部页面/功能模块，按"核心路径优先 + P0 高危模块优先 + 高频反馈模块优先"排序，写入各自 `SCAN-LIST` 后即开始，不等我确认。
+**Step 4 自检**：`CRITIC-FINDINGS-{date}.json` 存在 / 前缀为 `CRITIC-F-` / 七镜头 A–G 每镜头独立 / 镜头 A 分 A1–A5 五类 / 含产品 sense rationale / 引用上游有明确指针 / `CROSS-MODULE-{date}.md` 存在 / `recon-{slug}.md` 逐模块存在 / P0 标 快速修复=true
+
+**Step 5 自检**：每模块有独立 `GAP-REPORT-{slug}.md` + `GAP-FINDINGS-{slug}.json` / F1–F12 每面有判定 / U1–U7 引用 UI-F / 功能原型按命中选目录 / `CROSS-MODULE-UI-{date}.md` 存在 / `GAP-FINDINGS-_aggregate.json` 存在 / 每条带依据
+
+**Step 6 自检**：`PRODUCT-AUDIT-{date}.md` 存在 / 聚合全部四个前缀 / 四角度独立审查 / `AUDIT-TO-ROADMAP-{date}.md` 存在 / 主题含 SemVer 标注 / 跨步骤去重声明
+
+### F-BLOCKED 处理
+
+1. 停止继续下一步
+2. 输出 BLOCKED 原因 + 缺失项清单
+3. 不产出"合并总报告"替代
+4. 同一步骤最多 BLOCKED 2 次；第 3 次 → PERMANENTLY_BLOCKED
+5. PERMANENTLY_BLOCKED 列出"当前模式无法完成 vs 仍需完成"，用户决定
+
+### F-ANTI 反模式
+
+| 反模式 | 正确做法 |
+|--------|---------|
+| 批量 grep/glob 替代深度分析 | 每 lens 逐条对照检查项，每条 finding 带 product rationale |
+| 6 步产出 1 个合并 report | 每步独立文件，路径+前缀与标准一致 |
+| 不输出 F-GATE 自检表 | F-GATE 是强制输出 |
+| finding 数=0 且无逐模块声明 | 必须逐模块/逐镜头声明"经审查无问题" |
+| Token 漂移表为空壳 | 含 ≥1 条具体 file:line 对比，或声明"经逐页对比无漂移" |
+| CROSS-MODULE 为泛泛之谈 | 含具体批次列表（模块+finding IDs+裁决） |
+| 自检有 ❌ 但结论 PASS | 任一 ❌ 即 BLOCKED |
 
 ---
 
-按要求执行任务
+## 十一、与相邻提示词的边界
+
+| 提示词 | 定位 | 粒度 | 前缀 |
+|--------|------|------|------|
+| `audit.md` | 工程结构体检（模块化+Nielsen+联动测试） | 全项目 | `AUDIT-F-NN` |
+| `e2e-deep-audit.md` | 实机验证（路由 sweep+按钮审计+结构健康） | 全页面 | 无独立前缀 |
+| `ui-review-to-iteration.md` | UI/UX 八镜头审查 + 版本迭代路线图 | 全界面 | `UI-F-NN` |
+| `product-critic-review.md` | 产品总监七镜头批评（重复/散乱/定位） | 全模块 | `CRITIC-F-NN` |
+| `feature-gap-analysis.md` | 单模块功能缺口与增强深潜 | 单模块 | `GAP-F-NN` |
+| `product-audit-to-roadmap.md` | 多角度审查 → 主题候选交棒 roadmap | 聚合层 | `AUDIT-F-NN` |
+| **本编排器** | 串联以上六份提示词，做去重路由、聚合、交棒 | 编排层 | —（不下发 finding） |
+
+---
+
+## 十二、自动发现与执行
+
+未指定范围时：从路由表 + `.csp/product-spec/` 模块清单 + `.csp/code-spec/entry-points.jsonl` + `docs/FEATURES.md` 枚举全部页面/功能模块，按"核心路径优先 + P0 高危模块优先"排序，写入 SCAN-LIST 后即开始，不等确认。
+
+**gate 即授权**：顺序、范围、去重归属、严重度校准、P0–P3 分级、deferred 取舍自己拍板；仅在审查清单真模糊且问询后仍不明 / 基线全缺且无法限定降级 / 真破坏操作（改代码删文档）/ 无法 auto-resolve 的报错时才打断用户。

@@ -39,8 +39,8 @@ module.exports = {
 ```javascript
 module.exports = {
   // 统一输出目录（固定位置，不要频繁变更）
-  outputDir: 'src/__tests__/.csp/artifacts/verify/h5-test/test-results',
-  reporter: [['html', { open: 'never', outputFolder: 'src/__tests__/.csp/artifacts/verify/h5-test/playwright-report' }]],
+  outputDir: '.csp/artifacts/verify/h5-test/test-results',
+  reporter: [['html', { open: 'never', outputFolder: '.csp/artifacts/verify/h5-test/playwright-report' }]],
   use: {
     viewport: { width: 750, height: 1334 },
     deviceScaleFactor: 2,

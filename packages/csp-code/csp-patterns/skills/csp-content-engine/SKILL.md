@@ -131,6 +131,11 @@ Before delivering:
 - no duplicated copy across platforms unless requested
 - any CTA is earned and user-approved
 
+## 产物路径
+
+内容产出到项目 `docs/content/{campaign-slug}/` 目录：
+- `docs/content/{campaign-slug}/` — 多平台内容变体（X/LinkedIn/Newsletter 等）
+
 ## Related Skills
 
 - `brand-voice` for source-derived voice profiles

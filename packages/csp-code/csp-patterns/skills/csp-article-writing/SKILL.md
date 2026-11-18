@@ -84,3 +84,11 @@ Before delivering:
 - the voice matches the supplied examples or the agreed `VOICE PROFILE`
 - every section adds something new
 - formatting matches the intended medium
+
+## 产物路径
+
+文章产出到项目 `docs/articles/` 目录：
+
+- `docs/articles/{slug}.md` — Markdown 文章（博客/指南/新闻稿/随笔等）
+
+遵照 `000-project-governance_csp.md` G2.1 约定：人读文档落 `docs/`，带 scope 标识的文件名。

@@ -36,13 +36,13 @@
 │  Layer 0: csp-router  (常驻,~800 tokens)            │
 │  ─ 任务分类 + skill 选择 + 状态感知 + 上下文探测    │
 ├─────────────────────────────────────────────────────┤
-│  Layer 1: csp-meta    (SP + 规范驱动元技能)         │
+│  Layer 1: csp-meta    (方法论与规范驱动元技能)       │
 │  ─ 方法论: brainstorming, TDD, spec-driven...       │
 ├─────────────────────────────────────────────────────┤
-│  Layer 2: csp-workflow (GSD 93 workflows 骨架)      │
+│  Layer 2: csp-workflow (项目管理工作流骨架)          │
 │  ─ 项目管理: plan → execute → verify → ship        │
 ├─────────────────────────────────────────────────────┤
-│  Layer 3: csp-patterns (ECC 技术库 ~200 skills)     │
+│  Layer 3: csp-patterns (语言/框架 patterns 技术库)    │
 │  ─ 语言/框架 patterns, reviewers, build-resolvers   │
 ├─────────────────────────────────────────────────────┤
 │  Layer 4: csp-runtime (运行时独特能力 ~20 skills)   │

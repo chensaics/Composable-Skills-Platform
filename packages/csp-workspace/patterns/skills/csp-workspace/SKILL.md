@@ -11,7 +11,7 @@ category: patterns
 type: workflow
 phase: build
 domain: other
-role: orchestrator
+role: specialist
 scope: implementation
 tools: [Read, Write, Edit, Bash, Glob, Grep, WebFetch]
 related_skills:

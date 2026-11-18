@@ -351,22 +351,22 @@ a { color: var(--layer-1); text-decoration: none; }
 // ═══════════════════════════════════════════════════
 const CSP_DATA = {
   "stats": {
-    "total": 683,
+    "total": 706,
     "by_layer": {
       "Router": {
         "count": 1,
         "layer": "L0",
         "color": "#ef4444"
       },
-      "Meta": {
-        "count": 29,
-        "layer": "L1",
-        "color": "#3b82f6"
-      },
       "Patterns": {
-        "count": 383,
+        "count": 403,
         "layer": "L3",
         "color": "#a855f7"
+      },
+      "Meta": {
+        "count": 32,
+        "layer": "L1",
+        "color": "#3b82f6"
       },
       "Runtime": {
         "count": 58,
@@ -381,12 +381,12 @@ const CSP_DATA = {
     },
     "by_category": {
       "router": 1,
-      "meta": 29,
-      "patterns": 383,
+      "patterns": 403,
+      "meta": 32,
       "runtime": 58,
       "workflow": 212
     },
-    "reviewers": 77
+    "reviewers": 78
   },
   "skills": [
     {
@@ -399,6 +399,63 @@ const CSP_DATA = {
       "triggers": {
         "en": [
           "csp-router"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-prompt-builder",
+      "description": "Use when turning a vague idea into a copy-ready structured prompt for another LLM (Claude/GPT/Gemini/image models). Covers image generation, writing, code, business, research, agent tasks with model-aware adaptation and defaults. Keywords: prompt builder, 提示词生成, structured prompt, prompt engineering",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-prompt-builder",
+          "prompt",
+          "fix prompt builder",
+          "prompt builder",
+          "prompt-builder",
+          "review prompt builder"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-business-seo",
+      "description": "Use when optimizing content for search engines (Google/Bing/百度). Covers keyword research, on-page SEO, technical SEO, backlink strategy, content optimization, and rank tracking. Keywords: SEO, 搜索引擎优化, 关键词, backlink, 排名, Google, 百度, 搜索排名, meta tags.",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-business-seo",
+          "business",
+          "business seo",
+          "business-seo",
+          "fix business seo",
+          "review business seo"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-micro-product-scout",
+      "description": "Use when discovering small overseas product opportunities for a solo indie developer — tools, browser extensions, platform plugins, converters, micro-SaaS. Hard filter: overseas users, real-case-accessible, competitor-adjacent (not clone), 7-10 day MVP. Core principle: competitors validate demand, t",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-micro-product-scout",
+          "fix micro product scout",
+          "micro",
+          "micro product scout",
+          "micro-product-scout",
+          "review micro product scout"
         ],
         "zh": []
       }
@@ -8911,20 +8968,6 @@ const CSP_DATA = {
       }
     },
     {
-      "name": "csp-workspace",
-      "description": "Manage CSP workspaces — create, list, or remove isolated workspace environments",
-      "category": "workflow",
-      "layer": "L2",
-      "layer_name": "Workflow",
-      "layer_color": "#22c55e",
-      "triggers": {
-        "en": [
-          "csp-workspace"
-        ],
-        "zh": []
-      }
-    },
-    {
       "name": "csp-workstreams",
       "description": "Manage parallel workstreams — list, create, switch, status, progress, complete, and resume",
       "category": "workflow",
@@ -10895,6 +10938,378 @@ const CSP_DATA = {
       "triggers": {
         "en": [
           "csp-transition"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-vision",
+      "description": "Use when defining or refining the creator's brand identity, mission, target audience, and content philosophy. This is the \"why\" behind all content — the meta-level foundation that all other creator skills reference. Use BEFORE any content production to establish clear creative direction. Use when th",
+      "category": "meta",
+      "layer": "L1",
+      "layer_name": "Meta",
+      "layer_color": "#3b82f6",
+      "triggers": {
+        "en": [
+          "csp-creator-vision",
+          "creator vision",
+          "creator-vision",
+          "fix creator vision",
+          "review creator vision"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-beautiful-article",
+      "description": "Use when converting any source (URL/PDF/DOCX/Markdown/text/screenshots) into a beautiful single-file HTML web article that can be opened offline and shared. Follows source→plan→checkpoint→first-spread→full→review harness workflow. Triggers: \"做成网页文章\", \"生成可分享HTML\", \"beautiful web article\", \"reacticle\"",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-beautiful-article",
+          "beautiful",
+          "beautiful article",
+          "beautiful-article",
+          "fix beautiful article",
+          "review beautiful article"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-break-ui",
+      "description": "Use when stress-testing UI components with worst-case data — long names, zero items, empty states, non-Latin text, emoji, extreme numbers, missing fields. Feeds demo data + worst-case toggle to find everything that breaks. Triggers on \"stress test\", \"break this\", \"worst case\", \"边缘情况\", \"极限测试\". Keywor",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-break-ui",
+          "break",
+          "break ui",
+          "break-ui",
+          "fix break ui",
+          "review break ui"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-auto-publish",
+      "description": "Use when setting up automated/timed content publishing. Covers scheduled posting via platform APIs or scheduling tools, batch upload, content queue management, and post-publish performance data collection for复盘. Use when content is ready but publishing should happen at a future time. Keywords: 定时发布,",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-auto-publish",
+          "creator auto publish",
+          "creator-auto-publish",
+          "fix creator auto publish",
+          "review creator auto publish"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-carousel",
+      "description": "Use when creating visual storytelling content — Instagram/LinkedIn/小红书 carousels, infographics, multi-slide educational content, data storytelling, or swipeable content series. Covers narrative structure, visual hierarchy, slide-to-slide flow, and platform-specific optimization. Use when a single im",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-carousel",
+          "creator carousel",
+          "creator-carousel",
+          "fix creator carousel",
+          "review creator carousel"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-content-strategy",
+      "description": "Use when building a content strategy, editorial calendar, topic library, or content pillar framework. Covers audience analysis, competitor content audit, topic clustering, format mix planning, and posting cadence design. Use BEFORE content production to avoid random posting. Keywords: 内容策略, content ",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-content-strategy",
+          "creator content strategy",
+          "creator-content-strategy",
+          "fix creator content strategy",
+          "review creator content strategy"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-image-prompt",
+      "description": "Use when crafting prompts for AI image generation (fal.ai, Midjourney, DALL-E, Stable Diffusion, Nano Banana, etc.). Covers prompt structure, style control, composition techniques, negative prompting, and model-specific optimization. Use BEFORE generating images — good prompts save iterations. Keywo",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-image-prompt",
+          "creator image prompt",
+          "creator-image-prompt",
+          "fix creator image prompt",
+          "review creator image prompt"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-podcast",
+      "description": "Use when creating podcast/audio content — from episode planning and scripting through recording setup, AI voice synthesis, editing, show notes, and publishing to platforms (小宇宙/Apple Podcasts/Spotify/喜马拉雅). Covers solo shows, interview formats, and AI-generated podcasts. Keywords: 播客, podcast, 音频创作,",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-podcast",
+          "creator podcast",
+          "creator-podcast",
+          "fix creator podcast",
+          "review creator podcast"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-publish-pipeline",
+      "description": "Use when publishing content across multiple platforms (抖音/TikTok/小红书/B站/YouTube/ 公众号/X/LinkedIn). Covers format adaptation, scheduling, cross-platform optimization, tag/hashtag strategy, and publish-time coordination. Use AFTER content is created and ready for distribution. Keywords: 发布, 多平台分发, 一键发布",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-publish-pipeline",
+          "creator publish pipeline",
+          "creator-publish-pipeline",
+          "fix creator publish pipeline",
+          "review creator publish pipeline"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-short-video",
+      "description": "Use when creating short videos (抖音/TikTok/YouTube Shorts/Reels/B站). Covers storyboarding, scripting, shooting guidelines, editing workflow, caption/subtitle generation, and platform-specific optimization. Keywords: 短视频, 抖音, TikTok, Shorts, Reels, 剪辑, 拍摄, 字幕, 转场, video editing.",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-short-video",
+          "creator short video",
+          "creator-short-video",
+          "fix creator short video",
+          "review creator short video"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-thumbnail",
+      "description": "Use when designing video thumbnails, article cover images, social media covers, or any first-impression visual that drives click-through. Covers composition rules, text overlay, color psychology, A/B testing, and platform-specific dimensions. Use BEFORE publishing — thumbnails determine 80% of click",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-creator-thumbnail",
+          "creator thumbnail",
+          "creator-thumbnail",
+          "fix creator thumbnail",
+          "review creator thumbnail"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-learn-taste",
+      "description": "Use after a design review session to codify corrections into reusable rules. Turns design feedback (\"don't use blue buttons\", \"cards need 12px radius\") into DESIGN.md entries or project skills, with the WHY behind each rule so future sessions follow them without repeating the same corrections. Keywo",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-learn-taste",
+          "fix learn taste",
+          "learn taste",
+          "learn-taste",
+          "review learn taste"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-creator-orchestrator",
+      "description": "Use when starting a complete content creation project end-to-end — from strategy through production to publishing and复盘. This is the master orchestrator that routes to the right sub-skills in the right order. Use when the task spans multiple creator phases and needs coordinated execution. Triggers: ",
+      "category": "workflow",
+      "layer": "L2",
+      "layer_name": "Workflow",
+      "layer_color": "#22c55e",
+      "triggers": {
+        "en": [
+          "csp-creator-orchestrator",
+          "creator orchestrator",
+          "creator-orchestrator",
+          "fix creator orchestrator",
+          "review creator orchestrator"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-data",
+      "description": "Data entry hub — routes SQL queries, data analysis (pandas/scikit-learn), BI dashboards, and ETL pipeline requests to the correct sub-skill. Keywords: SQL, data science, pandas, BI, ETL, BigQuery, dbt, 数据分析, 查询.",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-data",
+          "fix data",
+          "review data"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-devops",
+      "description": "DevOps entry hub — routes CI/CD, container/K8s, cloud deployment, and monitoring requests to the correct sub-skill. Use when deploying, configuring CI/CD, managing Docker/K8s, or setting up cloud monitoring. Keywords: deploy, CI/CD, Docker, K8s, kubectl, GitHub Actions, cloud, 部署, 运维.",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-devops",
+          "devops",
+          "fix devops",
+          "review devops"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-deliberate",
+      "description": "Use when making consequential decisions — \"帮我分析利弊\", \"两面论证\", \"先别下结论\", steelman both sides. Structured deliberation in 2 turns: Turn 1 improves the question and asks the ONE most decision-critical question; Turn 2 makes the judgment. Not for factual Q&A, summaries, or urgent safety. Keywords: delibera",
+      "category": "meta",
+      "layer": "L1",
+      "layer_name": "Meta",
+      "layer_color": "#3b82f6",
+      "triggers": {
+        "en": [
+          "csp-deliberate",
+          "deliberate",
+          "fix deliberate",
+          "review deliberate"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-teach",
+      "description": "Use when tutoring or explaining concepts — the learner wants understanding, not task completion. Triggers on \"teach me\", \"explain\", \"ELI5\", \"walk me through\", \"I don't get it\", \"quiz me\", \"flashcards\". Covers diagnosis, active learning, and tutor moves (guided discovery, worked examples, visual, ref",
+      "category": "meta",
+      "layer": "L1",
+      "layer_name": "Meta",
+      "layer_color": "#3b82f6",
+      "triggers": {
+        "en": [
+          "csp-teach",
+          "fix teach",
+          "review teach",
+          "teach"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-contract-review",
+      "description": "Use when reviewing contracts, NDAs, employment agreements, SaaS terms, or any legal document. Pre-review checklist (blank fields, missing exhibits, signature status), CUAD risk categories, key term extraction, and redline suggestions. Triggers on \"review contract\", \"analyze agreement\", \"check NDA\". ",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-contract-review",
+          "contract code review",
+          "contract review",
+          "contract-review",
+          "review contract code"
+        ],
+        "zh": [
+          "contract 审查"
+        ]
+      }
+    },
+    {
+      "name": "csp-dogfood",
+      "description": "Use when doing exploratory testing, bug hunting, or dogfooding a web application. Systematically explores the app, finds bugs and UX issues, produces structured reports with step-by-step screenshots and repro steps. Asks user what to test and how deep to go, then independently explores. Keywords: do",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-dogfood",
+          "dogfood",
+          "fix dogfood",
+          "review dogfood"
+        ],
+        "zh": []
+      }
+    },
+    {
+      "name": "csp-quality",
+      "description": "Quality entry hub — routes testing/security/code-review requests to the correct sub-skill. Use when running tests (pytest/vitest/playwright), security audits (SonarQube/Snyk), or code reviews (CR checklists/lint). Keywords: test, testing, pytest, vitest, security, audit, code review, QA, quality.",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-quality",
+          "fix quality",
+          "review quality"
+        ],
+        "zh": [
+          "quality 质量"
+        ]
+      }
+    },
+    {
+      "name": "csp-workspace",
+      "description": "Workspace entry hub — routes knowledge base, project management, IM integration, and productivity requests to the correct sub-skill or external product connector. Skills link to Notion/Linear/飞书/WeChat APIs, not build them from scratch. Keywords: Notion, Linear, 飞书, 企业微信, knowledge base, 知识库, 项目管理, ",
+      "category": "patterns",
+      "layer": "L3",
+      "layer_name": "Patterns",
+      "layer_color": "#a855f7",
+      "triggers": {
+        "en": [
+          "csp-workspace"
         ],
         "zh": []
       }

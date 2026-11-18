@@ -1,6 +1,6 @@
 ---
 name: csp-test-spec
-description: "Test Module Spec (TMS / 测试说明书). The per-module living test baseline. Generates stock + incremental test cases from requirement/design docs; when a change lands, TMS emits only the incremental cases the delta requires, not a from-scratch rewrite."
+description: "Test Module Spec (TMS / 测试说明书). The per-module living test baseline, branching from PMS. Generates stock + incremental test cases from PMS acceptance criteria with full traceability (AC→test method→test case matrix). Auto-generates test stubs from PRD acceptance criteria. When a change lands, TMS emits only the incremental cases the delta requires, not a from-scratch rewrite."
 version: "1.0.0"
 layer: 2
 category: workflow
@@ -91,7 +91,138 @@ TMS 是 PMS 的分支，先校验：
 
 **分支纪律:** TMS 不得发明 PMS 未声明的模块；验收形态继承 PMS §5。
 
-### Step 2: 建立需求→方法追溯矩阵
+### Step 1.5: PMS 验收标准→TMS 测试用例映射（AC→Test）
+
+TMS 的核心价值是把 PMS 的验收标准（AC）**自动翻译为可执行的测试用例骨架**。
+这建立了从 PRD 到测试的完整追溯链。
+
+#### 1.5a: AC 到测试方法的自动路由
+
+对 PMS 中每条验收标准，按**原型**自动分配测试方法：
+
+| AC 原型 | → 测试方法 | 示例 |
+|--------|----------|------|
+| "用户执行 X，系统返回 Y" | unit test (happy path) | `test_login_returns_token()` |
+| "当 X 条件不满足，系统拒绝" | unit test (negative) | `test_login_rejects_invalid_password()` |
+| "X 操作后，Y 状态变更" | cross-layer (集成) | `test_order_changes_stock_in_db()` |
+| "用户可看到 Z 列表" | E2E / component test | `test_user_list_renders_20_items()` |
+| "系统在 N 秒内响应" | performance test | `test_search_under_200ms()` |
+| "X 变更不影响 Y 功能" | regression test | `test_email_still_works_after_auth_change()` |
+| "N 个用户同时 X" | concurrency / property | `test_concurrent_order_no_oversell()` |
+
+**执行**：
+```bash
+# 从 PMS 提取所有 AC，自动分配测试方法
+python3 -c "
+import re, sys
+ac_pattern = r'Given (.+), When (.+), Then (.+)'
+for line in sys.stdin:
+    m = re.match(ac_pattern, line.strip())
+    if m:
+        given, when, then = m.groups()
+        # 规则分配
+        if 'reject' in then.lower() or 'denied' in then.lower():
+            method = 'unit (negative)'
+        elif 'display' in then.lower() or 'render' in then.lower():
+            method = 'E2E / component'
+        elif 'status' in then.lower() or 'change' in then.lower():
+            method = 'cross-layer'
+        elif 'second' in then.lower() or 'second' in then.lower():
+            method = 'performance'
+        else:
+            method = 'unit (happy path)'
+        print(f'AC: {given} | {when} | {then}')
+        print(f'  → test method: {method}')
+        print()
+" < .csp/product-spec/PRODUCT-MODULE-SPEC.md
+```
+
+#### 1.5b: AC→测试用例映射表
+
+为每条 PMS 验收标准生成测试用例骨架：
+
+```markdown
+## AC→Test 映射表 — MOD-AUTH-1 用户与权限
+
+**PMS 来源**: `.csp/product-spec/PRODUCT-MODULE-SPEC.md`
+**生成时间**: {date}
+**覆盖率目标**: 每个 AC ≥ 1 测试方法
+
+| AC ID | PMS 验收标准 | 测试方法 | 测试用例 | 优先级 | 状态 |
+|-------|-----------|---------|---------|--------|------|
+| AC-AUTH-1 | Given 有效凭证, When 用户登录, Then 返回 JWT token | unit (happy) | `test_login_valid_credentials` | P0 | ⬜ |
+| AC-AUTH-2 | Given 无效密码, When 用户登录, Then 返回 401 + "密码错误" | unit (negative) | `test_login_invalid_password` | P0 | ⬜ |
+| AC-AUTH-3 | Given 已登录, When 访问需认证页面, Then 正常显示 | cross-layer | `test_auth_middleware_allows_authenticated` | P0 | ⬜ |
+| AC-AUTH-4 | Given 未登录, When 访问需认证页面, Then 跳转到登录页 | cross-layer | `test_auth_middleware_redirects_anonymous` | P0 | ⬜ |
+| AC-AUTH-5 | Given 过期 token, When 访问 API, Then 返回 401 + "token 过期" | unit (negative) | `test_expired_token_rejected` | P1 | ⬜ |
+| AC-AUTH-6 | Given 有效 token, When 用户登出, Then token 被撤销 | cross-layer | `test_logout_revokes_token` | P1 | ⬜ |
+
+### 覆盖统计
+- 总 AC 数：6
+- 已映射测试方法：6 (100%)
+- 已实现测试用例：0 (0%)  ← 开发者逐步实现
+- 未覆盖 AC：无
+```
+
+**自动生成测试骨架代码**：
+
+```python
+# 从 AC→Test 映射表自动生成测试函数骨架
+def generate_test_stub(ac_id, ac_given, ac_when, ac_then, test_method):
+    """生成 pytest 测试函数骨架"""
+    test_name = ac_id.lower().replace('-', '_')
+    return f'''
+def test_{test_name}():
+    """AC: Given {ac_given}, When {ac_when}, Then {ac_then}"""
+    # TODO: 实现测试逻辑
+    # Arrange: {ac_given}
+    # Act: {ac_when}
+    # Assert: {ac_then}
+    pass  # ← 开发者替换为实际测试代码
+'''
+
+# 示例输出:
+# def test_auth_1():
+#     """AC: Given 有效凭证, When 用户登录, Then 返回 JWT token"""
+#     # Arrange: 准备有效的用户名和密码
+#     # Act: 调用 POST /auth/login
+#     # Assert: 响应 status=200, body.token 非空, token 可解码
+#     pass
+```
+
+#### 1.5c: PMS 变更→TMS 影响追踪
+
+当 PMS 新增/修改/删除 AC 时，自动更新 TMS：
+
+```bash
+# 比较当前 PMS AC 与上次 TMS 基线的差异
+diff \
+  <(grep -E "Given.+When.+Then" .csp/product-spec/PRODUCT-MODULE-SPEC.md | sort) \
+  <(grep "^| AC-" .csp/test-spec/{module}/TEST-MODULE-SPEC.md | sort)
+```
+
+**变更影响**：
+- PMS 新增 AC → TMS 新增一行映射 + 未实现测试用例
+- PMS 修改 AC（语义变化）→ TMS 标记 `⚠️ AC CHANGED — 测试用例需更新`
+- PMS 删除 AC → TMS 标记 `🗑️ AC REMOVED — 对应测试用例可清理或归档`
+
+#### 1.5d: TMS→PMS 覆盖回写
+
+测试用例实现后，回写 TMS 映射表状态：
+
+```markdown
+| AC-AUTH-1 | Given 有效凭证... | unit (happy) | `test_login_valid_credentials` | P0 | ✅ 已实现 |
+```
+
+**输出产物**：
+```
+.csp/test-spec/{module}/
+├── TEST-MODULE-SPEC.md       # canonical baseline (含 AC→Test 映射表)
+├── case-inventory.md          # 存量用例（入口×状态矩阵）
+├── requirement-matrix.md      # 需求→方法 + 缺口清单
+├── ac-test-mapping.md         # PMS AC→TMS 测试用例映射表（本步产出）
+└── deltas/                    # 增量用例
+```
 
 把每条需求/验收标准映射到至少一种测试方法（参考 `csp-test-methodology` 谱系）：
 
@@ -172,12 +303,14 @@ requirement ──maps──▶ [test method(s)]
 ## 门控检查
 
 - [ ] 模块在 PMS 声明范围内（分支纪律）
+- [ ] 每条 PMS 验收标准映射到 ≥1 TMS 测试用例（AC→Test 映射表 100% 覆盖）
 - [ ] 每条需求映射到 ≥1 测试方法
 - [ ] 缺口清单已列（未映射需求 = 风险）
 - [ ] 存量用例矩阵式组织 + 叙事句命名
 - [ ] 增量只覆盖 delta 新触及组合，未触及的不动
 - [ ] 写路径有跨层联动一例（反割裂）
 - [ ] 需求覆盖率门：未映射需求 = 0（或已登记风险）
+- [ ] AC→Test 映射表含所有 PMS AC，状态标注（⬜ 待实现 / ✅ 已实现 / ⚠️ 需更新）
 
 ## 完成信号
 

@@ -1,7 +1,7 @@
 ---
 name: csp-code-spec
-description: "Code Module Spec (CMS / 代码说明书). The per-application living baseline distilled from the codebase. It maps entry points, module boundaries, and conventions, and feeds design / task-split / code generation / code review. Use when '代码说明书', 'CMS', '代码蒸馏', or 'code distillation' is needed."
-version: "1.0.0"
+description: "Code Module Spec (CMS / 代码说明书). The per-application living baseline distilled from the codebase. Maps entry points, call chains, module boundaries, and conventions. Includes code-to-doc auto-extraction (Python docstring → class/method docs, TypeScript JSDoc → component docs, one-click generation). Handles code-change-triggered delta updates like a repo wiki. Use when '代码说明书', 'CMS', '代码蒸馏', '生成代码文档', 'code documentation', 'repo wiki'."
+version: "1.1.0"
 layer: 2
 category: workflow
 phase: define
@@ -38,11 +38,15 @@ related_skills:
 triggers:
   keywords: ["代码说明书", "代码基线", "代码蒸馏", "code distillation", "knowledge graph",
              "调用链", "入口点", "代码规格书", "code module spec", "CMS", "align code spec",
-             "代码知识图谱", "entry points", "call chain", "代码对齐"]
+             "代码知识图谱", "entry points", "call chain", "代码对齐",
+             "生成代码文档", "代码文档生成", "docstring生成", "自动文档",
+             "code documentation", "repo wiki", "API文档生成"]
   intents:
     - "user wants a living code-knowledge baseline per application"
     - "user needs entry points + call chains to ground design/codegen/CR"
     - "user wants to re-align a stale code spec to current codebase"
+    - "user wants auto-generated per-file/per-module documentation from source code"
+    - "user wants the CMS to act like a repo wiki that updates with code changes"
   context:
     - "brownfield_codebase"
     - "before_design"
@@ -106,6 +110,101 @@ bash $SCRIPT entrypoints       # 扫描对外入口（HTTP/RPC/CLI/定时/MQ/事
 
 每个入口点输出：`{类型, 标识, 文件:行, 业务场景(推断,标[TBD]若不确定)}`。
 **禁臆造**：grep 不到的不写；推断的场景标 `[TBD]`。
+
+### Step 2.5: 代码模块文档自动抽取（Code-to-Doc）（3 min）
+
+从源码自动生成每个模块/文件的结构化文档——类似 repo wiki 的按文件说明。
+**目标：一键运行，代码变更时自动检测并增量更新。**
+
+#### 2.5a: 一键全量生成
+
+```bash
+# 全量生成所有模块文档
+bash scripts/code_doc_gen.sh --lang auto
+
+# 或指定语言
+bash scripts/code_doc_gen.sh --lang python   # Python 项目
+bash scripts/code_doc_gen.sh --lang typescript  # 前端项目
+```
+
+#### 2.5b: 增量更新（代码变更后）
+
+```bash
+# 只处理自从上次 CMS 基线以来的变更文件
+PREV=$(git log --oneline -1 -- .csp/code-spec/{app}/CODE-MODULE-SPEC.md | cut -d' ' -f1)
+bash scripts/code_doc_gen.sh --changed-since "$PREV"
+```
+
+#### 2.5c: 语言特定抽取模式
+
+**Python** — 从 docstring + type hints + 装饰器抽取：
+```bash
+# 单文件示例
+python3 -c "
+import ast, sys
+with open(sys.argv[1]) as f: tree = ast.parse(f.read())
+for node in ast.walk(tree):
+    if isinstance(node, ast.ClassDef):
+        doc = ast.get_docstring(node) or '⚠️ MISSING DOCSTRING'
+        methods = [(m.name, ast.get_docstring(m) or '⚠️') for m in node.body if isinstance(m, ast.FunctionDef)]
+        print(f'## Class: {node.name} (line {node.lineno})')
+        print(f'{doc}\n')
+        for m_name, m_doc in methods:
+            print(f'### {m_name}()')
+            print(f'{m_doc}\n')
+" {file}
+```
+
+抽取内容：
+| 源码信号 | → 文档内容 |
+|---------|-----------|
+| 模块顶部 `"""..."""` | 模块职责 + 依赖 |
+| `class X: """..."""` | Class 功能、字段表、方法列表 |
+| `def x(arg: type) -> type: """..."""` | 方法签名、参数表、返回值、功能说明 |
+| `@app.route(...)` / 装饰器 | HTTP 端点说明 |
+| `MAX_xxx = N` / `DEFAULT_*` | 配置常量说明 |
+
+**TypeScript/React** — 从 JSDoc + interface + export 抽取：
+```bash
+# 抽取组件 Props 和 JSDoc
+grep -B2 -A10 "/\*\*" component.tsx | grep -v "^--$"
+grep -n "export.*interface.*Props" component.tsx  
+```
+
+抽取内容：
+| 源码信号 | → 文档内容 |
+|---------|-----------|
+| `/** @component */` | 组件功能 + 使用示例 |
+| `interface XProps { ... }` | Props 参数表（类型、必需、默认值） |
+| `export function useXxx()` | Custom Hook 文档 |
+| `export type X = ...` | 领域类型说明 |
+
+**检测无文档信号**：
+- 公开 class/function 无 docstring → 标记 `⚠️ MISSING DOCSTRING`
+- 参数无类型标注 → 标记 `⚠️ UNTYPED PARAM`
+- JSDoc 缺失 @param → 标记 `⚠️ MISSING @param`
+
+#### 2.5d: 输出产物
+
+生成到 `.csp/code-spec/{app}/modules/`：
+
+```
+.csp/code-spec/{app}/modules/
+├── auth_service_py.md          # Python 模块文档
+├── user_session_py.md          # Class 文档
+├── components_UserProfile_tsx.md  # React 组件文档
+├── hooks_useAuth_ts.md         # Hook 文档
+├── pkg_auth_go.md              # Go 包文档
+└── INDEX.md                    # 模块文档总索引
+```
+
+每个模块文档含：
+- 模块职责（一段话）
+- 主要 Class/Component/Function 列表（表格：名称 | 类型 | 说明）
+- 每个 Class/Component 的详细字段和方法说明
+- 源码引用 `[[file:line]]`
+
+详见 `../references/code-doc-extraction.md` — 完整抽取规范。
 
 ### Step 3: 调用链追溯
 
@@ -176,10 +275,14 @@ bash $SCRIPT diff-since <prev_sha>   # 自上次基线的 git diff
 
 ```
 .csp/code-spec/{app}/
-├── CODE-MODULE-SPEC.md      # canonical baseline
-├── knowledge-graph.json      # 节点+边，CR 蒸馏增强消费
-├── entry-points.jsonl        # 每入口一行
-└── deltas/                    # ADDED/MODIFIED/REMOVED
+├── CODE-MODULE-SPEC.md        # canonical baseline
+├── knowledge-graph.json        # 节点+边，CR 蒸馏增强消费
+├── entry-points.jsonl          # 每入口一行
+├── modules/                    # 代码文档自动抽取（Step 2.5）
+│   ├── INDEX.md                # 模块文档总索引
+│   ├── {module}_py.md          # Python 模块/class 文档
+│   └── {component}_tsx.md      # TypeScript 组件文档
+└── deltas/                     # ADDED/MODIFIED/REMOVED
 ```
 
 ## 门控检查
@@ -189,6 +292,8 @@ bash $SCRIPT diff-since <prev_sha>   # 自上次基线的 git diff
 - [ ] 模块边界对齐 PMS，drift 已记录
 - [ ] 约定分层职责 + 禁止项齐全
 - [ ] delta 幂等：未变更源 → 零 delta
+- [ ] 代码文档抽取覆盖所有公开 Class/Component（无 docstring 的至少标记 ⚠️）
+- [ ] modules/INDEX.md 与 modules/ 目录内容一致
 - [ ] 无内部域名/平台名；remote = git + CSP_GIT_REMOTE
 
 ## 完成信号
@@ -232,6 +337,7 @@ completion_signal:
 | `references/code-spec-standard.md` | CMS 说明书标准、入口点识别规则、约定蒸馏、质量自检 |
 | `references/distillation-strategy.md` | 蒸馏/对齐策略、调用链追溯、高危核验、delta 幂等、断点续跑、异常矩阵、handoff |
 | `../references/code-to-spec-extraction.md` | 6 类代码萃取信号 + sanitizer 黑名单（代码→产品规格萃取，CMS↔PMS 桥） |
+| `../references/code-doc-extraction.md` | **代码→文档自动抽取规范**：Python/TS/Go 抽取模式、一键生成脚本、增量更新（Step 2.5） |
 | `../references/destructive-operation-safety.md` | 破坏性/可逆端点分类（入口点扫描标记） |
 | `scripts/code_spec.sh` | CLI 辅助：baseline / entrypoints / diff-since / graph（纯 git+grep，零依赖） |
 | `../references/module-spec-lifecycle-norms.md` | 全生命周期行为准则（PMS/CMS/TMS 共享） |

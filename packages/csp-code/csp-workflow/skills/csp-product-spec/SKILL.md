@@ -1,6 +1,6 @@
 ---
 name: csp-product-spec
-description: "Product Module Spec (PMS / 产品说明书). The living, versioned baseline that governs PRD generation quality for a product. Defines module decomposition, boundaries, and the acceptance standard every PRD must meet; downstream skills read it before producing their own artifacts."
+description: "Product Module Spec (PMS / 产品说明书). The living, versioned baseline that governs PRD generation quality for a product. Defines module decomposition, boundaries, and the acceptance standard every PRD must meet. Also bridges PMS to code: each module definition maps to the code entry points that need to exist (scaffolding checklist). Downstream skills read it before producing their own artifacts."
 version: "1.0.0"
 layer: 2
 category: workflow
@@ -144,7 +144,104 @@ acceptance_standard:
     module_to_owner: 100%      # 每个模块必须有 owner
 ```
 
-### Step 5: 生成 canonical PMS
+### Step 4: PMS→代码脚手架翻译桥（PMS-to-Code）
+
+PMS 定义"要做什么"（WHAT）——本步把每个模块翻译成开发者可直接行动的**代码脚手架清单**，
+告诉开发者需要创建/修改哪些文件、哪些入口点、哪些接口。
+
+#### 4a: 模块→入口点映射
+
+对 PMS 的每个模块，推断它需要的代码入口点：
+
+| PMS 模块能力 | → 代码入口点类型 | → 示例文件位置 |
+|-------------|----------------|--------------|
+| "用户可登录" | HTTP POST endpoint | `src/api/auth.py` → `POST /auth/login` |
+| "管理员可查看用户列表" | HTTP GET endpoint + 权限守卫 | `src/api/admin.py` → `GET /admin/users` |
+| "下单后扣库存" | Service 层方法 | `src/services/order.py` → `def create_order()` |
+| "库存不足发通知" | 消息队列 consumer | `src/consumers/notification.py` |
+| "每日数据报表" | 定时任务 | `src/cron/daily_report.py` |
+| "前端用户注册页" | React 路由 + 组件 | `src/pages/Register.tsx` |
+| "前端商品列表" | React 组件 + API client | `src/components/ProductList.tsx` |
+
+**纪律**：
+- 每个 PMS 模块能力 → **至少一个代码入口点**（入口点 = HTTP endpoint / RPC method / CLI command / React route / 定时任务）
+- 不能直接映射的标 `[待技术设计确定]`
+- 跨模块依赖 → 标注 `import dependency`（模块 A 的代码会 import 模块 B 的接口）
+
+#### 4b: 输出代码脚手架清单
+
+为每个 PMS 模块生成一份 **代码脚手架清单**，写入 `.csp/product-spec/scaffolds/{MOD-ID}.md`：
+
+```markdown
+# Code Scaffold — MOD-AUTH-1 用户与权限
+
+**PMS 模块**: MOD-AUTH-1
+**CMS 对应**: `code-spec/auth-svc/`
+**状态**: 待开发 / 已有代码需对齐 / 代码已完成
+
+## 需要创建/确认的代码
+
+### 后端 (Python/FastAPI)
+
+| 文件 | 内容 | PMS 能力映射 | 优先级 |
+|------|------|------------|--------|
+| `src/api/auth.py` | POST /auth/login — 用户登录接口 | "用户可登录" | P0 |
+| `src/api/auth.py` | POST /auth/register — 用户注册接口 | "新用户注册" | P0 |
+| `src/api/auth.py` | POST /auth/refresh — Token 刷新 | "会话续期" | P1 |
+| `src/services/auth_service.py` | `class AuthService` — 认证逻辑 | "登录验证" | P0 |
+| `src/models/user.py` | `class User(BaseModel)` — 用户模型 | "用户数据结构" | P0 |
+| `src/middleware/auth.py` | `AuthMiddleware` — 权限中间件 | "访问控制" | P0 |
+
+### 前端 (React/TypeScript)
+
+| 文件 | 内容 | PMS 能力映射 | 优先级 |
+|------|------|------------|--------|
+| `src/pages/Login.tsx` | 登录页面组件 | "用户可登录" | P0 |
+| `src/pages/Register.tsx` | 注册页面组件 | "新用户注册" | P0 |
+| `src/hooks/useAuth.ts` | 认证状态管理 hook | "用户登录状态" | P0 |
+| `src/api/auth.ts` | API client — auth endpoints | "前后端通信" | P0 |
+
+### 模块间依赖
+
+| 当前模块需要 | 依赖模块 | 接口 |
+|------------|---------|------|
+| 登录后跳转 | MOD-WORKSPACE-1 | workspace 入口路由 |
+| 权限校验 | MOD-AUTH-1 (自身) | AuthMiddleware |
+
+## 验收检查
+
+- [ ] 每个 PMS 能力对应至少一个代码入口点文件
+- [ ] 跨模块依赖已标注 import 方向
+- [ ] CMS 代码抽取生成的模块文档能回链到此 scaffold
+```
+
+#### 4c: PMS 变更→代码影响分析
+
+当 PMS 模块变更（新增能力、修改边界），触发代码影响评估：
+
+```bash
+# 比较 PMS delta 与当前 CMS 入口点清单
+diff <(grep "PMS 能力映射" .csp/product-spec/scaffolds/*.md | sort) \
+     <(grep "业务场景" .csp/code-spec/{app}/entry-points.jsonl | sort)
+```
+
+**影响类型**：
+- PMS 新增能力 + 代码无对应入口 → 🟡 **需新建代码**
+- PMS 删除能力 + 代码仍有入口 → 🔴 **需清理死代码**
+- PMS 边界变更 + 代码入口归属不匹配 → 🟡 **需调整模块归属**
+
+#### 4d: 从脚手架启动 CMS
+
+PMS 脚手架完成后，CMS 使用入口点清单启动代码蒸馏：
+
+```
+PMS scaffold ──entry-points──▶ CMS Step 2 (入口点蒸馏)
+                                       │
+                                       ▼
+                               CMS Step 2.5 (代码文档抽取)
+```
+
+**CMS 蒸馏时**，对 PMS scaffold 中列出的每个文件进行代码文档抽取，生成的模块文档回链到 PMS 模块 ID（`source-pms: MOD-AUTH-1`），形成双向可追溯。
 
 输出到 `.csp/product-spec/`：
 
@@ -210,6 +307,8 @@ graph LR
 .csp/product-spec/
 ├── PRODUCT-MODULE-SPEC.md      # canonical baseline
 ├── modules/{MODULE}.md          # 逐模块详情
+├── scaffolds/                   # PMS→代码脚手架（Step 4）
+│   └── {MOD-ID}.md              # 每个模块的代码入口点清单
 └── deltas/                      # ADDED/MODIFIED/REMOVED
 ```
 
@@ -219,6 +318,8 @@ graph LR
 - [ ] 模块依赖图无环
 - [ ] 验收标准形态已定义（Given/When/Then + 禁止项）
 - [ ] PRD 覆盖门：每个 PRD 可映射到某个 PMS 模块
+- [ ] 每个 PMS 模块能力对应至少一个代码入口点（scaffold）
+- [ ] 跨模块代码依赖已标注 import 方向
 - [ ] delta 增量遵守 ADDED/MODIFIED/REMOVED 纪律
 - [ ] 无技术实现细节（tech-agnostic）
 
@@ -245,7 +346,7 @@ completion_signal:
 | `csp-prd-traceability` | 模块层追溯起点 | — |
 | `csp-prd-change-impact` | 模块依赖图（影响传播） | delta |
 | `csp-test-spec` | 模块边界 + 验收形态（TMS 是 PMS 的分支） | — |
-| `csp-code-spec` | 模块边界（代码归属对齐） | — |
+| `csp-code-spec` | 模块边界（代码归属对齐）+ **消费 scaffolds/ 作为入口点清单** | — |
 
 ## Key Principles
 

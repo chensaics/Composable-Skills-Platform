@@ -185,13 +185,15 @@ npx playwright show-report
 
 ## Output Format
 
-所有产物统一输出到项目内**固定目录** `src/__tests__/.csp/artifacts/verify/h5-test/`，不要频繁换目录：
+所有产物统一输出到项目根目录下的 `.csp/artifacts/verify/h5-test/`（遵循项目治理 G2.1 约定）：
 
 ```
 src/__tests__/
 ├── *.spec.js                 # Playwright 测试脚本
 ├── playwright.config.js
-└── .csp/artifacts/verify/h5-test/
+└── (测试源码在项目既有测试目录)
+
+.csp/artifacts/verify/h5-test/
     ├── screenshots/          # 截图：{page}.png 或 {page}-{light|dark}.png
     ├── videos/               # 交互录屏（Library 模式）
     ├── test-results/         # 测试结果（Test 模式，含视频）

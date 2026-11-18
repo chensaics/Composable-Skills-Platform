@@ -37,13 +37,13 @@
 │  Layer 0: csp-router  (Resident, ~800 tokens)     │
 │  ─ Task classification + skill selection + state awareness + context detection │
 ├─────────────────────────────────────────────────────┤
-│  Layer 1: csp-meta    (SP + Specification-driven meta skills) │
+│  Layer 1: csp-meta    (Methodology & specification-driven) │
 │  ─ Methodologies: brainstorming, TDD, spec-driven... │
 ├─────────────────────────────────────────────────────┤
-│  Layer 2: csp-workflow (GSD 93 workflows skeleton) │
+│  Layer 2: csp-workflow (Project management workflow skeleton) │
 │  ─ Project management: plan → execute → verify → ship │
 ├─────────────────────────────────────────────────────┤
-│  Layer 3: csp-patterns (ECC technology library ~200 skills) │
+│  Layer 3: csp-patterns (Language/framework patterns library) │
 │  ─ Language/framework patterns, reviewers, build-resolvers │
 ├─────────────────────────────────────────────────────┤
 │  Layer 4: csp-runtime (Unique runtime capabilities ~20 skills) │

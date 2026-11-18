@@ -100,7 +100,7 @@ Step 4: 等待用户决策
 
 - 测试脚本：<path>
 - 修改文件：<path>
-- 测试报告：src/__tests__/.csp/artifacts/verify/h5-test/playwright-report/index.html
+- 测试报告：.csp/artifacts/verify/h5-test/playwright-report/index.html
 
 ---
 

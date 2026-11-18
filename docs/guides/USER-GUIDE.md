@@ -30,15 +30,14 @@ CSP (Code Skills Package) 是一个将多个开源 AI 编程辅助项目的精�
 - **规范驱动**: CSP 阶段工作流 + spec-driven 元技能,proposal → specs → apply → verify
 - **多栈支持**: Python/Rust/Go/TypeScript/Java/Kotlin/Swift 等 10+ 语言
 
-**来源项目:**
+**架构分层:**
 
-| 项目 | 定位 | 贡献 |
+| 层 | 定位 | 概况 |
 |------|------|------|
-| csp-patterns | 全平台 skill 库 | 技术库主体 (~200 skills) |
-| CSP | 项目管理框架 | 工作流骨架 (93 workflows) |
-| csp-runtime | Claude Code 增强运行时 | 独特运行时能力 |
-| CSP Meta | 元技能方法论 | 底层方法论 (14 个元技能) |
-| spec-kit | 社区扩展工具 | 扩展机制兼容 |
+| csp-patterns | 语言/框架 patterns 技术库 | 314 skills, 覆盖 15+ 语言与框架 |
+| csp-workflow | 项目管理工作流骨架 | 33-agent 编排, plan → execute → verify → ship |
+| csp-runtime | 运行时独特能力 | autopilot, wiki, remember, self-improve 等 |
+| csp-meta | 方法论与规范驱动元技能 | brainstorming, TDD, debugging 等 15 个元技能 |
 
 ---
 
@@ -80,31 +79,29 @@ CSP 采用五层架构,从路由到技能内容逐层深入:
 │  Layer 0: csp-router  (常驻,~800 tokens)            │
 │  ─ 任务分类 + skill 选择 + 上下文探测                │
 ├─────────────────────────────────────────────────────┤
-│  Layer 1: csp-meta    (SP 14 个元技能)               │
+│  Layer 1: csp-meta    (方法论与规范驱动元技能)       │
 │  ─ 方法论层: brainstorming, TDD, debugging...        │
 │  ─ 规范驱动: propose → specs → apply → verify        │
 ├─────────────────────────────────────────────────────┤
-│  Layer 2: csp-workflow (CSP 93 workflows 骨架)      │
+│  Layer 2: csp-workflow (项目管理工作流骨架)          │
 │  ─ 项目管理: plan → execute → verify → ship          │
 ├─────────────────────────────────────────────────────┤
-│  Layer 3: csp-patterns (技术库 ~200 skills)     │
+│  Layer 3: csp-patterns (语言/框架 patterns 技术库)    │
 │  ─ 语言/框架 patterns, reviewers, build-resolvers    │
 ├─────────────────────────────────────────────────────┤
-│  Layer 4: csp-runtime (运行时能力 ~40 skills)     │
+│  Layer 4: csp-runtime (运行时独特能力 ~20 skills)   │
 │  ─ autopilot, ralph, wiki, remember, self-improve    │
 └─────────────────────────────────────────────────────┘
 ```
 
-**数据量统计:**
+**各层概况:**
 
 | 层 | 内容 | 数量 |
-|---|------|------|
-| Layer 1 | 元技能 | 14 |
-| Layer 2 | 工作流 Commands + Agents | 67 + 33 |
-| Layer 3 | OPSX Commands + Templates | 12 + 8 |
-| Layer 3 | Agents + Skill Categories | 64 + 71 |
-| Layer 4 | 运行时 Skills | 40 |
-| **总计** | | **585 skills** |
+|------|------|------|
+| csp-patterns | skills + agents + commands | 314 + 71 + 98 |
+| csp-workflow | agents | 33 |
+| csp-meta | 元技能 | 15 |
+| csp-runtime | 运行时 skills | ~20 |
 
 ---
 

@@ -83,3 +83,9 @@ You are **Document Generator** — you create professional documents programmati
 ## Reference
 
 For code examples for each format (PDF, PPTX, XLSX, DOCX), template patterns, accessibility guidelines, and advanced formatting techniques, see `reference/` directory.
+
+## 产物路径
+
+生成的文件（PDF/PPTX/DOCX/XLSX）产出到调用方指定的路径。默认建议：
+- `docs/generated/{filename}` — 人读文档
+- `data/exports/{filename}` — 数据导出

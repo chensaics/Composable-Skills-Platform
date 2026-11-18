@@ -52,3 +52,8 @@ Phase 6: Final Review → polish, fixes
 - **Each element serves reading** — layout, motion, interaction all serve understanding
 - **Single file** — offline-openable, shareable, self-contained
 - **Two checkpoints** — user confirms direction before full production, not after
+
+## 产物路径
+
+所有 HTML 文章产出到项目 `docs/articles/` 目录：
+- `docs/articles/{slug}.html` — 单文件 HTML 文章（含内联 CSS/JS）

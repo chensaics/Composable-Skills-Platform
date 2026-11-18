@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![npm](https://img.shields.io/npm/v/code-skills-package)](https://www.npmjs.com/package/code-skills-package)
 [![v0.12.0](https://img.shields.io/badge/version-0.12.0-green)](./CHANGELOG.md)
-[![Registry: 716](https://img.shields.io/badge/entries-683-orange)](./docs/reference/SKILL-INDEX.md)
+[![Registry: 706](https://img.shields.io/badge/entries-706-orange)](./docs/reference/SKILL-INDEX.md)
 
 <br>
 
@@ -16,7 +16,7 @@
 **可组合的多领域技能平台 — 从编程到创作、从商业到生活的全栈能力。**
 [![Platforms: 22+](https://img.shields.io/badge/platforms-22+-brightgreen)](./docs/guides/INSTALL.md)
 
-**统一 AI 技能架构 · 22+ 个平台 · 15+ 语言 · 370 Skills + 116 Agents + 154 Commands + 36 Workflows**
+**统一 AI 技能架构 · 22+ 个平台 · 15+ 语言 · 394 Skills + 116 Agents + 153 Commands + 36 Workflows**
 
 整合多个开源 AI 编程项目为分层自动路由框架，以极低的 token 成本完成复杂开发任务。
 
@@ -30,7 +30,7 @@
 
 <a href="https://maythyai.github.io/code-skills-package/"><img src="./assets/dashboard-overview.svg" alt="CSP 技能仪表盘总览 — 五层架构与技能统计，由 registry 自动生成" width="640" /></a>
 
-**🔗 [在线交互式仪表盘](https://maythyai.github.io/code-skills-package/)** — 按层级、分类、触发词浏览全部 683 个条目
+**🔗 [在线交互式仪表盘](https://maythyai.github.io/code-skills-package/)** — 按层级、分类、触发词浏览全部 706 个条目
 
 </div>
 
@@ -228,7 +228,7 @@ CSP 采用五层分层架构。仅路由器（L0）在会话启动时加载，�
 │  L4  csp-runtime     运行时（~300 tokens/skill · 58 个）     │
 │      持续学习 · 自主执行 · 知识管理 · Token 预算 · 文件整理 · 并行编排│
 └──────────────────────────────────────────────────────────────┘
-                    总计：710 个条目（370 Skills + 116 Agents + 154 Commands + 36 Workflows）
+                    总计：706 个条目（394 Skills + 116 Agents + 153 Commands + 36 Workflows）
 ```
 
 ### 路由流程
@@ -345,7 +345,7 @@ node bin/csp-sdk.mjs init-skill csp-my-skill --layer 3 --phase build
 | 文档 | 说明 |
 |------|------|
 | [ARCHITECTURE_zh.md](./docs/architecture/ARCHITECTURE_zh.md) | 完整架构设计（14 章 · DAG 编排 · SKPG · Token 策略） |
-| [SKILL-INDEX.md](./docs/reference/SKILL-INDEX.md) | 全部 683 个条目索引 |
+| [SKILL-INDEX.md](./docs/reference/SKILL-INDEX.md) | 全部 706 个条目索引 |
 | [INSTALL.md](./docs/guides/INSTALL.md) / [INSTALL_zh.md](./docs/guides/INSTALL_zh.md) | 完整安装指南（22+ 平台） |
 | [UPDATE.md](./docs/guides/UPDATE.md) | 如何为已安装的技能包获取更新 |
 | [SKILL-AUTHORING_zh.md](./docs/guides/SKILL-AUTHORING_zh.md) | Skill 编写最佳实践 |

@@ -17,6 +17,8 @@ tools: [Read, Write, Edit, Bash, Glob, Grep]
 related_skills:
   - csp-creator-content-strategy
   - csp-creator-publish-pipeline
+  - csp-creator-thumbnail
+  - csp-creator-image-prompt
 triggers:
   keywords: ["短视频", "抖音", "TikTok", "Shorts", "Reels", "剪辑", "拍摄", "字幕", "转场"]
   intents:

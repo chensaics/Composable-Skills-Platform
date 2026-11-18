@@ -164,3 +164,9 @@ Each agent searches, reads sources, and returns findings. The main session synth
 "What's happening with the US housing market right now?"
 "Investigate the competitive landscape for AI code editors"
 ```
+
+## 产物路径
+
+- 简短调研：`docs/analysis/research-{topic-slug}-{date}.md`
+- 深度调研（多源综合）：`docs/market-research/{topic-slug}/report.md`
+- 运行时缓存：`.csp/research/{topic-slug}/`（可 gitignore）

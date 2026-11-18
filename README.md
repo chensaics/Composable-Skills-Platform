@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![npm](https://img.shields.io/npm/v/code-skills-package)](https://www.npmjs.com/package/code-skills-package)
 [![v0.12.0](https://img.shields.io/badge/version-0.12.0-green)](./CHANGELOG.md)
-[![Registry: 716](https://img.shields.io/badge/entries-683-orange)](./docs/reference/SKILL-INDEX.md)
+[![Registry: 706](https://img.shields.io/badge/entries-706-orange)](./docs/reference/SKILL-INDEX.md)
 
 <br>
 
@@ -16,7 +16,7 @@
 **Composable Multi-Domain Skills Platform — Full-stack capabilities from code to creation, commerce to life.**
 [![Platforms: 22+](https://img.shields.io/badge/platforms-22+-brightgreen)](./docs/guides/INSTALL.md)
 
-**Unified AI Skills Architecture · 22+ Platforms · 15+ Languages · 370 Skills + 116 Agents + 154 Commands + 36 Workflows**
+**Unified AI Skills Architecture · 22+ Platforms · 15+ Languages · 394 Skills + 116 Agents + 153 Commands + 36 Workflows**
 
 Integrates capabilities from multiple open-source AI coding projects into a layered, auto-routing framework with extremely low token costs to complete complex development tasks.
 
@@ -230,7 +230,7 @@ CSP uses a five-layer layered architecture. Only the router (L0) loads at sessio
 │      Continuous learning · Autonomous execution · Knowledge  │
 │      management · Token budget · File-organizer · Parallel   │
 └──────────────────────────────────────────────────────────────┘
-                    Total: 683 entries (365 skills + 116 agents + 154 commands + 36 workflows + 46 other entries)
+                    Total: 706 entries (394 skills + 116 agents + 153 commands + 36 workflows + 7 other entries)
 ```
 
 ### Routing Process

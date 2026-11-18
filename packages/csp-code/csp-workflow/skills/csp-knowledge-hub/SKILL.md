@@ -1,7 +1,7 @@
 ---
 name: csp-knowledge-hub
-description: "Local-first Knowledge Hub — a git-managed markdown workspace that unifies spec (PMS/CMS/TMS), wiki, and memory into one indexed, queryable hub to accelerate Agent codebase understanding. Platform-decoupled: local markdown + git + AGENTS.md routing + a sole manifest index."
-version: "1.0.0"
+description: "Local-first Knowledge Hub — a git-managed markdown workspace that unifies spec (PMS/CMS/TMS), wiki, and memory into one indexed, queryable hub. Includes alignment guard that proactively checks PMS↔CMS↔TMS consistency: when any one changes, detect drift in the others. Platform-decoupled: local markdown + git + AGENTS.md routing + a sole manifest index."
+version: "1.1.0"
 layer: 2
 category: workflow
 phase: define
@@ -30,12 +30,16 @@ related_skills:
 triggers:
   keywords: ["知识中枢", "knowledge hub", "知识库初始化", "local wiki workspace", "spec 索引",
              "locate spec", "知识 workspace", "本地知识库", "align docs to code", "knowledge workspace",
-             "manifest index", "AGENTS.md 路由", "spec 定位", "知识闭环", "docs-to-code"]
+             "manifest index", "AGENTS.md 路由", "spec 定位", "知识闭环", "docs-to-code",
+             "对齐检查", "alignment check", "PMS对齐", "CMS对齐", "TMS对齐", "spec drift",
+             "文档一致性", "需求代码测试对齐"]
   intents:
     - "user wants a single local hub indexing specs + wiki + memory"
     - "user wants fast spec location/read/generation across the codebase"
     - "user wants to align docs to code locally (git-managed, no platform)"
     - "user wants the 需求→code→test knowledge loop closed in one workspace"
+    - "user wants to check if PMS/CMS/TMS are consistent with each other"
+    - "user detects that specs and code are out of sync"
   context:
     - "project_onboarding"
     - "before_spec_generation"
@@ -68,6 +72,7 @@ anti_rationalizations:
 - 要把文档对齐到代码（本地 git 治理，非平台）
 - 要闭环 需求→code→test 的知识流（spec 记录 → code 开发 → test 用例，全在 hub 索引）
 - 要替代平台知识库做离线/可审计的本地等价物
+- **棕地项目**：已有代码但文档不全 → 从代码反推文档并对齐
 
 ## When NOT to Use
 
@@ -75,6 +80,51 @@ anti_rationalizations:
 - 代码 source-grounded Q&A wiki（用 `csp-code-wiki`）
 - 个人事实记忆（用 `csp-remember`）
 - 只读既有 spec 不需 hub 路由（直接 Read）
+
+## 棕地项目快速启动（Brownfield Quick Start）
+
+已有代码和部分文档，需要快速建立 PMS/CMS/TMS 体系并对齐。按**信息丰富程度**分三条路径：
+
+### 路径 1: 代码完备，文档缺失（最常见）
+
+**指令**: "从代码生成 CMS + 反推 PMS + 梳理 TMS + 对齐检查"
+
+Agent 执行：
+1. **代码→CMS** (`csp-code-spec` Step 2.5)：全量扫描源码，生成按文件/模块的结构化文档到 `.csp/code-spec/{app}/modules/`
+2. **代码→PMS 反推**：从目录/包结构推导模块边界，从业务规则代码（枚举、校验、状态机）反推业务逻辑。输出 PMS 模块定义，标注 `[从代码反推，需人工确认]`
+3. **测试→TMS 梳理**：扫描现有测试文件，建立入口点→覆盖矩阵，标注 `⚠️ NO COVERAGE` 的入口点
+4. **对齐检查** (`hub align-check`)：报告 PMS↔CMS↔TMS 的所有不一致
+
+**Agent 自动完成的**：文档生成、gap 检测、对齐报告
+**需要你确认的**：从代码反推的 PMS 模块名和边界是否准确、孤立的测试是否该保留
+
+### 路径 2: PRD + 代码都有，但可能不一致
+
+**指令**: "从 PRD 生成 PMS，从代码生成 CMS，找出 PRD 和代码的差异"
+
+Agent 执行：
+1. PRD → PMS（`csp-product-spec` Step 2）
+2. 代码 → CMS（`csp-code-spec`）
+3. PMS ↔ CMS 对齐对比：
+   - PMS 声明的模块 CMS 没找到 → 🔴 **PRD 写了但代码没实现**
+   - CMS 有入口点 PMS 没声明 → 🟡 **代码有功能但 PRD 没记录**
+   - 两者都有但不一致 → 🟡 **实现偏离设计，需确认以哪个为准**
+
+**Agent 自动完成的**：双向生成、差异检测、标注严重度
+**需要你确认的**：PRD vs 代码哪个是 ground truth，不一致时改哪个
+
+### 路径 3: 三者都有，只验证
+
+**指令**: "检查 PMS/CMS/TMS 对齐"
+
+Agent 执行 `hub align-check`：
+- 检查 A (PMS↔CMS)：模块边界是否对齐
+- 检查 B (PMS↔TMS)：验收标准是否覆盖
+- 检查 C (CMS↔TMS)：代码入口点是否有测试
+- 输出对齐报告 + 修复建议
+
+**Agent 自动完成的**：全量一致性检查、报告生成
+**需要你确认的**：歧义项的裁决（两个模块声称同一入口等）
 
 ## Project Entry Contract
 
@@ -175,6 +225,126 @@ updated: "2026-08-28"
 - **test:** TMS 需求→方法矩阵 + 存量用例（`type: test-spec`），增量只对 delta 新组合。
 - **审查/ship:** CR 读 CMS 追溯调用链 + TMS 存量产增量；ship 后 PMS 闭环（每条验收可追溯到需求）+ 三说明书 delta 折叠进 canonical。
 
+## 对齐守卫 (Alignment Guard) — PMS/CMS/TMS 一致性检查
+
+PMS、CMS、TMS 是**有机整体**，不是三个孤岛。对齐守卫**主动检测**三者之间的一致性，
+在任何变更后回答："PMS 改了，CMS 和 TMS 跟着更新了吗？"
+
+### align-check 命令
+
+```bash
+# 全面对齐检查（PMS↔CMS, PMS↔TMS, CMS↔TMS）
+bash scripts/hub_manifest.sh align-check
+
+# 只检查某个维度
+bash scripts/hub_manifest.sh align-check --pms   # PMS→CMS 对齐
+bash scripts/hub_manifest.sh align-check --tms   # PMS→TMS 对齐
+bash scripts/hub_manifest.sh align-check --all   # 全维度
+```
+
+### 三大对齐检查
+
+#### 检查 A: PMS ↔ CMS 模块边界对齐
+
+```bash
+# 1. PMS 声明了哪些模块
+grep "^### MOD-" .csp/product-spec/PRODUCT-MODULE-SPEC.md
+
+# 2. CMS 入口点归属了哪些模块
+grep "业务场景" .csp/code-spec/{app}/entry-points.jsonl
+
+# 3. 差异检测
+diff <(grep "^### MOD-" .csp/product-spec/PRODUCT-MODULE-SPEC.md | sort) \
+     <(grep "pms:" .csp/code-spec/{app}/CODE-MODULE-SPEC.md | sort)
+```
+
+| 检测信号 | 问题 | 严重度 | 建议操作 |
+|---------|------|--------|---------|
+| PMS 有模块、CMS 无代码归属 | 模块无实现 | 🔴 | 创建代码入口点（见 PMS scaffold） |
+| CMS 有入口、PMS 未声明模块 | 自由代码 | 🟡 | 确认是 PMS 遗漏还是应删除 |
+| PMS 模块更名、CMS 仍用旧名 | 命名不一致 | 🟡 | 同步 CMS 引用 |
+| 两个模块声称同一入口点 | 职责冲突 | 🔴 | 裁决归属 |
+
+#### 检查 B: PMS ↔ TMS 验收覆盖对齐
+
+```bash
+# 1. PMS 有多少条 AC
+grep -c "Given.*When.*Then" .csp/product-spec/PRODUCT-MODULE-SPEC.md
+
+# 2. TMS 映射了多少条
+grep -c "^| AC-" .csp/test-spec/{module}/TEST-MODULE-SPEC.md
+
+# 3. 找出未映射的 AC
+diff <(grep "Given.*When.*Then" .csp/product-spec/PRODUCT-MODULE-SPEC.md | sort) \
+     <(grep "PMS 验收标准" .csp/test-spec/{module}/TEST-MODULE-SPEC.md | sort)
+```
+
+| 检测信号 | 问题 | 严重度 | 建议操作 |
+|---------|------|--------|---------|
+| PMS AC 无 TMS 映射 | 未测需求 | 🔴 | 生成 AC→Test 映射 |
+| TMS 用例无 PMS AC 对应 | 孤儿测试 | 🟡 | 标注来源或清理 |
+| AC 语义已变但 TMS 用例未更新 | 过时测试 | 🟡 | 标记 ⚠️ AC CHANGED |
+
+#### 检查 C: CMS ↔ TMS 入口覆盖对齐
+
+```bash
+# 1. CMS 有多少 HTTP 入口点
+grep "HTTP" .csp/code-spec/{app}/entry-points.jsonl | wc -l
+
+# 2. TMS 覆盖了多少入口
+grep "入口" .csp/test-spec/{module}/case-inventory.md | wc -l
+
+# 3. 找出无测试覆盖的入口点
+comm -23 \
+  <(grep "HTTP" .csp/code-spec/{app}/entry-points.jsonl | cut -d',' -f2 | sort) \
+  <(grep "入口:" .csp/test-spec/{module}/case-inventory.md | cut -d':' -f2 | sort)
+```
+
+| 检测信号 | 问题 | 严重度 |
+|---------|------|--------|
+| HTTP 入口无 TMS 覆盖 | 漏测风险 | 🔴 |
+| RPC 入口无 TMS 覆盖 | 漏测风险 | 🔴 |
+| CMS 新增/删除入口 TMS 未更新 | 测试不再匹配代码 | 🔴 |
+
+### 对齐报告格式
+
+```markdown
+## PMS/CMS/TMS 对齐报告 — {timestamp}
+
+### 概览
+| 维度 | 状态 | 问题数 |
+|------|------|--------|
+| PMS ↔ CMS | ✅ aligned | 0 |
+| PMS ↔ TMS | ⚠️ 3 issues | 3 |
+| CMS ↔ TMS | ❌ 5 issues | 5 |
+
+### 议题清单
+| ID | 维度 | 严重度 | 来源 | 问题 | 建议 |
+|----|------|--------|------|------|------|
+| ALN-1 | PMS↔TMS | 🔴 | .csp/product-spec/ | AC-AUTH-7 无测试映射 | 生成 AC→Test |
+| ALN-2 | CMS↔TMS | 🔴 | .csp/code-spec/auth/ | POST /auth/refresh 无测试覆盖 | 补 E2E case |
+```
+
+### 对齐触发时机
+
+| 触发事件 | 应执行的检查 |
+|---------|-----------|
+| PMS 模块变更 (delta) | A (PMS↔CMS) + B (PMS↔TMS) |
+| CMS 代码变更 (ship 后 realign) | A (PMS↔CMS) + C (CMS↔TMS) |
+| TMS 用例变更 | B (PMS↔TMS) + C (CMS↔TMS) |
+| 里程碑归档 (fold deltas) | A + B + C 全量 |
+| CR review 前 | C (CMS↔TMS) — 确认有测试覆盖 |
+| 用户显式请求 "alignment check" | A + B + C 全量 |
+
+### 自动修复 vs 人工裁决
+
+| 问题类型 | 处理方式 |
+|---------|---------|
+| 命名不一致（同义不同名） | 自动建议统一命名，人工确认 |
+| 缺失映射（新 AC 无测试） | 自动生成骨架，人工填充 |
+| 孤儿条目（死代码/死测试） | 标记 `[DEPRECATED]`，人工确认删除 |
+| 职责冲突（两个模块声称同一入口） | 上报人工裁决，不解冲突 |
+
 ## 快速 Spec 定位/读取/生成
 
 从已安装的 `csp-knowledge-hub` 技能目录定位兄弟脚本 `scripts/hub_manifest.sh`；在 CSP 源码仓库中其路径为 `csp-workflow/skills/csp-knowledge-hub/scripts/hub_manifest.sh`。设置 `CSP_PROJECT_ROOT=<目标项目根>` 后运行：
@@ -232,6 +402,7 @@ CSP_PROJECT_ROOT=<目标项目根> bash <技能目录>/scripts/hub_manifest.sh d
 - [ ] 增量用 content_hash（非 mtime）
 - [ ] raw 只读；查询只读
 - [ ] 闭环：每条 spec 可 manifest 定位；ship 后 PMS 闭环
+- [ ] 对齐守卫已就绪：PMS↔CMS 模块边界、PMS↔TMS 验收覆盖、CMS↔TMS 入口覆盖全部检查
 - [ ] 无内部平台名/域名/鉴权耦合（git + CSP_GIT_REMOTE）
 
 ## 完成信号
@@ -245,8 +416,9 @@ completion_signal:
   status:
     hub: "{{project}}"
     items_indexed: "{{count}}"
+    alignment: "{{aligned_count}}/{{total}} aligned"
     phase: define
-    ready_for: [spec-generation, code-understanding, closed-loop, query]
+    ready_for: [spec-generation, code-understanding, closed-loop, query, alignment-check]
 ```
 
 ## References
@@ -262,3 +434,7 @@ completion_signal:
 | `../references/destructive-operation-safety.md` | 破坏性/可逆操作分类（捕获为 development_pitfall 信号） |
 | `scripts/hub_manifest.sh` | CLI 辅助：status / locate / diff / list（纯 git+grep，零依赖） |
 | `../references/module-spec-operational-protocol.md` | 运行时纪律共享（断点续跑/文件边界/双重门禁） |
+
+## 人类可读的使用文档
+
+详细操作手册：`docs/guides/PMS-CMS-TMS-GUIDE.md` — 绿地/棕地完整流程，常用指令速查，产物目录速查。

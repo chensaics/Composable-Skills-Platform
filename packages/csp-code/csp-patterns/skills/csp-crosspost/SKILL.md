@@ -111,8 +111,15 @@ Before delivering:
 - no copy is duplicated verbatim across platforms
 - any extra context added for LinkedIn or newsletter use is actually necessary
 
+## 产物路径
+
+跨平台内容变体产出到项目 `docs/content/{campaign-slug}/crosspost/` 目录：
+- `docs/content/{campaign-slug}/crosspost/{platform}.md` — 各平台适配版本
+
 ## Related Skills
 
 - `brand-voice` for reusable source-derived voice capture
 - `content-engine` for voice capture and source shaping
 - `x-api` for X publishing workflows
+
+遵照 `000-project-governance_csp.md` G2.1 约定：人读文档落 `docs/`。
