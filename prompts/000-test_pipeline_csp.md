@@ -143,6 +143,14 @@ PRD Features + AC + Spec 可测试性点 ──→ 测试依据提取 ──→ 
 
 **覆盖目标**：业务逻辑 ≥80%，纯函数/工具方法 ≥90%。
 
+**Mock/Fake 完整性铁律**（来自复盘——2 个测试因 FakeUser 缺少 `id` 属性失败）：
+
+| 规则 | 说明 |
+|------|------|
+| **Mock 必须覆盖被生产代码访问的全部属性** | 不仅是被测函数参数——还包括日志/审计/副作用中引用的字段 |
+| **生产代码新增属性引用 → 同步更新所有 Mock** | `grep -rn "\.attr_name" src/` 确认有哪些位置访问了该属性 |
+| **禁止用 `hasattr(obj, 'x')` 绕过 Mock 缺失** | 如果生产代码真的需要，Mock 必须提供；如果不需要，删掉生产代码中的引用 |
+
 ---
 
 ## Phase TI：API 与集成测试
@@ -325,6 +333,7 @@ E2E 测试必须覆盖前端真实交互——不仅仅验证"页面打开展示
 - **DB 迁移确认**：Schema 变更是否在生产正确执行？数据完整性？
 - **可观测确认**：关键指标/日志/告警在生产中是否正常产出？→ `[[skill:csp-observability-testing]]`
 - **功能开关确认**：新功能是否按预期开启/关闭？灰度比例是否正确？
+- **跨版本回归冒烟**（每个 version batch 完成后）：用最新版本代码，验证最早 feature 仍可用。防止新版本改动静默破坏旧功能——原因：测试按版本隔离，版本间没有集成回归
 
 ### TQ.3 测试复盘
 
@@ -430,6 +439,8 @@ E2E 测试必须覆盖前端真实交互——不仅仅验证"页面打开展示
 | 模块删了测试留着 | `git rm audit_v337.py` 但 `test_v337_smoke.py` 还 import 它 | G-10: rename/delete 后 `grep -r <old_name> tests/`，断裂 import 必须同步修复或删除测试 |
 | 计数断言腐烂 | sidebar 从 6 sections 改为 5，测试还 `expect(6)` | T-01: 结构变更后 `grep -r "expect.*<N>" tests/`，所有计数断言同步更新 |
 | Tag 打了门控没跑 | v6.64.0 有 tag 但 mypy 报 4 条错误 | G-11: 五项全绿才允许 `git tag -a`——缺一项即 BLOCKED |
+| **精确计数断言** | `expect(items).toHaveLength(23)` / `expect(6)`——任何结构增量都破坏 | 禁止精确数字等于断言。改用 `toContain()`（存在性）/ `toBeGreaterThanOrEqual()`（防止意外删除）/ 快照测试 |
+| **DB migration 未实跑** | migration chain 的 `down_revision` 只在 AST 验证，未在干净 DB 实跑 `alembic upgrade head` | 每个版本完成后在 SQLite in-memory 上跑 `alembic upgrade head && alembic downgrade base`——FK 引用/表冲突/索引名冲突在实跑时才暴露 |
 
 ---
 

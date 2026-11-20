@@ -703,7 +703,7 @@ Agent 依功能审阅：根指令/路由卡应便于快速装载；长 PRD/CHANG
 
 ---
 
-## 四文档协作关系（v2）
+## 四文档协作关系
 
 ```
 000-product-planning_csp.md

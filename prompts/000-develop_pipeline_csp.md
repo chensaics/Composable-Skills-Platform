@@ -12,6 +12,13 @@ ROADMAP 含功能-模块-描述-边界-测试维度-任务路径全部详情，P
 
 **输入校验**：任务清单 `.csp/tasks/TASK-INDEX.md` 必须存在——这是 `000-product-planning_csp.md` Phase 7 的产出。缺失说明规划未完成，回 `000-product-planning_csp.md` 补，不进 05。
 
+**PRD 深度门控**（05 入口强制检查）：
+```bash
+# 每个版本必须有 engineering 级 PRD，不能是 planning 骨架
+grep "prd_depth: engineering" docs/prd/PRD-{version-slug}.md
+```
+不匹配 → **BLOCKED**，回 `000-product-planning_csp.md` Phase 5→6 升级 PRD。原因：planning 级 PRD 只有大纲——缺少完整 AC（≥3 条/模块）、错误场景矩阵、埋点定义。不能拿大纲当开发规格。
+
 **Spec 到位检查**（每个 task 开始前）：
 - 对应 Spec（`.csp/planning/spec.md` + `.csp/tech-design/`）必须存在且 `build_status: built`
 - Spec 含接口契约/数据模型/DDL/错误场景/状态机——缺任一项（quick-fix 除外）不进 05
@@ -60,6 +67,49 @@ ROADMAP 含功能-模块-描述-边界-测试维度-任务路径全部详情，P
 - 前端：`[[skill:csp-frontend-patterns]]`（组合/状态/性能/表单/数据获取，框架无关）
 - 后端：`[[skill:csp-backend-patterns]]`（API 设计/分层架构/错误处理/幂等/分页）
 - 数据库：`[[skill:csp-postgres-patterns]]`（Schema 设计/索引/查询优化）+ `[[skill:csp-db-migration]]`（Schema 变更/数据迁移/回滚/零停机）
+
+**模型层并行安全**（Agent 并行开发时的关键纪律）：
+- **模型文件由主进程串行创建**——不要多个 Agent 同时创建 ORM model。表名冲突、FK 引用断裂、import 冲突的根因都是并行创建模型
+- Wave 1（模型/迁移）：主进程执行，Agent 不碰
+- Wave 2（服务/API）：Agent 并行，但注册（`__init__.py`）由主进程在 Agent 全部完成后统一执行
+- Wave 3（前端）：Agent 并行，独立验证，共享状态冲突少
+
+**创建 Model 前强制表名查重**：
+```bash
+# 创建 model 前必须 grep target __tablename__——零命中才允许创建
+grep -rn "__tablename__.*<target_name>" {project_models_dir}/
+```
+命中 ≠ 0 → 表名已存在，换名。这不是"可能冲突"的警告，是**硬阻断**——两个回合中 Agent 创建 model 时跳过了此步骤，每次冲突浪费 3-5 轮修复。
+
+**Agent 写后 import chain 完整性验证**（扩展写后验证纪律）：
+> AST parse / ruff / tsc 只验证语法和类型，不验证 import 能否 resolve。
+
+| 文件类型 | 写后验证 | 命令 |
+|---------|---------|------|
+| Python model/service | import 链完整 | `python3 -c "from <pkg>.<module> import <Class>"` |
+| Python API router | 路由 + 依赖均可 import | `python3 -c "from <api_pkg> import router"` |
+| TypeScript 组件 | 组件 + 依赖 resolve | `tsc --noEmit` 覆盖 import 路径 |
+
+Agent 声称"文件已创建" ≠ 文件可被消费方 import。Agent 完成回调中必须执行消费方 import 验证。
+
+**并发 Agent 文件冲突检测**：
+```bash
+# 两个 Agent 分配任务前先比对目标文件集合
+git diff --name-only HEAD | sort > /tmp/agent_a_files.txt
+# Agent B 启动前
+comm -12 /tmp/agent_a_files.txt /tmp/agent_b_files.txt
+```
+有交集 → 后启动的 Agent 等待或换文件。同一文件被两个 Agent 并行写入 → 后者覆盖前者，前者工作在 import 失败时才暴露。
+
+**Lint/Type 豁免基线**（解决预存错误阻塞门控）：
+- 项目已有 `.csp/exemptions.json` 时，gate 脚本读取豁免后判断「新增回归」而非「全量 zero」
+- 格式：`{"tsc": ["file:line:error_code"], "ruff": ["file:line:rule"], "mypy": ["file:line:error_code"]}`
+- gate 逻辑：`current_errors − exemptions = new_errors`；new_errors > 0 → BLOCKED；new_errors == 0 → PASS
+- 豁免项修复后，从 exemptions.json 移除对应条目——修复一个就消除一个豁免
+- 禁止将新错误直接加入豁免（写后验证已捕获的不能靠豁免过关）
+
+**lifecycle-state 写入时应主动对账**：
+写 `.csp/lifecycle-state.json` 的代码必须附带 `git tag -l 'v*'` 交叉验证。版本号/阶段与 tag 不一致 → raise, 不写入。原因：state 静默漂移，下次读才发现时已经浪费了一次上下文装载。
 
 **数据库开发保障**（05 开发期间）：
 - Schema 设计：从 `docs/architecture/DATA-SCHEMA.md` 取字段名，生成 DDL。开发中新字段先更新数据字典，再改 Spec，再写代码——不要反过来

@@ -162,6 +162,19 @@ STRATEGY.md 短而硬——anchor，不扩成 feature list。下游 PRD 读它 g
 - **默认不用日期形式**：AI 产出节奏与日历无关，按年/季/月/日定版本无意义
 - **不做估时**：Agent 开发下不估人日/工时——无意义。版本顺序由依赖 DAG + 优先级 + 攒批原则决定，不按日历排期
 
+**版本号分配前置检查**（防止跨会话碰撞）：
+```bash
+# 分配版本号前必须先查——最新 tag + lifecycle-state 中的已分配号
+git tag --list 'v*' --sort=-v:refname | head -5   # 最新发布的版本号
+grep '"version"' .csp/lifecycle-state.json         # 已分配但未发布的版本号
+```
+版本号分配 = `max(已发布 tag, 已分配 lifecycle 号) + 1`。禁止凭记忆或"上次大概到哪个号了"分配。
+
+**ROADMAP 单文件真相源**：
+- `docs/strategy/ROADMAP.md` 是唯一版本队列源。禁止创建 ROADMAP-ALPHA.md 等并行文件
+- 审视/收敛/评审等分析产物落 `.csp/convergence/` 或 `docs/analysis/`，不回写 ROADMAP 的版本队列逻辑
+- 任何 planned 版本必须有：功能清单 + PRD 路径 + 任务目录。缺任一项 → 状态降为 `stub`，不进开发管道
+
 **攒批原则**（以模块为单位聚合）：
 - 同模块功能打包到一个版本（每版本功能数以模块内实际 feature 数量为准，不设硬上限——一个模块如果有 8 个相关 feature 就全打包进一个版本），不"一个 feature 开一个版本"
 - 不同模块/主题方向不同/体量过大 → 拆成下一版本
@@ -771,3 +784,6 @@ Spec 和任务拆解是这些细节的自然形式化展开——不是新的分
 - 文档 frontmatter 遵循 GK.4 约定
 - 版本号遵循 G1.1 SemVer 规则
 
+---
+
+要给到 planning→engineering, Spec 和 任务拆解等深度文档。
