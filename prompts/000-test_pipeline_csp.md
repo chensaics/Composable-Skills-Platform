@@ -1,6 +1,6 @@
-使用 CSP 测试能力完成全链路测试（依据→设计→分层实施→门控→上线验证），产出可直接嵌入 `[[prompts/000-develop_pipeline_csp.md]]` 06 质量门控的测试证据。
+使用 CSP 测试能力完成全链路测试——从 PRD/Spec 提取测试依据，到设计用例，到分层实施，到质量门控，产出可直接嵌入 `[[prompts/000-develop_pipeline_csp.md]]` 06 质量门控的测试证据。
 
-> 测试不是"代码写完了跑一下"——是从 PRD 出发、到上线后验证的完整闭环。本文件贯通测试依据→用例设计→分层实施→质量门控→上线验证全链路。
+> 测试回答"代码做对了吗"——验证功能是否符合 Spec。产品方向/设计逻辑/用户体验的审查不在本文档范围，请使用 `[[prompts/000-product-review_csp.md]]`。
 
 ## 测试全流程
 
@@ -225,77 +225,15 @@ E2E 测试必须覆盖前端真实交互——不仅仅验证"页面打开展示
 
 ---
 
-## Phase TA：系统审计（Test 之外的另一维——结构健康 × 可用性 × 可追溯）
+> **结构健康与可用性审查**：代码结构/模块化/Nielsen 10 可用性/需求可追溯等维度的审查已移至 `[[prompts/000-product-review_csp.md]]`。本文档聚焦于功能测试——验证代码是否符合 Spec。
 
-> 测试回答"代码做对了吗"，审计回答"系统健康吗/可用吗/结构干净吗"。两者互补——功能测试全绿 ≠ 系统没问题。
+**代码结构变更时的强制验证**（非审查，是测试基建——确保改代码不破坏测试）：
 
-### TA.1 审计与测试的区别
-
-| 维度 | 测试 (TB–TQ) | 审计 (TA) |
-|------|-------------|----------|
-| 核心问题 | 功能是否符合 Spec | 系统是否健康、可用、可追溯 |
-| 切入点 | PRD AC / 用例 / 边界值 | 模块结构 / 调用链 / 路由 / 代码健康 |
-| 典型发现 | "注册表单缺邮箱格式校验" | "3 个模块重复实现了同一逻辑 / 4 个路由无导航入口" |
-| 证据类型 | pass/fail + 断言输出 | finding + file:line + 严重度 + 影响分析 |
-| 频率 | 每个版本 | 里程碑/大重构后/按需触发 |
-
-### TA.2 审计入口
-
-根据审计目标选择入口：
-
-| 审计类型 | 触发场景 | CSP Skill | 输出 |
-|---------|---------|-----------|------|
-| **模块化审计 + 可用性审查** | 全面体检：模块健康/联动/Nielsen 10/裁决报告 | `[[skill:csp-audit]]` | `.csp/audit/AUDIT-VERDICT + AUDIT-FINDINGS.json` |
-| **E2E 深度审计** | 发布前全量体检：全路由 sweep/按钮级点击/孤儿路由/结构健康 | `[[skill:csp-e2e-deep-audit]]` | `.csp/artifacts/verify/ui-test-report.md` + `.csp/gap-analysis/`（或已映射既有位置） |
-| **代码库审计** | 多维度代码扫描：安全/性能/可观测/架构 | `[[skill:csp-codebase-audit]]` | 各维度 finding 清单 |
-| **结构审计**（轻量） | 迭代间快速扫描：死代码/重复/命名/依赖性 | `[[skill:csp-code-simplification]]` | 清理建议 |
-
-### TA.3 审计覆盖维度
-
-每个维度独立审查，finding 带 `file:line` + 严重度 + 修复建议：
-
-| 维度 | 审什么 | 典型问题 |
-|------|--------|---------|
-| **模块化** | 模块边界/职责/依赖 | 循环依赖/职责重叠/贫血模块/god file |
-| **需求可追溯** | 每条需求是否有测试覆盖 | 未覆盖 AC / 单层 happy path 覆盖（视同缺口）/ 孤儿测试 |
-| **可用性（Nielsen 10）** | 系统状态可见性/用户控制/一致性/错误预防… | 操作无反馈/无撤销/不一致交互/无键盘可达 |
-| **跨层集成** | UI→API→DB 往返是否一致 | 接口 200 但 DB 未落库 / trace_id 断裂 / 回路不闭合 |
-| **代码健康** | 死代码/重复实现/命名/类型安全 | 死代码/重复逻辑/类型漂移/import 路径混乱 |
-| **安全** | OWASP Top 10/依赖 CVE/权限矩阵 | 注入/越权/敏感数据泄漏/无速率限制 |
-| **性能** | N+1 查询/慢 SQL/缓存缺失/首屏 | 热路径无索引/无连接池/首屏 >3s |
-| **可观测** | 日志/指标/链路/告警 | 无结构化日志/无 trace_id/无告警 |
-| **结构健康** | schema drift/类型检查/mock 债务/孤儿路由/**AI 生成文件的 import 路径解析**/**CSS 样式构建验证** | migration 说 head≠物理 schema / 类型检查失败 / import resolution 失败 / CSS parse error |
-
-### TA.4 审计与测试的协作
-
-```
-测试 Pipeline                        审计 Pipeline
-─────────────                        ─────────────
-TB 测试依据（从 PRD + Spec）         TA 模块化拆解 + 可追溯缺口
-TD 用例设计（从 Spec 可测试性点）    TA 需求→测试方法映射审计
-TU/TI/TE 分层实施 ──→ 测试证据 ──→  TA 跨层集成验证（四层断言）
-                                       TA 可用性审查（Nielsen 10）
-TQ 质量门控 ←── 测试证据 + 审计 findings ──→ 裁决报告
-```
-
-- **测试找功能缺陷** → TB–TQ 分层覆盖
-- **审计找结构/可用性/健康问题** → TA 多维度扫描
-- **06 门控消费两者**：测试 exit 0 + 审计无 CRITICAL → 放行
-
-产出：审计 findings 前缀 `AUDIT-F-NN`，与测试 findings 前缀不同。P0 findings 标 `快速修复=true` 直发 04→05→06。
-
-**审计强制覆盖**（非可选——按条件全选必查）：
-- 有 DB 变更 → DB schema 对齐 + migration chain + 性能影响评估
-- 有新 API 端点 → 每端点鉴权/越权 + 前端消费者检查 + OpenAPI 同步
-- 有 UI 变更 → visual regression + 设计系统一致性 + 响应式断点
-- 有新增依赖 → 依赖审计 + license 检查
-- 有测试代码变更 → conftest/fixture 加载验证
-- **Agent 生成新文件（.tsx/.ts/.py/.css）→ 逐文件 import 路径 resolve + 运行 type-check/build**
-- **样式文件（.css/.scss/tailwind 配置）变更 → 跑一次完整 build（CSS parse error/build 失败 = BLOCKED）**
-- **代码结构变更（模块 rename/delete、sidebar sections 增减、route 迁移、`__tablename__` 变更）→ `grep -r <old_name> tests/`，测试中断裂 import/过期计数断言/过期表名断言必须同步修复。`pytest --collect-only` exit ≠0 或 `vitest run` exit ≠0 → BLOCKED**
-- **findings 闭合门控**：P0 finding 必须 closed（附 fix commit），不得 open/deferred 进 release。3 条以上 P1 同 P0 阻断。新端点无前端消费者 → P1 或标注"有意开放供外部调用"
-- **审计发现不能降级为"已知"**：一个 finding 发现了就是发现了——"已知问题/之前就这样/任务级非 bug"不是继续遗留的理由。要么 06 前修了（closed），要么标 BLOCKED（附具体阻塞点+谁解除+预期版本），要么 deferred（附解除条件）。**禁止"📋 已知"作为 status**——那不是状态，是把问题晾着
-- **审计发现路由**：审计 finding 反映的若是规划级缺口（如"需要前端页面建设"）→ 不作为 audit deferred 积压，而是升为 Planning Phase 2.5 审视候选——由产品规划决定要不要做、排哪个版本。审计不替规划做决策，但审计必须把发现推给规划
+- 有 DB 变更 → DB schema 对齐 + migration chain 验证
+- 有新 API 端点 → 鉴权/越权 + 前端消费者检查 + OpenAPI 同步
+- Agent 生成新文件（.tsx/.ts/.py/.css）→ 逐文件 import 路径 resolve + 运行 type-check/build
+- 样式文件变更 → 跑一次完整 build
+- 代码结构变更（模块 rename/delete/route 迁移）→ `grep -r <old_name> tests/`，断裂 import 必须同步修复
 
 ---
 
@@ -470,33 +408,6 @@ TQ 质量门控 ←── 测试证据 + 审计 findings ──→ 裁决报告
 | 安全审查 | `[[skill:csp-security-review]]`（鉴权/越权/注入/XSS/CSRF/依赖漏洞） |
 | 设计还原审查 | `[[skill:csp-qa]]`（设计还原度/发布裁决 Pass/Warning/Fail） |
 
-### 系统审计（Phase TA — 测试之外的互补维度）
-
-| 审计类型 | CSP Skill | 适用场景 |
-|---------|-----------|---------|
-| 模块化审计 + 可用性审查 | `[[skill:csp-audit]]`（模块拆解/四层联动/Nielsen 10/裁决报告/版本 bump） | 全面体检 |
-| E2E 深度审计 | `[[skill:csp-e2e-deep-audit]]`（全路由 sweep/按钮级点击/孤儿路由/结构健康/IA 评审） | 发布前全量 |
-| 代码库审计 | `[[skill:csp-codebase-audit]]`（多维度并行扫描：安全/性能/可观测/架构） | 迭代间 |
-| 结构审计（轻量） | `[[skill:csp-code-simplification]]`（死代码/重复/命名/类型漂移） | 每个版本 |
-| 可用性测试 | `[[skill:csp-test]]`（Nielsen 10 启发式评估/用户测试 Mode A/B） | 里程碑后 |
-| 无障碍审计 | `[[skill:csp-access]]`（WCAG 2.1 AA/axe/Playwright/Lighthouse 扫描） | 前端项目 |
-| 需求可追溯审计 | `[[skill:csp-prd-traceability]]`（AC→测试方法映射/缺口识别/孤儿用例检测） | 每个版本 |
-| 技术债评估 | `[[skill:csp-tech-debt-assessment]]`（债规模/利息/偿还优先级） | 里程碑后 |
-| 缺陷挖掘 | `[[skill:csp-defect-mining]]`（测试套件平台期→换方法挖掘/4 层递进） | 测试 plateau |
-| AI 盲点回归 | `[[skill:csp-ai-regression-testing]]`（AI 生成代码已知缺陷模式回归） | 每个版本 |
-| 跨层集成审查 | `[[skill:csp-integration-review]]`（11 场景全栈契约审查） | 每版本 |
-| UI 对齐审查 | `[[skill:csp-ui-alignment-review]]`（Figma/原型 vs 实现对齐） | 前端改动时 |
-| 设计还原审查 | `[[skill:csp-qa]]`（设计还原度/发布裁决 Pass/Warning/Fail） | 发布前 |
-| 代码审查（多审） | `[[skill:csp-multi-review]]`（分层评审/置信度门控/去重合并） | 每个 PR |
-| 代码审查（标准） | `[[skill:csp-code-review]]`（正确性/复用/简化/效率） | 每个 PR |
-| 安全审查 | `[[skill:csp-security-review]]`（鉴权/越权/注入/依赖 CVE） | 每个版本 |
-| 后端性能 | `[[skill:csp-backend-performance]]`（API P95/慢查询/N+1/缓存/连接池） | 有后端时 |
-| 前端性能审计 | `[[skill:csp-web-performance-auditor]]`（CWV 审计/加载/渲染/网络） | 前端项目 |
-| 前端性能优化 | `[[skill:csp-frontend-performance]]`（bundle 分析/代码分割/缓存策略） | 前端项目 |
-| 可观测审计 | `[[skill:csp-observability-and-instrumentation]]` + `[[skill:csp-monitoring-alerting]]`（日志/指标/链路/告警） | 每个版本 |
-| 全栈集成审计 | `[[skill:csp-e2e-deep-audit]]` + `[[skill:csp-cross-layer-testing]]`：跨前端/后端/DB 三层一致性扫描——端点→消费者映射、接口→实现对齐、DB schema→代码 model 对齐 | 里程碑后 |
-| 重构策略 | `[[skill:csp-refactoring-strategies]]`（Strangler Fig/并行运行/分支抽象） | 需要时 |
-
 ---
 
 ## 反模式速查
@@ -513,9 +424,8 @@ TQ 质量门控 ←── 测试证据 + 审计 findings ──→ 裁决报告
 | 不测 DB 状态 | 只断言 API 响应 | DB 前后状态断言 + 事务回滚验证 |
 | 上线不冒烟 | 部署完就算上线 | 生产环境关键路径冒烟 + DB 迁移确认 |
 | 漏测不补回归 | 线上 bug 修完不加回归测试 | 每个线上 bug → 至少 1 条回归用例 |
-| 只测不审 | 功能测试全绿就当系统没问题 | 审计（TA）独立于测试——结构健康/可用性/模块化/可追溯缺一不可 |
-| 📋 已知但不修 | finding 标"已知/之前就这样/任务级非 bug"然后留着 | 要么 closed（修了）、要么 BLOCKED（附阻塞点+解除人）、要么 deferred（附解除条件）。没有"📋 已知"这个状态 |
-| grep 当验证 | 写完代码 grep 到 import 行就算通过 | grep 只能确认写了，不能确认 build 通过/import resolve/CSS parser 能消费。必须跑 type-check + build |
+| 📋 已知但不修 | finding 标"已知/之前就这样"然后留着 | 要么 closed / BLOCKED / deferred。没有"📋 已知"状态 |
+| grep 当验证 | 写完代码 grep 到 import 行就算通过 | 必须跑 type-check + build |
 | Build 后补 | "CI 挂了下次再修" / "先 push，CI 会告诉我哪里错了" | Agent 写文件时就该跑 build——本地验证成本远低于 CI 反馈延迟 |
 | 模块删了测试留着 | `git rm audit_v337.py` 但 `test_v337_smoke.py` 还 import 它 | G-10: rename/delete 后 `grep -r <old_name> tests/`，断裂 import 必须同步修复或删除测试 |
 | 计数断言腐烂 | sidebar 从 6 sections 改为 5，测试还 `expect(6)` | T-01: 结构变更后 `grep -r "expect.*<N>" tests/`，所有计数断言同步更新 |
@@ -539,9 +449,6 @@ TQ 质量门控 ←── 测试证据 + 审计 findings ──→ 裁决报告
 │   └── test-retro-{version}.md            # 测试复盘（覆盖率/漏测分析）
 └── .csp/
     ├── test-spec/{module}/                # TMS 基线
-    ├── audit/AUDIT-FINDINGS.json          # 审计 findings
-    ├── gap-analysis/                      # 缺口分析 findings
-    ├── design-qa/                         # UI 对齐审查产物（视觉对比/对齐报告）
     ├── artifacts/verify/
     │   ├── ui-test-report.md             # E2E 执行摘要
     │   ├── h5-test/                      # H5 视觉测试产物（截图/录屏/报告）
@@ -571,50 +478,46 @@ Check 5.8: DB 迁移验证           ←───  Phase TP（db-migration-testi
 Check 5.9: 安全审查              ←───  Phase TSEC（security-review）
 Check 5.10: 后端性能             ←───  Phase TP（backend-performance + load-testing）
 
-审计 findings（Phase TA）独立于测试门控——无 CRITICAL 审计 finding 是放行的必要条件之一。
-审计前缀 AUDIT-F-NN，与测试 findings（GAP-F/UI-F/CRITIC-F）可并存去重。
-P0 审计 finding → 标 快速修复=true → 直发 04→05→06，不等下一轮 roadmap。
+测试 findings 直接嵌入 06 门控——pass/fail + 证据。
+
+> **产品方向审查**：Nielsen 10 可用性/模块化/用户体验/业务价值等维度的审查已移至 `[[prompts/000-product-review_csp.md]]`。测试不判断产品方向——测试验证功能是否符合 Spec。
 ```
 
 ---
 
-按依据提取 → 用例设计 → 分层实施 → 系统审计 → 质量门控 → 上线验证链执行。
+按依据提取 → 用例设计 → 分层实施 → 质量门控 → 上线验证链执行。
 
-**协作时序**：S3 Spec（含可测试性点）→ Test Pipeline TB 提取依据 + TD 设计用例 → 05 TDD 同步产出测试代码 → 06 门控验证。
+**协作时序**：规划产出 Spec → Test Pipeline TB 提取依据 + TD 设计用例 → 05 TDD 同步产出测试代码 → 06 门控验证。
 
-**缺口报告**：执行过程中若发现本说明未覆盖的测试维度、或引用的 CSP skill 不包含所需测试方法论（测试类型缺失/深度不足），**立即指出缺口**——不跳过、不假装覆盖、不用「可以了」糊过。
+**方向审查**：产品定位/UX/业务价值/技术可行性等维度的审查请使用 `[[prompts/000-product-review_csp.md]]`。
 
 AI 自主完成，每个阶段按进度条播报，全部完成后输出总测试报告，交棒 pipeline 06 门控。
 
 ---
 
-## 三文档协作关系
-
-本文件是 CSP 三件套之一（测试段），与另外两个文件配合使用：
+## 三文档协作关系（v2）
 
 ```
 000-product-planning_csp.md
-  │  产出: ROADMAP (Layer 1) + PRD SPECs (Layer 2, prd_depth: planning)
+  │  产出: ROADMAP + PRD SPEC + 技术 Spec + 任务清单
+  │
+  ├──→ 000-product-review_csp.md
+  │     产品审查 Pipeline: R0→R1→R2→R3→R4→R5→R6→R7
+  │     审查"做的东西对吗"——方向/体验/业务/技术/风险/数据/长期
   │
   ├──→ 000-test_pipeline_csp.md（本文件）
-  │      │  测试 Pipeline: TB→TD→TU→TI→TE→TV→TP→TSEC→TQ
-  │      │  planning PRD 只生成测试设想
-  │      │  engineering PRD (Layer 3) + Spec (Layer 4) → TB 正式依据 → TD 用例 → 分层实施
-  │      │
-  │      └──→ 嵌入 000-develop_pipeline_csp.md
-  │             开发 Pipeline S6 质量门控（Check 1–5.14）
-  │             TQ 产出测试证据 → 消费 S6 各 Check
-  │             深度门控: Layer 1-4 全部完成才进 S5
+  │     测试 Pipeline: TB→TD→TU→TI→TE→TV→TP→TSEC→TQ
+  │     测试"做对了吗"——Spec → 用例 → 分层实施 → 门控
   │
   └──→ 000-develop_pipeline_csp.md
-         开发 Pipeline: Layer 3 (01 engineering 升级) → Layer 4 (03 Spec)
-         → 04 拆解 → 05 实施 → 06 门控+发布 → 07 复盘
+         开发 Pipeline: 读任务清单 → 05 实施 → 06 门控+发布 → 07 复盘
+         S6 质量门控消费测试证据（Check 1-5.14）
 ```
 
-- **上游输入** = 规划阶段的 PRD/ROADMAP 用于预选测试范围；正式 TB 依据是经 01 升级后的工程级 PRD + S3 Spec + TMS 既有基线
-- **本文件职责** = 测试全链路：依据→设计→分层实施→门控→上线验证
-- **下游输出** = 测试证据嵌入 `000-develop_pipeline_csp.md` S6 质量门控各 Check
-- **项目治理** = `[[prompts/000-project-governance_csp.md]]` 定义产物路径/版本管理/文档边界——本文档产物落盘遵循 G2.1 约定
+- **上游输入** = 规划阶段的 ROADMAP + Spec + 任务清单
+- **本文件职责** = 纯测试执行：依据→设计→分层→门控→验证
+- **审查分家** = 产品方向/UX/业务审查请用 `[[prompts/000-product-review_csp.md]]`
+- **项目治理** = `[[prompts/000-project-governance_csp.md]]` 定义产物路径/版本管理/文档边界
 
 ---
 

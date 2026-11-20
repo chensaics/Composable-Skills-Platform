@@ -167,20 +167,62 @@ STRATEGY.md 短而硬——anchor，不扩成 feature list。下游 PRD 读它 g
 - 不同模块/主题方向不同/体量过大 → 拆成下一版本
 - **feat/fix 分轨**：feat 批（MINOR+1）与 fix 批（PATCH+1）不混合；同迭代既有 feat 又有 fix → 拆两个 tag
 
-**版本序列格式**（每版本摘要级——ROADMAP 的任务是回答"哪些版本、以什么顺序"，不是"具体怎么做"。细节是下面三层的事：PRD SPEC（大纲）→ 01 工程级 PRD（穷举）→ 03 Spec（技术契约））：
+**版本序列格式**（每个版本含摘要 + 详情展开，审视通过后即为开发的完整输入）：
 
 ```
 vX.Y.Z — {主题名} — status: planned
-- 目标：一句话说清本版本要交付什么用户价值
-- 新增功能（摘要列表，按模块内实际 feature 数量）：每个功能一句话说清"用户能做什么"，不写详细 AC（AC 归 PRD SPEC→01 升级→03 Spec）
-- 优化项（从 Phase A+I 流入）：[来源 CURRENT-NN] 简要描述优化内容
-- 增长实验（从 Phase G 流入，如有）：[假设 X → 预期指标 Y 变化 Z%]
-- 数据需求：涉及的核心数据实体/字段（概念级，DDL 归 S3 Spec）
-- 用户场景/竞品差距：本版本对应解决什么
-- 价值：用户价值 + 业务价值
-- 前置依赖：依赖版本/外部能力
-- PRD SPEC：docs/prd/PRD-{slug}.md（Phase 5 产出——大纲级详情在此）
+
+### 目标
+一句话说清本版本要交付什么用户价值。
+
+### 功能-模块-描述（功能路径）
+| 功能 ID | 功能名 | 所属模块 | 功能描述 | 优先级 |
+|---------|--------|---------|---------|--------|
+| F-001 | 用户可登录 | MOD-AUTH-1 | 用户用邮箱+密码登录，获取 JWT token | P0 |
+
+### 模块边界定义
+- MOD-AUTH-1 职责：认证+授权+会话管理；不包含：用户资料编辑
+- MOD-AUTH-1 对外能力：login() / register() / refresh() / verify()
+- MOD-AUTH-1 依赖：无
+- 被依赖：MOD-WORKSPACE-1（需验证登录状态）
+
+### 细节 Specs（接口/数据/错误——大纲级，详细 Spec 归 Phase 6）
+#### 数据实体
+| 实体 | 核心字段 | 约束 | 所属 feature |
+|------|---------|------|-------------|
+| User | id(UUID), email, password_hash, created_at | email UNIQUE | F-001 |
+
+#### API 端点（概念级）
+| 端点 | 方法 | 请求体 | 响应 | 所属功能 |
+|------|------|--------|------|---------|
+| /auth/login | POST | {email, password} | {token, user} | F-001 |
+
+### 测试维度
+| 测试维度 | 覆盖目标 | 具体场景 |
+|---------|---------|---------|
+| 单元测试 | 认证逻辑正确性 | login() 成功/密码错/token过期 |
+| 集成测试 | 登录→DB 往返 | 完整 login flow + DB 验证 |
+| E2E | 用户登录完整体验 | 首页→点登录→输凭证→进工作台 |
+| 安全 | 鉴权/越权 | 无 token 访问被拒绝/token 篡改被拒绝 |
+| 性能 | 登录 API 响应时间 | P95 < 200ms |
+
+### 任务路径拆解
+| 任务 ID | 任务 | 涉及文件 | 前置依赖 | 预估复杂度 |
+|---------|------|---------|---------|-----------|
+| T-001 | 创建 User model + migration | src/models/user.py, migrations/ | — | 小 |
+| T-002 | 实现 AuthService.login() | src/services/auth_service.py | T-001 | 中 |
+| T-003 | 创建 POST /auth/login 端点 | src/api/auth.py | T-002 | 小 |
+| T-004 | 生成 JWT + 验证中间件 | src/middleware/auth.py | T-002 | 中 |
+| T-005 | 创建 Login 页面组件 | src/pages/Login.tsx | T-003 | 中 |
 ```
+
+**文档规范**（嵌入治理标准）：
+- 版本序列格式遵循 `[[prompts/000-project-governance_csp.md]]` G2.1 产物路径约定
+- 功能 ID 格式：`F-{NNN}`，模块 ID 格式：`MOD-{DOMAIN}-{N}`，任务 ID 格式：`T-{NNN}`
+- 数据实体字段遵循 `DATA-SCHEMA.md` 数据字典命名规范
+- 模块边界定义必须含职责/对外能力/依赖/被依赖四要素
+- 测试维度必须覆盖：单元/集成/E2E/安全/性能 五维
+- 任务拆解每个任务需含涉及文件路径 + 前置依赖 + 复杂度
 
 v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资主线推进。
 
@@ -340,8 +382,189 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 
 ---
 
+### Phase 6：技术 Spec 生成（原 03，Layer 4）
+
+> PRD SPEC（Phase 5）定义了 WHAT——本 Phase 产出技术级的 HOW。这是从产品到代码的最后一步翻译桥。
+
+#### 6.1 技术选型
+
+调用 `[[workflow:csp-tech-stack-advisor]]` 做技术栈决策：
+- 语言/框架选型（记录选型理由 + 备选方案 + 放弃原因）
+- 存储层决策（PostgreSQL/MySQL/SQLite/NoSQL），产出 ADR
+- 关键依赖评估（成熟度/许可/社区活跃度）
+
+#### 6.2 技术方案设计
+
+调用 `[[workflow:csp-tech-solution-design]]` 产出 `.csp/tech-design/`：
+- 架构图（C4 或 Mermaid）：系统上下文 → 容器 → 组件
+- 分层设计：路由层 → 服务层 → 数据访问层 → 数据库
+- 跨模块交互：同步调用 / 异步消息 / 事件驱动
+- 关键流程时序图
+
+#### 6.3 全栈 Spec 生成
+
+调用 `[[workflow:csp-fullstack-spec-generator]]` 产出 `.csp/planning/spec.md`：
+
+**Spec 产出内容**：
+```markdown
+# Spec — vX.Y.Z {主题名}
+
+## 接口契约
+| 端点 | 方法 | 请求体 | 响应体 | 状态码 | 鉴权 |
+|------|------|--------|--------|--------|------|
+| /auth/login | POST | {email: str, password: str} | {token: str, user: User} | 200/401 | 无 |
+
+## 数据模型
+### User
+| 字段 | 类型 | 约束 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| id | UUID | PK | gen_random_uuid() | 用户唯一标识 |
+| email | VARCHAR(255) | UNIQUE NOT NULL | — | 登录邮箱 |
+| password_hash | VARCHAR(255) | NOT NULL | — | bcrypt 哈希 |
+| created_at | TIMESTAMPTZ | NOT NULL | now() | 创建时间 |
+
+## DDL
+```sql
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+```
+
+## 业务规则（穷举）
+- R1: 密码错误 5 次 → 账号锁定 15 分钟
+- R2: 同一 IP 1 分钟内登录失败 20 次 → IP 封禁 1 小时
+- R3: Token 有效期 24 小时，刷新后旧 token 立即失效
+
+## 错误场景
+| 错误码 | HTTP 状态 | 场景 | 用户可见消息 |
+|--------|----------|------|------------|
+| AUTH_INVALID_CREDENTIALS | 401 | 邮箱或密码错误 | "邮箱或密码不正确" |
+| AUTH_ACCOUNT_LOCKED | 423 | 密码错误超限 | "账号已锁定，请 15 分钟后重试" |
+| AUTH_TOKEN_EXPIRED | 401 | Token 过期 | "登录已过期，请重新登录" |
+
+## 状态机
+```mermaid
+stateDiagram
+    [*] --> ACTIVE: 注册
+    ACTIVE --> LOCKED: 5 次密码错误
+    LOCKED --> ACTIVE: 15 分钟后自动解锁
+    ACTIVE --> [*]: 注销
+```
+```
+
+**Spec 产出可测试性点**（供 `[[prompts/000-test_pipeline_csp.md]]` 消费）：
+- **接口契约** → 每个端点/请求-响应对 → 对应 ≥1 条 API 测试用例
+- **数据模型** → 每个 entity/字段/约束 → 对应用例；同步产出 DDL，逐字段与 PRD 功能需求对齐
+- **业务规则** → 每条规则 → 对应正常+异常+边界用例
+- **错误场景** → 每个错误码/异常路径 → 对应 negative 用例
+- **状态机** → 每个合法/非法迁移 → 对应状态迁移用例
+
+**Spec 验收门**：
+- PRD 含背景/目标/功能清单/Given-When-Then 验收标准
+- Spec 含技术方案/接口契约/数据模型/DDL/业务规则/错误场景/状态机
+- 关键改动带 `file:line` 证据
+- quick-fix 类版本走轻量 Spec 一页纸（改动点+证据+验证方式），主题版本走完整 Spec
+
+#### 6.4 设计评审
+
+调用 `[[workflow:csp-tech-design-review]]` 审查技术方案：
+- 架构合理性
+- 接口设计一致性
+- 数据模型完整性
+- 安全风险点
+
+产物：`.csp/tech-design/review-findings.md`
+
+---
+
+### Phase 7：任务拆解（原 04）
+
+> 从 Spec 拆解为可独立开发、可验证的原子任务。**每个任务 = 一个 Agent 可独立完成的开发单元。**
+
+#### 7.1 任务拆解
+
+调用 `[[workflow:csp-tech-task-breakdown]]` 从 Spec 生成 `.csp/tasks/`：
+
+**拆解规则**：
+- 一个任务只能改一个模块/文件组（避免跨模块大 patch）
+- 每个任务有明确的可验证产出（编译通过/测试绿/API 返回正确）
+- 任务间依赖形成 DAG（无环）
+- 任务粒度：小（1-3 文件，30 行以内）→ 中（3-5 文件，100 行以内）→ 大（5+ 文件，需进一步拆分）
+
+**任务格式**：
+```markdown
+# T-001: 创建 User model + migration
+
+## 前置条件
+- 数据库已就绪（PostgreSQL 15+）
+- Alembic 已初始化
+
+## 涉及文件
+- `src/models/user.py`（新建）
+- `migrations/versions/xxxx_add_users.py`（新建）
+
+## 实现要点
+1. User model: id(UUID PK), email(unique), password_hash, created_at
+2. Migration: 正向创建表，反向删除表
+3. 字段命名遵循 `docs/architecture/DATA-SCHEMA.md` 数据字典
+
+## 验收标准
+- [ ] `alembic upgrade head` 创建 users 表成功
+- [ ] `alembic downgrade -1` 删除 users 表成功
+- [ ] `python -c "from src.models.user import User; print(User.__tablename__)"` 输出 "users"
+- [ ] 字段名与 DATA-SCHEMA.md 一致
+
+## 测试点
+- Migration 正向/反向 ran+exit 0
+- Model 字段类型与 DDL 一致
+
+## 预估复杂度: 小
+## 依赖任务: 无
+```
+
+**任务依赖 DAG**：
+```mermaid
+graph TD
+    T-001[User model+迁移] --> T-002[AuthService.login]
+    T-001 --> T-003[User model 单元测试]
+    T-002 --> T-004[POST /auth/login]
+    T-004 --> T-005[Login 页面组件]
+    T-004 --> T-006[Auth API 集成测试]
+```
+
+#### 7.2 实施规划
+
+调用 `[[workflow:csp-plan-phase]]` 做实施规划：
+- **Wave 排序**：按依赖 DAG 分组 → Wave 1（无依赖）→ Wave 2（依赖 Wave 1）→ Wave N
+- **并行策略**：同 Wave 内无依赖冲突的任务可并行开发
+- **风险标注**：高风险任务标注缓解措施
+
+产物：`.csp/tasks/TASK-INDEX.md`（任务清单 + DAG）+ `.csp/planning/implementation-plan.md`（Wave 计划）
+
+---
+
+## 规划完成门控
+
+规划阶段完成检查（全部通过才能交棒开发 Pipeline）：
+
+- [ ] `docs/strategy/STRATEGY.md` 已产出（6 要素齐全）
+- [ ] `docs/strategy/ROADMAP.md` 已产出（版本序列完整，含功能-模块-描述-边界-测试-任务）
+- [ ] Phase 2.5 集成审视已完成（`INTEGRATION-NECESSITY-{date}.md` 已产出，净版功能清单已回写）
+- [ ] Phase 3 收敛审查已完成（`CONVERGED-FEATURE-PLAN.md` 已产出）
+- [ ] 每版本 PRD SPEC 已产出（`docs/prd/PRD-{slug}.md`）
+- [ ] 每版本技术 Spec 已产出（`.csp/planning/spec.md` + `.csp/tech-design/`）
+- [ ] 每版本任务拆解已完成（`.csp/tasks/` 含 DAG + 实施计划）
+- [ ] 数据字典 `docs/architecture/DATA-SCHEMA.md` 已更新（新增 entity/字段）
+- [ ] 产物路径遵循 `[[prompts/000-project-governance_csp.md]]` G2.1 约定
+- [ ] 所有文档的命名/格式/frontmatter 遵循治理规范
+
+---
+
 ## 自决策授权
-调研方向、竞品取舍、版本主题与 feature 拆分、优先级排序、跨版本依赖排布、集成必要性裁决、SPEC 结构取舍、优化项优先级、增长实验假设——你自己拍板，记入 DEV-LOG/ROADMAP，不打断我。打断条件仅 3 类：战略根本模糊 / 无法 auto-resolve 的报错 / 破坏性操作。
+调研方向、竞品取舍、版本主题与 feature 拆分、优先级排序、跨版本依赖排布、集成必要性裁决、SPEC 结构取舍、技术选型、任务拆解粒度、Wave 排序、优化项优先级、增长实验假设——你自己拍板，记入 DEV-LOG/ROADMAP，不打断我。打断条件仅 3 类：战略根本模糊 / 无法 auto-resolve 的报错 / 破坏性操作。
 
 **缺口报告**：执行过程中若发现本说明未覆盖的维度、或引用的 CSP skill 不包含所需方法论（功能缺失/深度不足），**立即指出缺口**——不跳过、不假装覆盖、不糊过。
 
@@ -350,25 +573,31 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 ---
 
 ## 交棒 pipeline
-规划完成输出摘要后，交棒给 `[[prompts/000-develop_pipeline_csp.md]]`——pipeline 读取 ROADMAP 版本队列 + PRD SPECs 启动 01→06 连续交付。
+规划完成输出摘要后，交棒给 `[[prompts/000-develop_pipeline_csp.md]]`——pipeline 读取 ROADMAP 版本队列 + 任务清单，直接启动 05 实施。
 
 ```
-产品规划                                    开发 Pipeline
-───────────                                ──────────────
+产品规划（本文件）                         开发 Pipeline
+─────────────                            ──────────────
 Phase 0 上下文探测
-  └→ Phase A 现状评估（非全新项目必跑）
+  └→ Phase A 现状评估
       └→ Phase R 调研
           └→ Phase 1 战略锚点
-              └→ Phase 2 路线图+版本序列   ──→ 01 PRD（规划级 SPEC → 工程级升级）
-                  └→ Phase 2.5 集成审视     ──→ 02 需求拆解
-                      └→ Phase 3 收敛审查   ──→ 03 技术方案+Spec
-                          └→ Phase I 迭代优化 ──→ 04 任务拆解
-                              └→ Phase 4 设计衔接 ──→ 05 实施
-                                  └→ Phase 5 PRD SPEC ──→ 06 质量门控+发布
-                                      └→ Phase G 增长实验  ──→ 07 复盘（findings 回流 Phase A）
+              └→ Phase 2 路线图+版本序列
+              │   （功能-模块-描述-边界-测试-任务 全部落实）
+                  └→ Phase 2.5 集成审视
+                      └→ Phase 3 收敛审查
+                          └→ Phase I 迭代优化
+                              └→ Phase 4 设计衔接
+                                  └→ Phase 5 PRD SPEC (Layer 1+2)
+                                      └→ Phase 6 技术 Spec (Layer 4)
+                                          └→ Phase 7 任务拆解
+                                              │                    交棒
+                                              ├──────────→ 05 实施（直接开发）
+                                              ├──────────→ 06 质量门控+发布
+                                              └──────────→ 07 复盘
 ```
 
-> Phase A（现状评估）→ Phase I（迭代优化）→ Phase G（增长实验）形成持续改进闭环：每轮迭代都从当前状态出发 → 优化既有问题 → 验证增长假设 → 07 复盘 findings 回流下一轮 Phase A。
+> **关键变化**：规划文档现在是完整的预开发中心。ROADMAP 产出时路径-功能-模块-边界-测试维度-任务拆解全部落实，Phase 6 产出可执行 Spec，Phase 7 产出带依赖 DAG 的任务清单。开发 Pipeline **不再做 01→04**，直接拿任务清单进 05 写代码。
 
 ---
 
@@ -403,7 +632,16 @@ Phase 0 上下文探测
 | PRD（设计师视角） | `[[pattern:csp-prd]]`（设计资产整合/8 段工程交底） |
 | 产品能力翻译 | `[[skill:csp-product-capability]]`（PRD→SRS，约束/不变量/接口） |
 
-### 设计衔接（规划→设计过渡）
+### 技术 Spec 与任务拆解（Phase 6 + Phase 7）
+
+| 阶段 | CSP Skill |
+|------|-----------|
+| 技术选型 | `[[workflow:csp-tech-stack-advisor]]`（语言/框架/存储/依赖评估，ADR 产出） |
+| 技术方案设计 | `[[workflow:csp-tech-solution-design]]`（架构/分层/跨模块交互/时序图） |
+| 全栈 Spec 生成 | `[[workflow:csp-fullstack-spec-generator]]`（接口契约/数据模型/DDL/错误场景/状态机） |
+| 设计评审 | `[[workflow:csp-tech-design-review]]`（架构/接口/数据/安全审查） |
+| 任务拆解 | `[[workflow:csp-tech-task-breakdown]]`（DAG/原子任务/验收标准/测试点） |
+| 实施规划 | `[[workflow:csp-plan-phase]]`（Wave 排序/并行策略/风险标注） |
 
 | 阶段 | CSP Skill |
 |------|-----------|
@@ -450,8 +688,15 @@ Phase 0 上下文探测
 │   └── GROWTH-PLAN-{date}.md         # 增长实验规划（假设清单+ICE 排序+版本映射+复盘结论）
 ├── .csp/
 │   ├── convergence/
-│   │   └── CONVERGED-FEATURE-PLAN.md  # 收敛后功能清单
-│   └── manifest.json                  # 产物回写索引
+│   │   └── CONVERGED-FEATURE-PLAN.md     # 收敛后功能清单
+│   ├── planning/
+│   │   ├── spec.md                        # Phase 6 全栈 Spec
+│   │   └── implementation-plan.md         # Phase 7 实施计划
+│   ├── tech-design/                       # Phase 6 技术方案
+│   ├── tasks/                             # Phase 7 任务拆解
+│   │   ├── TASK-INDEX.md                  #   任务清单 + DAG
+│   │   └── T-{NNN}-{slug}.md              #   逐任务详情
+│   └── manifest.json                      # 产物回写索引
 ```
 
 ---
@@ -489,34 +734,40 @@ Phase 0 上下文探测
 
 ## 三文档协作与四层深度分工（固定契约）
 
-本文件是 CSP 三件套之一（规划段），与另外两个文件配合使用。四层深度分工在此**一次定死**，本文件其他章节及下游文件只引用、不重复定义：
+本文件是 CSP 三件套之首（规划段），承担所有预开发工作。四层深度分工在此**一次定死**：
 
-| 层 | 产物 | 归属 | 深度边界（写什么 / 不写什么） |
-|----|------|------|------------------------------|
-| Layer 1 | `docs/strategy/ROADMAP.md` | **本文件** Phase 2 | 每功能一句话"用户能做什么"；不写 AC、不写实现 |
-| Layer 2 | PRD SPEC（`prd_depth: planning`） | **本文件** Phase 5（= roadmap workflow Phase 4.5） | 8 段大纲：功能清单 / 用户故事 / 关键规则要点 / AC 骨架（每模块 ≥1 条 GWT 锚点）；不写穷举规则、完整 AC、异常流、埋点、DDL |
-| Layer 3 | 同一 PRD 文件 delta 升级（`prd_depth: engineering`） | 开发 Pipeline 01 | 穷举业务规则 / 完整 AC（≥3 条/模块）/ 异常矩阵 / 埋点，在此补齐 |
-| Layer 4 | 03 Spec（`.csp/planning/spec.md` + `.csp/tech-design/`） | 开发 Pipeline 03 | 接口契约 / 数据模型 / DDL / 错误场景——实现与测试的直接输入 |
+| 层 | 产物 | 归属 | 深度边界 |
+|----|------|------|---------|
+| Layer 1 | `docs/strategy/ROADMAP.md` | **本文件** Phase 2 | ROADMAP 详情展开：功能-模块-描述-边界-测试维度-任务路径拆解，全部落实 |
+| Layer 2 | PRD SPEC（`prd_depth: planning`） | **本文件** Phase 5 | 8 段大纲：功能清单/用户故事/关键规则要点/AC 骨架 |
+| Layer 3 | 同一 PRD 文件升级（`prd_depth: engineering`） | **本文件** Phase 5→6 衔接 | 穷举业务规则/完整 AC（≥3 条/模块）/异常矩阵/埋点 |
+| Layer 4 | 03 Spec + 技术方案 | **本文件** Phase 6 | 接口契约/数据模型/DDL/错误场景/状态机——实现与测试的直接输入 |
 
-**分工红线**：本文件产物止步 Layer 2。原因有二——① Phase 2.5 集成审视默认砍，审视剔除/降级的功能若已写工程级细节即纯浪费；② Layer 3/4 的内容依赖 02/03 的技术决策（DDL 依赖存储选型、异常矩阵依赖接口设计），提前写必返工。Layer 3/4 由 `000-develop_pipeline_csp.md` 的 01/03 补齐，`planning_depth_gate` 强制四层全齐才允许进 05。升级路径 = 01 探测到同 `target_version` 的 planning Draft → 在同一 PRD 原文件上 delta 补全为 engineering，不新建文件。
+**任务拆解**为第四层的自然产出：**本文件** Phase 7。
+
+**分工红线（v2 变化）**：四层全部在规划阶段完成。开发 Pipeline `000-develop_pipeline_csp.md` **不再包含 01→04**，
+直接从任务清单进 05 开发。原因：ROADMAP 阶段已经将功能-模块-边界-测试-任务全部落实，
+Spec 和任务拆解是这些细节的自然形式化展开——不是新的分析阶段，是格式转换。
 
 ```
 000-product-planning_csp.md（本文件）
-  │  产出: ROADMAP (Layer 1) + PRD SPECs (Layer 2, prd_depth: planning)
-  │  门控: Phase 2.5 集成审视 + Phase 3 收敛审查
+  │  产出: ROADMAP (Layer 1+详情: 功能/模块/边界/测试/任务)
+  │       + PRD SPECs (Layer 2+3, planning→engineering)
+  │       + 技术 Spec (Layer 4) + 任务拆解 (Phase 7)
+  │  门控: Phase 2.5 集成审视 + Phase 3 收敛审查 + 规划完成门控
   │
   ├──→ 交棒 000-develop_pipeline_csp.md
-  │      Layer 3: 01 升级 (planning→engineering, 同一文件 delta 补全)
-  │      Layer 4: 03 Spec (.csp/planning/spec.md + .csp/tech-design/)
-  │      深度门控: 四层全部完成才允许进 05 执行
-  │      (参见 lifecycle-orchestrator planning_depth_gate)
+  │      Pipeline 读任务清单 → 直接进 05 实施
+  │      （不再做 01 PRD升级/02 拆解/03 Spec/04 任务——这些已在规划完成）
   │
   └──→ 输入 000-test_pipeline_csp.md
-         测试 Pipeline: engineering PRD (Layer 3) + Spec (Layer 4) → TB→TD→分层实施→门控
+         测试 Pipeline: Spec (Layer 4) + 任务清单 → TB→TD→分层实施→门控
+         测试维度在 ROADMAP 阶段已定义，Spec 阶段产出可测试性点
 ```
 
-- **规划产出** = PRD SPECs + ROADMAP + FEATURES → 开发 Pipeline 的 01 输入 + 测试 Pipeline 的 TB 输入
-- **开发进行时** = 规划中的版本队列 → `000-develop_pipeline_csp.md` 逐版本推进
-- **测试嵌入** = `000-test_pipeline_csp.md` 产出测试证据 → 嵌入开发 Pipeline S6 的 Check 1-5.10
-- **项目治理** = `[[prompts/000-project-governance_csp.md]]` 定义产物路径/版本管理/文档边界——所有产物落盘遵循 G2.1 约定
+**与项目治理的关系**：
+- 产物路径遵循 `[[prompts/000-project-governance_csp.md]]` G2.1 约定
+- 数据模型字段命名遵循 `DATA-SCHEMA.md` 数据字典
+- 文档 frontmatter 遵循 GK.4 约定
+- 版本号遵循 G1.1 SemVer 规则
 

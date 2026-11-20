@@ -703,23 +703,23 @@ Agent 依功能审阅：根指令/路由卡应便于快速装载；长 PRD/CHANG
 
 ---
 
-## 四文档协作关系
-
-本文件是 CSP 第四份——项目治理横切面，为另外三份提供底层约定：
+## 四文档协作关系（v2）
 
 ```
-000-project-governance_csp.md（本文件）
-  │  项目结构/产物路径/版本管理/文档生命周期
+000-product-planning_csp.md
+  │  规划全链路: Phase 0→7（调研→战略→ROADMAP→审视→收敛→PRD→Spec→任务拆解）
+  │  产出: Layer 1-4 全部 + 任务清单 DAG
   │
-  ├──→ 被 000-product-planning_csp.md 引用
-  │      Planning 产物按 G2.1 表落盘 (Layer 1: ROADMAP + Layer 2: PRD SPEC)
+  ├──→ 000-develop_pipeline_csp.md
+  │     纯开发执行: 读任务清单 → 05 实施 → 06 质量门控 → 07 复盘
+  │     （不再包含 01→04 预开发阶段）
   │
-  ├──→ 被 000-develop_pipeline_csp.md 引用
-  │      Development 产物按 G2.1 表落盘 (Layer 3: Eng PRD + Layer 4: Spec)
-  │      深度门控: 四层全部完成 → planning_depth_gate_passed → 进 S5
+  ├──→ 000-test_pipeline_csp.md  
+  │     测试 Pipeline: 从 Spec 提取测试依据 → 分层实施 → 嵌入 06 门控
   │
-  └──→ 被 000-test_pipeline_csp.md 引用
-         Testing 产物按 G2.1 表落盘，TB 从 Layer 3+4 提取测试依据
+  └──→ 000-project-governance_csp.md（本文件）
+        项目治理横切面: 产物路径/版本管理/文档生命周期/根目录卫生
+        所有产物落盘遵循 G2.1 约定
 ```
 
 ---

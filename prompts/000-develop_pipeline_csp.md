@@ -1,42 +1,21 @@
-使用 [[workflow:csp-lifecycle-orchestrator]] 从当前 .csp/lifecycle-state.json 续跑，连续推进所有待交付版本（待交付 = ROADMAP 中 status planned/in-progress；deferred 版本不并入活跃队列，待解除条件满足才并入），版本间不停：每个版本 06 done（push origin、已打 tag、已出 Release、已归档）后，自动读 docs/strategy/ROADMAP.md 取下一个未交付版本，回 01 开启下一轮，直到队列清空。ROADMAP 须已过集成必要性审视；若未过或过期，先 spawn [[workflow:csp-roadmap-planner]] 净化版本队列再续跑；若净化产生新增/重排的版本批次，先过 [[csp-product-design-convergence]] 收敛审查（定位对齐/导航准入/系统卫生），收敛后功能清单才是 01 的合法输入。仅当我说"只做某个版本"时才单版本停。
+使用 [[workflow:csp-lifecycle-orchestrator]] 从当前 .csp/lifecycle-state.json 续跑，连续推进所有待交付版本（待交付 = ROADMAP 中 status planned/in-progress；deferred 版本不并入活跃队列）。每个版本 06 done 后自动读 `docs/strategy/ROADMAP.md` 取下一个未交付版本，直接进 05 实施，直到队列清空。
 
-每轮 01 按 `[[workflow:csp-knowledge-hub]]` 四层入口定位当前状态与任务相关源，不全文加载 manifest/历史 dev_log；历史指标标明观测 commit 与环境，不代替 06 本次验证。前置四读（缺一不可）：
-① 读 .csp/agent-conventions/ 全部规范（ai-coding-guardrails.md 的 G-01~G-08、VERIFICATION-DISCIPLINE.md 等），05 开发逐条遵守；
-② 读 .csp/{audit,ui-review,critic,gap-analysis}/ 最新批次 findings，把与本版本主题对应的 findings 并入入口清单作为验收项；
-③ 对账 .csp/lifecycle-state.json 与 docs/strategy/ROADMAP.md（前者为运行时真相、后者为规划真相），漂移则按授权修复并记 DEV-LOG；
-④ 检查既有 BLOCKED 项解除条件，满足者并入本版本入口清单。
+**前置条件**：ROADMAP 须已通过 `[[prompts/000-product-planning_csp.md]]` 的完整规划流程（Phase 0→7）——
+ROADMAP 含功能-模块-描述-边界-测试维度-任务路径全部详情，PRD SPEC 已完成，技术 Spec (Layer 4) 已完成，任务拆解 (Phase 7) 已完成，`.csp/tasks/TASK-INDEX.md` 含依赖 DAG。
 
-先有完整 PRD 和详细技术 Spec，Spec 齐全后才进开发（05），不写无 Spec 的代码：
-- PRD：[[workflow:csp-prd-generation]]（PM 视角）或 [[pattern:csp-prd]]（设计师视角）
-- 需求拆解：[[workflow:csp-requirement-decomposition]]（S1）
-- 技术选型：[[workflow:csp-tech-stack-advisor]]（S2）
-- 数据库选型：`[[workflow:csp-tech-stack-advisor]]` 覆盖存储层决策（PostgreSQL/MySQL/SQLite/NoSQL），产出 ADR
-- 技术方案设计：[[workflow:csp-tech-solution-design]]（S2.5）
-- 设计评审：[[workflow:csp-tech-design-review]]（S2.6）
-- 全栈 Spec：[[workflow:csp-fullstack-spec-generator]]（S3）
-- 任务拆解：[[workflow:csp-tech-task-breakdown]]（S3.5）
-- 实施规划：[[workflow:csp-plan-phase]]（S4）
+仅当我说"只做某个版本"时才单版本停。
 
-Spec 验收门：PRD 含背景/目标/功能清单/Given-When-Then 验收标准；Spec 含技术方案/接口契约/测试计划/风险，关键改动带 file:line 证据。quick-fix 类版本走轻量 Spec 一页纸（改动点+证据+验证方式），主题版本走完整 Spec。
+每轮按 `[[workflow:csp-knowledge-hub]]` 四层入口定位当前状态与任务相关源。前置三读（缺一不可）：
+① 读 `.csp/agent-conventions/` 全部规范（ai-coding-guardrails.md 的 G-01~G-08、VERIFICATION-DISCIPLINE.md 等），05 开发逐条遵守，禁因"知道了"跳过；
+② 读 `.csp/{audit,ui-review,critic,gap-analysis}/` 最新批次 findings，把与本版本主题对应的 findings 并入入口清单作为验收项；
+③ 对账 `.csp/lifecycle-state.json` 与 `docs/strategy/ROADMAP.md`（前者为运行时真相、后者为规划真相），漂移则按授权修复并记 DEV-LOG。
 
-**01→03 深度门控（四层强制完成 gate）**：规划阶段必须四层全部完成才允许进 05 执行（参见 [[workflow:csp-lifecycle-orchestrator]] `planning_depth_gate` 和 [[workflow:csp-roadmap-planner]] Planning Phase Completion Gate）：
+**输入校验**：任务清单 `.csp/tasks/TASK-INDEX.md` 必须存在——这是 `000-product-planning_csp.md` Phase 7 的产出。缺失说明规划未完成，回 `000-product-planning_csp.md` 补，不进 05。
 
-```
-Layer 1: ROADMAP.md          ← [[workflow:csp-roadmap-planner]] 产出
-Layer 2: PRD (planning)      ← 同上 Phase 4.5（prd_depth: planning, AC skeleton, thin_sections）
-Layer 3: PRD (engineering)   ← 01 升级: planning → engineering delta 补全（同一文件，≥3 AC/模块，异常矩阵完整）
-Layer 4: Spec (technical)    ← 03 产出: .csp/planning/spec.md + .csp/tech-design/
-```
-
-01 读 `prd_depth: planning` Draft 时，在同一 PRD 原文上补全工程级业务规则/AC/异常流并评审为 `engineering`，之后 03 产出可执行全栈 Spec。缺任一层 → **硬阻塞，禁止进 05**，不得以 CHANGELOG/tag 代替实现；失败则记录真实 blocker 并修复或报告，不把 planned 版本自动标 skipped/deferred。四层全部完成后 lifecycle-orchestrator `planning_depth_gate_passed` 信号通过，方可进入 S5 执行。
-
-**Spec 产出可测试性点**（S3 Spec 生成时同步产出，供 Test Pipeline TD 用例设计消费）：
-- **接口契约** → 每个端点/请求-响应对 → 对应 ≥1 条 API 测试用例
-- **数据模型** → 每个 entity/字段/约束 → 对应用例；同步产出 DDL，逐字段与 PRD 功能需求对齐。新增 entity/字段时同步更新 `docs/architecture/DATA-SCHEMA.md`（数据字典），字段名从此派生——API 响应、代码 model、DB 列三者对齐数据字典
-- **业务规则** → 每条规则 → 对应正常+异常+边界用例
-- **错误场景** → 每个错误码/异常路径 → 对应 negative 用例
-- **状态机** → 每个合法/非法迁移 → 对应状态迁移用例
-- S3 Spec 产出后，`[[prompts/000-test_pipeline_csp.md]]` Phase TD 从 Spec 提取可测试性点设计用例
+**Spec 到位检查**（每个 task 开始前）：
+- 对应 Spec（`.csp/planning/spec.md` + `.csp/tech-design/`）必须存在且 `build_status: built`
+- Spec 含接口契约/数据模型/DDL/错误场景/状态机——缺任一项（quick-fix 除外）不进 05
+- 数据字典 `docs/architecture/DATA-SCHEMA.md` 含本次涉及的 entity/字段
 
 开发阶段（05）使用 [[workflow:csp-implementation-phase]]，遵循 TDD 流程 [[meta:csp-tdd]]，coding agent 遵守 [[pattern:csp-coding-standards]] 的全部命名/安全/跨层对齐规则。
 
@@ -97,7 +76,7 @@ Layer 4: Spec (technical)    ← 03 产出: .csp/planning/spec.md + .csp/tech-de
 
 **测试嵌入**：开发期间测试并行推进——`[[prompts/000-test_pipeline_csp.md]]` 从当前版本的 PRD SPEC 提取测试依据→设计用例→分层实施，产出测试证据直接嵌入 S6 质量门控。
 
-自决策授权（默认自己拍板，不问我）：范围/优先级、Spec 歧义、Wave 排序、fix 路由（05 实现缺陷 / 03 Spec 缺口）、可逆整改（已授权移动后的 manifest re-point、版本漂移核对）、CMS re-align——这些你自己定，定了记入 DEV-LOG 即可，不打断我。**deferred 禁止自决策**：任何 deferred 项必须在 DEV-LOG 中注明解除条件 + 预期版本——不是"下轮再说"的万能兜底。
+自决策授权（默认自己拍板，不问我）：范围/优先级、Wave 排序、fix 路由（05 实现缺陷 vs Spec 缺口）、可逆整改（已授权移动后的 manifest re-point、版本漂移核对）、CMS re-align——这些你自己定，定了记入 DEV-LOG 即可，不打断我。**deferred 禁止自决策**：任何 deferred 项必须在 DEV-LOG 中注明解除条件 + 预期版本——不是"下轮再说"的万能兜底。
 
 循环收敛：06 未过按根因回 05/03 修 delta 重验，循环到全绿；超 5 轮再报我。跨版本熔断：连续 3 个版本因同一根因失败，暂停并报我，附根因证据链。
 
@@ -193,106 +172,72 @@ gate 即授权，全自动推进。打断条件（仅 6 类）：战略根本模
 
 ---
 
-## CSP Skill 路径速查
+## CSP Skill 路径速查（仅开发段）
 
 | 阶段 | CSP Skill |
 |------|-----------|
 | 全生命周期编排 | `[[workflow:csp-lifecycle-orchestrator]]` |
-| Roadmap 规划 | `[[workflow:csp-roadmap-planner]]` |
-| 架构收敛审查 | `[[csp-product-design-convergence]]` |
-| 产品管理（PM 视角） | `[[agent:csp-pm]]`（用户故事/验收标准/优先级） + `[[agent:csp-analyst]]`（商业模型/成本收益/SWOT） |
-| 产品透镜审查 | `[[agent:csp-product-lens-reviewer]]`（前提挑战/战略后果/目标-需求对齐） |
-| PRD 生成（PM 视角） | `[[workflow:csp-prd-generation]]` |
-| PRD（设计师视角） | `[[pattern:csp-prd]]` |
-| 需求拆解（S1） | `[[workflow:csp-requirement-decomposition]]` |
-| 技术选型（S2） | `[[workflow:csp-tech-stack-advisor]]` |
-| 技术方案设计（S2.5） | `[[workflow:csp-tech-solution-design]]` |
-| 设计评审（S2.6） | `[[workflow:csp-tech-design-review]]` |
-| 全栈 Spec（S3） | `[[workflow:csp-fullstack-spec-generator]]` |
-| 用户体验设计 | `[[agent:csp-ux-designer]]`（用户流/线框/可用性启发式） |
-| 前端设计 | `[[skill:csp-frontend-design]]`（设计语言库/Token/主题） + `[[skill:csp-flow-web]]`（16 场景多屏流程） |
-| 任务拆解（S3.5） | `[[workflow:csp-tech-task-breakdown]]` |
-| 实施规划（S4） | `[[workflow:csp-plan-phase]]` |
-| 设计→开发桥接 | `[[workflow:csp-design-to-workflow-bridge]]` |
-| 并行开发（S5） | `[[workflow:csp-implementation-phase]]` |
+| 并行开发（05） | `[[workflow:csp-implementation-phase]]` |
 | TDD | `[[meta:csp-tdd]]` |
-| 测试方法论 → 专项测试 skill 分派 | `[[meta:csp-test-methodology]]`（契约/属性/变异/模糊/混沌/差分/并发/无障碍/国际化/可观测/后端 mock/DB 迁移/Kotlin） |
+| 测试方法论 → 专项测试 skill 分派 | `[[meta:csp-test-methodology]]` |
 | 编码规范 | `[[pattern:csp-coding-standards]]` |
-| 前端开发模式 | `[[skill:csp-frontend-patterns]]`（组合/状态/性能/表单/数据获取/无障碍，框架无关） |
-| 后端开发模式 | `[[skill:csp-backend-patterns]]`（API 设计/分层架构/错误处理/幂等/分页）+ `[[skill:csp-postgres-patterns]]`（Schema 设计/索引/查询优化） |
-| 数据库迁移 | `[[skill:csp-db-migration]]`（Schema 变更/数据迁移/回滚/零停机） |
-| SQL 审查 | `[[skill:csp-sql-reviewer]]`（查询性能/索引使用/安全/注入防护） |
-| DB 性能 | `[[skill:csp-db-performance]]`（慢查询/索引优化/连接池/锁竞争） |
-| DB 状态断言 | `[[skill:csp-db-state-assertion]]`（写操作前后 DB 状态验证/字段完整性） |
-| Schema 漂移检测 | `[[skill:csp-schema-drift-detection]]`（ORM 声明 vs information_schema 物理列 diff——Check 5.8c） |
-| 字段名一致性 | Spec 数据模型字段名 vs 代码/API/DB 对齐——Check 5.8d。Spec 是字段名唯一真相源，开发中新字段回写 Spec |
-| API 治理 | `[[skill:csp-api-governance]]`（契约/版本管理/限流/认证授权模式） |
-| 代码整洁 | `[[skill:csp-code-simplification]]`（死代码清理/AI 冗余消除/重复合并）+ `[[skill:csp-refactoring-strategies]]`（大规模重构路径） |
-| 最小改动工程 | `[[skill:csp-minimal-change-engineer]]`（只修该修的，拒绝 scope creep） |
-| 可观测与日志 | `[[skill:csp-observability-and-instrumentation]]`（关键路径日志/结构化日志/trace_id/指标） |
-| 质量门控（S6） | `[[workflow:csp-release-manager]]`（全流程）或 `[[workflow:csp-verify-phase]]`（单独验证） |
-| 审查（S7） | `[[workflow:csp-code-review]]` |
+| 前端开发模式 | `[[skill:csp-frontend-patterns]]` |
+| 后端开发模式 | `[[skill:csp-backend-patterns]]` + `[[skill:csp-postgres-patterns]]` |
+| 数据库迁移 | `[[skill:csp-db-migration]]` |
+| SQL 审查 | `[[skill:csp-sql-reviewer]]` |
+| DB 性能 | `[[skill:csp-db-performance]]` |
+| DB 状态断言 | `[[skill:csp-db-state-assertion]]` |
+| Schema 漂移检测 | `[[skill:csp-schema-drift-detection]]` |
+| API 治理 | `[[skill:csp-api-governance]]` |
+| 代码整洁 | `[[skill:csp-code-simplification]]` + `[[skill:csp-refactoring-strategies]]` |
+| 最小改动工程 | `[[skill:csp-minimal-change-engineer]]` |
+| 可观测与日志 | `[[skill:csp-observability-and-instrumentation]]` |
+| 质量门控（06） | `[[workflow:csp-release-manager]]` 或 `[[workflow:csp-verify-phase]]` |
+| 审查（07） | `[[workflow:csp-code-review]]` |
 | 双审对抗验证 | `[[pattern:csp-santa-method]]` |
 | 跨层集成审查 | `[[pattern:csp-integration-review]]` |
-| 安全审查（S7 必检） | `[[skill:csp-security-review]]`（鉴权/越权/注入/XSS/CSRF/敏感数据脱敏/依赖漏洞） |
-| 门控合规审计 | `[[skill:csp-gate-compliance]]`（发布前检查：上一版 gate 是否真的 PASS + 中间版本是否缺 gate 记录——Check 5.14） |
-| 后端性能 | `[[skill:csp-backend-performance]]`（API P95/慢查询索引/N+1/缓存策略/连接池） |
-| 无障碍审计 | `[[agent:csp-a11y-architect]]`（WCAG 2.2/语义化/焦点管理） |
-| 前端性能 | `[[agent:csp-web-performance-auditor]]`（CWV 审计）或 `[[skill:csp-frontend-performance]]`（bundle/缓存优化） |
-| 跨层契约测试 | `[[skill:csp-cross-layer-testing]]`（前后端契约验证/UI→API→DB 往返 traceable） |
-| E2E 测试 | `[[skill:csp-e2e-testing]]`（全路由 sweep/关键路径冒烟/浏览器自动化，Check 5.6） |
-| 视觉回归测试 | `[[skill:csp-visual-regression]]`（截图 vs 基线 diff，UI 意外变更检测，Check 5.7） |
-| 负载测试 | `[[skill:csp-load-testing]]`（k6/Locust，SLA 百分位/并发模型/瓶颈定位，选做） |
-| 四声部决策 | `[[pattern:csp-council]]`（架构/怀疑/务实/批评） |
-| AI 盲点回归测试 | `[[pattern:csp-ai-regression-testing]]` |
-| 任务自评 | `[[pattern:csp-agent-self-evaluation]]`（5 轴结构性复盘） |
-| Agent 治理 | `[[workflow:csp-agent-governance]]`（4 级安全护栏） |
-| 发布（S8） | `[[workflow:csp-ship]]` |
-| CI/CD 管道 | `[[skill:csp-cicd-pipelines]]`（构建/测试/部署管道，GitHub Actions） |
-| 部署策略 | `[[skill:csp-deployment]]`（健康检查/回滚/灰度/蓝绿/零 downtime） |
-| 可观测 | `[[skill:csp-monitoring-alerting]]` + `[[skill:csp-observability-and-instrumentation]]`（关键指标/日志/链路/告警） |
+| 安全审查 | `[[skill:csp-security-review]]` |
+| 门控合规审计 | `[[skill:csp-gate-compliance]]` |
+| 后端性能 | `[[skill:csp-backend-performance]]` |
+| 无障碍审计 | `[[agent:csp-a11y-architect]]` |
+| 前端性能 | `[[agent:csp-web-performance-auditor]]` 或 `[[skill:csp-frontend-performance]]` |
+| 跨层契约测试 | `[[skill:csp-cross-layer-testing]]` |
+| E2E 测试 | `[[skill:csp-e2e-testing]]` |
+| 视觉回归测试 | `[[skill:csp-visual-regression]]` |
+| 发布 | `[[workflow:csp-ship]]` |
+| CI/CD 管道 | `[[skill:csp-cicd-pipelines]]` |
+| 部署策略 | `[[skill:csp-deployment]]` |
+| 可观测 | `[[skill:csp-monitoring-alerting]]` + `[[skill:csp-observability-and-instrumentation]]` |
 | Git 规范 | `[[pattern:csp-git-conventions]]` |
-| 版本管理 | prompts/version-management.md（规则参考文档） |
-| 复盘（S10） | `[[pattern:csp-retro]]` |
-| 技能蒸馏（01-07 每阶段后） | `[[workflow:csp-skill-distiller]]`（执行观察→技能缺口→改进提案，`.csp/skill-improvements/`） |
-| 重构策略 | `[[skill:csp-refactoring-strategies]]`（Strangler Fig/Branch by Abstraction/并行运行，大规模架构演进） |
-| 代码整洁 | `[[skill:csp-code-simplification]]`（死代码清理/简化 AI 冗余/移除未使用依赖） |
+| 复盘 | `[[pattern:csp-retro]]` |
+| 技能蒸馏 | `[[workflow:csp-skill-distiller]]` |
 | 文档治理 | `[[workflow:csp-documentation-governance]]` |
-| 文档生命周期 | `[[workflow:csp-doc-lifecycle-manager]]` |
-| 用户体系设计 | `[[pattern:csp-user-system-design]]`（账号/RBAC/认证/数据模型） |
-| GDPR 隐私合规 | `[[pattern:csp-privacy-compliance]]`（含 GDPR 工程参考） |
-| 前端开发 | `[[skill:csp-frontend-patterns]]`（CSP 原生前端模式入口）或 prompts/frontend-development.md（零依赖独立 prompt） |
 
 ---
 
 ## 三文档协作关系
 
-本文件是 CSP 三件套之一（开发段），与另外两个文件配合使用：
-
 ```
 000-product-planning_csp.md
-  │  产出: ROADMAP + PRD SPECs (prd_depth: planning, Layer 1+2)
-  │  门控: 集成必要性审视(Phase 2.5) + 收敛审查(product-design-convergence)
+  │  产出: ROADMAP (Layer 1+2: 功能/模块/边界/测试/任务) + PRD SPEC + 技术 Spec (Layer 4) + 任务拆解
+  │  门控: Phase 2.5 集成审视 + Phase 3 收敛审查 + 规划完成门控
   │
   └──→ 000-develop_pipeline_csp.md（本文件）
-          │  开发 Pipeline: 01(planning→engineering 升级, Layer 3)
-          │                → 03(Spec, Layer 4) → 04(任务拆解)
-          │                → 05(实施) → 06(发布) → 07(复盘)
-          │
-          │  深度门控: 四层全部完成(ROADMAP+Planning PRD+Eng PRD+Spec)
-          │           才允许进 05。缺任一层 = HARD BLOCK。
+          │  开发 Pipeline: 读任务清单 → 05(实施) → 06(质量门控+发布) → 07(复盘)
+          │  不包含 01→04（已在 planning 完成）
+          │  输入: .csp/tasks/TASK-INDEX.md + .csp/planning/spec.md
           │
           ├──← 06 质量门控消费测试证据
           │       │
 000-test_pipeline_csp.md ←──┘
   │  测试 Pipeline: TB→TD→TU→TI→TE→TV→TP→TSEC→TQ
-  │  engineering PRD (Layer 3) + Spec (Layer 4) → 测试依据/用例 → 分层实施 → 嵌入 06 门控
+  │  Spec (Layer 4) → 测试依据/用例 → 分层实施 → 嵌入 06 门控
 ```
 
-- **上游输入** = `000-product-planning_csp.md` 产出的 ROADMAP + PRD SPECs (Layer 1+2)
-- **本文件职责** = 版本交付: planning→engineering 升级(Layer 3) → Spec(Layer 4) → 拆解 → 开发 → 质量门控 → 发布 → 复盘
-- **测试嵌入** = `000-test_pipeline_csp.md` 在 engineering PRD (Layer 3) 和 Spec (Layer 4) 后建立测试基线并实跑，证据供 06 门控使用
-- **项目治理** = `[[prompts/000-project-governance_csp.md]]` 定义产物路径/版本管理/文档边界——本文档产物落盘遵循 G2.1 约定
+- **上游输入** = `000-product-planning_csp.md` 产出的完整规划包（ROADMAP + PRD + Spec + 任务清单）
+- **本文件职责** = 纯开发执行: 读任务 → 写代码 → 质量门控 → 发布 → 复盘
+- **测试嵌入** = `000-test_pipeline_csp.md` 从 Spec 提取测试依据 → 分层实施 → 证据嵌入 06 门控
+- **项目治理** = `[[prompts/000-project-governance_csp.md]]` 定义产物路径/版本管理/文档边界
 
 ---
 
