@@ -10,6 +10,13 @@ ROADMAP 含功能-模块-描述-边界-测试维度-任务路径全部详情，P
 ② 读 `.csp/{audit,ui-review,critic,gap-analysis}/` 最新批次 findings，把与本版本主题对应的 findings 并入入口清单作为验收项；
 ③ 对账 `.csp/lifecycle-state.json` 与 `docs/strategy/ROADMAP.md`（前者为运行时真相、后者为规划真相），漂移则按授权修复并记 DEV-LOG。
 
+**lifecycle-state 写入对账**（写入时主动校验，不等下次读取才发现漂移）：
+```bash
+# 写入 lifecycle-state.json 前必须交叉验证 git tag
+python3 prompts/scripts/lifecycle_tag_reconcile.py --check
+# 不一致 → raise, 不写入。禁止静默漂移。
+```
+
 **输入校验**：任务清单 `.csp/tasks/TASK-INDEX.md` 必须存在——这是 `000-product-planning_csp.md` Phase 7 的产出。缺失说明规划未完成，回 `000-product-planning_csp.md` 补，不进 05。
 
 **PRD 深度门控**（05 入口强制检查）：
@@ -77,6 +84,27 @@ grep "prd_depth: engineering" docs/prd/PRD-{version-slug}.md
 
 **Agent 写后验证**：遵循 [[G-13 写后验证覆盖 import 可达性]]，lint/format 通过不足够——必须 import 能 resolve。
 
+**API Registry 路由规则**（防止重复注册/遗漏注册——来自复盘因果链 1+3）：
+- 新 router **只进一个** registry 文件。项目有多个 registry 时，逐版本开发期间一律进 `recent_features.py`（或项目约定的标准入口）。除非项目有明确的**域→registry 映射表**（如 `ai_intelligence.py: AI domain / recent_features.py: recent features`），否则 Agent 不自行判断"这个功能属于哪个域"
+- 创建 API 文件**同一次修改必须包含注册**——遵循 [[G-15 新模块创建必附带接入点注册]]。Agent 创建 `api/v1/xxx.py` 后必须同步修改 registry 的 `include_router` 行
+- **提交前检查**：
+  ```bash
+  # 新增 API 文件 → registry 也必须有新增行
+  diff <(git diff --cached --name-only | grep "api/" | sort) \
+       <(git diff --cached | grep "^+.*include_router\|^+.*router" | grep -oP '["\x27].*?["\x27]' | sort)
+  ```
+
+**启动时路由验证**（06 门控的一部分——防止重复和遗漏积累到生产）：
+```bash
+# 检查 1：无重复路由
+# 启动 app 时自动执行 assert_no_duplicate_routes() 断言
+
+# 检查 2：无孤儿 API 文件
+# 对比 api/ 目录下的文件列表 vs 已注册的路由
+python3 scripts/router_registry_check.py
+```
+重复路由 → BLOCKED（双注册导致每个 endpoint 出现 2 次）。孤儿 API 文件 → BLOCKED（文件存在但从未被注册，不可达）。
+
 **Lint/Type 豁免基线**（解决预存错误阻塞门控）：
 - 项目已有 `.csp/exemptions.json` 时，gate 脚本读取豁免后判断「新增回归」而非「全量 zero」
 - 格式：`{"tsc": ["file:line:error_code"], "ruff": ["file:line:rule"], "mypy": ["file:line:error_code"]}`
@@ -131,6 +159,7 @@ grep "prd_depth: engineering" docs/prd/PRD-{version-slug}.md
   Check 5.12: 命名规范 → [[agent:csp-project-standards-reviewer]] 检查项目及语言约定，发现无语义版本/milestone 副本提出重命名；迁移 revision、稳定公开协议标识等要验证使用方，不能按正则盲改并称通过
   Check 5.13: 审计 findings 闭合 → P0 audit finding = 0（全部 closed，附 fix commit 证据）；P1 > 3 条同 P0 阻断
   Check 5.14: 门控合规审计 → [[skill:csp-gate-compliance]] — 上一版 gate snapshot 是否 BLOCKED 且无修复记录即 shipped？gate 证据是否来自当前 commit？中间版本是否缺 gate 记录？有违规 → 不打 tag，先闭合
+  Check 5.15: 路由完整性 → `assert_no_duplicate_routes()` exit 0（无重复注册）+ `python3 scripts/router_registry_check.py` exit 0（无孤儿 API 文件）
   （工具链不可用 = BLOCKED，不得用 grep/review 替代动态门控）
 - 运行环境先探测实际服务/启动命令、端口身份和可用凭据；按项目授权启动并探活，不默认 Compose、npm 或固定重试次数。视觉/性能/API 文档动态检查工具不可用时标未执行及解除条件，不能用静态 grep 冒充动态验证。
 - S7 审查无 CRITICAL → [[workflow:csp-code-review]] + [[pattern:csp-santa-method]]（关键模块双审）
