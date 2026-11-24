@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "total_skills": 706,
+  "total_skills": 709,
   "shards": [],
   "skill_metadata": "skill-metadata.yaml",
   "skills": [
@@ -36,7 +36,7 @@
     },
     {
       "name": "csp-business-seo",
-      "description": "Use when optimizing content for search engines (Google/Bing/百度). Covers keyword research, on-page SEO, technical SEO, backlink strategy, content optimization, and rank tracking. Keywords: SEO, 搜索引擎优化, 关键词, backlink, 排名, Google, 百度, 搜索排名, meta tags.",
+      "description": "Use when optimizing content for search engines (Google/Bing/百度) AND AI search engines (ChatGPT, Perplexity, Gemini, Copilot, Claude). Covers traditional SEO (keyword research, on-page, technical, backlinks) plus GEO (Generative Engine Optimization) — being cited by AI is the new ranking #1. Includes",
       "layer": 3,
       "category": "patterns",
       "triggers": {
@@ -61,6 +61,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-business/patterns/skills/csp-micro-product-scout/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-product-hunt",
+      "description": "Product Hunt data access via GraphQL API — discover trending products, search posts by topic, track competitor launches, find makers, and monitor collections. Use for product discovery, competitive intelligence, market validation, and trend spotting. Complements csp-micro-product-scout (find opportu",
+      "layer": 3,
+      "category": "patterns",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-business/patterns/skills/csp-product-hunt/SKILL.md",
       "deps": [],
       "priority": 10
     },
@@ -4315,7 +4330,7 @@
     },
     {
       "name": "csp-fal-ai-media",
-      "description": "Unified media generation via fal.ai MCP — image, video, and audio. Covers text-to-image (Nano Banana), text/image-to-video (Seedance, Kling, Veo 3), text-to-speech (CSM-1B), and video-to-audio (ThinkSound). Use when the user wants to generate images, videos, or audio with AI.",
+      "description": "Unified AI media generation — image, video, and audio. Two providers: fal.ai MCP (Nano Banana for images, Seedance/Kling/Veo 3 for video, CSM-1B/ThinkSound for audio) and Google Gemini API (Gemini 3 Pro Image for text-to-image with batch generation). Includes creator workflows for logo/banner design",
       "layer": 3,
       "category": "patterns",
       "triggers": {
@@ -5735,6 +5750,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-code/csp-patterns/skills/csp-sitemap/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-social-intel",
+      "description": "Read-only social media data retrieval for research, competitive analysis, and user feedback collection. Two channels: Reddit (public JSON API, no auth required) and Twitter/X (twitterapi.io, requires API key). Search posts, get user profiles, retrieve discussions. Complements csp-crosspost which han",
+      "layer": 3,
+      "category": "patterns",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-code/csp-patterns/skills/csp-social-intel/SKILL.md",
       "deps": [],
       "priority": 10
     },
@@ -8590,7 +8620,7 @@
     },
     {
       "name": "csp-code-spec",
-      "description": "Code Module Spec (CMS / 代码说明书). The per-application living baseline distilled from the codebase. It maps entry points, module boundaries, and conventions, and feeds design / task-split / code generation / code review. Use when '代码说明书', 'CMS', '代码蒸馏', or 'code distillation' is needed.",
+      "description": "Code Module Spec (CMS / 代码说明书). The per-application living baseline distilled from the codebase. Maps entry points, call chains, module boundaries, and conventions. Includes code-to-doc auto-extraction (Python docstring → class/method docs, TypeScript JSDoc → component docs, one-click generation). H",
       "layer": 2,
       "category": "workflow",
       "triggers": {
@@ -9040,7 +9070,7 @@
     },
     {
       "name": "csp-knowledge-hub",
-      "description": "Local-first Knowledge Hub — a git-managed markdown workspace that unifies spec (PMS/CMS/TMS), wiki, and memory into one indexed, queryable hub to accelerate Agent codebase understanding. Platform-decoupled: local markdown + git + AGENTS.md routing + a sole manifest index.",
+      "description": "Local-first Knowledge Hub — a git-managed markdown workspace that unifies spec (PMS/CMS/TMS), wiki, and memory into one indexed, queryable hub. Includes alignment guard that proactively checks PMS↔CMS↔TMS consistency: when any one changes, detect drift in the others. Platform-decoupled: local markdo",
       "layer": 2,
       "category": "workflow",
       "triggers": {
@@ -9310,7 +9340,7 @@
     },
     {
       "name": "csp-product-spec",
-      "description": "Product Module Spec (PMS / 产品说明书). The living, versioned baseline that governs PRD generation quality for a product. Defines module decomposition, boundaries, and the acceptance standard every PRD must meet; downstream skills read it before producing their own artifacts.",
+      "description": "Product Module Spec (PMS / 产品说明书). The living, versioned baseline that governs PRD generation quality for a product. Defines module decomposition, boundaries, and the acceptance standard every PRD must meet. Also bridges PMS to code: each module definition maps to the code entry points that need to ",
       "layer": 2,
       "category": "workflow",
       "triggers": {
@@ -9640,7 +9670,7 @@
     },
     {
       "name": "csp-test-spec",
-      "description": "Test Module Spec (TMS / 测试说明书). The per-module living test baseline. Generates stock + incremental test cases from requirement/design docs; when a change lands, TMS emits only the incremental cases the delta requires, not a from-scratch rewrite.",
+      "description": "Test Module Spec (TMS / 测试说明书). The per-module living test baseline, branching from PMS. Generates stock + incremental test cases from PMS acceptance criteria with full traceability (AC→test method→test case matrix). Auto-generates test stubs from PRD acceptance criteria. When a change lands, TMS em",
       "layer": 2,
       "category": "workflow",
       "triggers": {
@@ -10580,6 +10610,21 @@
       },
       "stack_detection": false,
       "path": "packages/csp-quality/patterns/skills/csp-quality/SKILL.md",
+      "deps": [],
+      "priority": 10
+    },
+    {
+      "name": "csp-session-archive",
+      "description": "Archive session learnings, debugging solutions, and deployment logs to .archive/YYYY-MM-DD/ as indexed markdown with searchable tags. Auto-indexes entries in .archive/MEMORY.md for cross-session knowledge reuse. Use when completing a significant task, resolving a tricky bug, deploying, or when the u",
+      "layer": 3,
+      "category": "patterns",
+      "triggers": {
+        "keywords": [],
+        "file_patterns": [],
+        "context": []
+      },
+      "stack_detection": false,
+      "path": "packages/csp-workspace/patterns/skills/csp-session-archive/SKILL.md",
       "deps": [],
       "priority": 10
     },

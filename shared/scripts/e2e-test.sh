@@ -170,7 +170,8 @@ echo ""
 # Test 11: 共享资源
 # ═══════════════════════════════════════════════
 echo -e "${CYAN}[Test 11] 共享资源${NC}"
-assert_file_exists "shared/hooks/hooks.json" "Hooks 配置"
+assert_file_exists "shared/scripts/confidence-router.mjs" "置信度路由器"
+assert_file_exists "shared/scripts/state-detector.mjs" "状态探测器"
 assert_dir_exists "shared/templates/csp" "CSP 项目模板"
 assert_file_exists "shared/templates/csp/CLAUDE.md" "模板: CLAUDE.md"
 echo ""

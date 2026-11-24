@@ -3,7 +3,8 @@
  * build-skpg-edges.mjs — Phase 4.17: Add depends_on/related_to edges to SKPG
  *
  * Reads graph.json and registry.json, generates semantic edges:
- * - depends_on: L2→L1 methodology, L3 build-resolver→reviewer, SKILL.md cross-refs
+ * - depends_on: L2→L1 methodology, L3 build-resolver→reviewer, frontmatter deps
+ * - mentions: SKILL.md cross-refs (textual reference, not a dependency)
  * - related_to: same category, same language/framework, shared triggers
  *
  * Usage: node scripts/build-skpg-edges.mjs [--dry-run]
@@ -12,6 +13,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { parseSimpleYaml } from '../shared/scripts/lib/yaml.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -137,10 +139,15 @@ for (const resolver of buildResolvers) {
 }
 
 // --- Rule 3: Skills that reference other skills in SKILL.md content ---
-// Scan SKILL.md files for "csp-" references
+// A textual mention is NOT a dependency ("do not use csp-X" also mentions it),
+// so these get a distinct `mentions` edge kind; true depends_on edges come
+// from explicit frontmatter dependencies and Rules 1-2 only.
 let crossRefCount = 0;
 const allSkillNames = [...nameToNode.keys()];
-const skillNamePattern = new RegExp(`\\b(${allSkillNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g');
+// Longest names first + hyphen-aware boundaries: \b alone holds at '-', so
+// "csp-learn-taste" would otherwise match the shorter name "csp-learn".
+const sortedNames = [...allSkillNames].sort((a, b) => b.length - a.length);
+const skillNamePattern = new RegExp(`(?<![\\w-])(${sortedNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?![\\w-])`, 'g');
 
 for (const skill of registry.skills) {
   const skillPath = join(ROOT, skill.path);
@@ -162,12 +169,10 @@ for (const skill of registry.skills) {
 
   for (const ref of referenced) {
     if (nameToNode.has(ref)) {
-      if (addEdge(skill.name, ref, 'depends_on')) crossRefCount++;
+      if (addEdge(skill.name, ref, 'mentions')) crossRefCount++;
     }
   }
 }
-
-dependsOnCount += crossRefCount;
 
 // --- Rule 4: related_to — same category ---
 let relatedCount = 0;
@@ -222,16 +227,18 @@ for (const [lang, names] of byLang) {
 }
 
 // --- Rule 6: related_to — shared trigger keywords ---
-// Build keyword -> skills index
+// Source is triggers.yaml (registry entries carry no keywords): keyword →
+// skills inverted index, same data the router scores against.
 const keywordIndex = new Map();
-for (const skill of registry.skills) {
-  const keywords = skill.triggers?.keywords || [];
-  for (const kw of keywords) {
+try {
+  const triggers = parseSimpleYaml(readFileSync(join(ROOT, 'csp-router', 'triggers.yaml'), 'utf8'));
+  for (const [kw, entry] of Object.entries(triggers.trigger_index || {})) {
     const normalized = kw.toLowerCase().trim();
-    if (!normalized) continue;
-    if (!keywordIndex.has(normalized)) keywordIndex.set(normalized, []);
-    keywordIndex.get(normalized).push(skill.name);
+    if (!normalized || !Array.isArray(entry?.skills)) continue;
+    keywordIndex.set(normalized, [...new Set(entry.skills)]);
   }
+} catch (e) {
+  console.warn(`Warning: could not load triggers.yaml for Rule 6: ${e.message}`);
 }
 
 for (const [kw, names] of keywordIndex) {
@@ -244,12 +251,11 @@ for (const [kw, names] of keywordIndex) {
 // --- Apply edges to graph ---
 const totalDependsOn = newEdges.filter(e => e.kind === 'depends_on').length;
 const totalRelatedTo = newEdges.filter(e => e.kind === 'related_to').length;
+const totalMentions = newEdges.filter(e => e.kind === 'mentions').length;
 
 console.log('=== SKPG Edge Builder (Phase 4.17) ===');
-console.log(`  depends_on edges generated: ${totalDependsOn}`);
-console.log(`    - L2→L1 methodology: ${totalDependsOn - crossRefCount - buildResolvers.filter(r => { const lang = r.name.replace('csp-', '').replace('-build-resolver', ''); return reviewerNames.has(`csp-${lang}-reviewer`); }).length}`);
-console.log(`    - L3 resolver→reviewer: ${buildResolvers.filter(r => { const lang = r.name.replace('csp-', '').replace('-build-resolver', ''); return reviewerNames.has(`csp-${lang}-reviewer`) && nameToNode.has(r.name); }).length}`);
-console.log(`    - SKILL.md cross-refs: ${crossRefCount}`);
+console.log(`  depends_on edges generated: ${totalDependsOn} (L2→L1 methodology + L3 resolver→reviewer)`);
+console.log(`  mentions edges generated:   ${totalMentions} (SKILL.md cross-refs, not dependencies)`);
 console.log(`  related_to edges generated: ${totalRelatedTo}`);
 console.log(`  Total new edges: ${newEdges.length}`);
 console.log('');
@@ -267,11 +273,13 @@ graph.edges.push(...newEdges);
 graph.stats.edge_count = graph.edges.length;
 graph.stats.depends_on_count = graph.edges.filter(e => e.kind === 'depends_on').length;
 graph.stats.related_to_count = graph.edges.filter(e => e.kind === 'related_to').length;
+graph.stats.mentions_count = graph.edges.filter(e => e.kind === 'mentions').length;
 graph.stats.edge_types = {
   contains: graph.edges.filter(e => e.kind === 'contains').length,
   triggers: graph.edges.filter(e => e.kind === 'triggers').length,
   depends_on: graph.stats.depends_on_count,
   related_to: graph.stats.related_to_count,
+  mentions: graph.stats.mentions_count,
 };
 graph.generated_at = new Date().toISOString();
 

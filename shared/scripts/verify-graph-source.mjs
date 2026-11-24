@@ -6,20 +6,16 @@
 // Exit code 0 = match, 1 = mismatch.
 
 import fs from 'fs';
-import { createHash } from 'crypto';
 
 const REGISTRY_PATH = 'csp-router/registry.json';
 const GRAPH_PATH = 'csp-router/skpg/graph.json';
 
-function makeId(name) {
-  return createHash('md5').update(name).digest('hex').slice(0, 12);
-}
-
 const registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf8'));
 const graph = JSON.parse(fs.readFileSync(GRAPH_PATH, 'utf8'));
 
+// Compare full sets: build-skpg creates nodes for deprecated entries too
+// (they carry redirect targets), so filtering them here would false-flag.
 const regSkillNames = registry.skills
-  .filter(s => !s.deprecated)
   .map(s => s.name)
   .sort();
 const graphSkillNames = Object.values(graph.nodes)

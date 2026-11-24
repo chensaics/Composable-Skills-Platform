@@ -134,11 +134,11 @@ npm install -g code-skills-package --registry=https://registry.npmjs.org/
 
 ## 技能数量
 
-- 总计: 685 个 skills
+- 总计: 709 个 skills/条目（397 Skills + 116 Agents + 153 Commands + 36 Workflows + 7 工具）
 - csp-router: 1 个
-- csp-meta: 26 个
-- csp-workflow: 201 个
-- csp-patterns: 396 个
+- csp-meta: 32 个
+- csp-workflow: 212 个
+- csp-patterns: 406 个
 - csp-runtime: 58 个
 
 ## 可用技术栈

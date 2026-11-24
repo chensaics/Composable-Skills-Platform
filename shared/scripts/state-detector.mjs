@@ -126,7 +126,13 @@ function parseYAML(yamlStr) {
 }
 
 const PROJECT_ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
-const CONFIG_PATH = resolve(PROJECT_ROOT, 'csp-router', 'state-config.yaml');
+// Config ships with the router data, not with the target project: resolve
+// relative to this script (shared/scripts → repo root → csp-router), with a
+// project-root copy as fallback for custom installs.
+const CONFIG_PATH = [
+  resolve(import.meta.dirname, '..', '..', 'csp-router', 'state-config.yaml'),
+  resolve(PROJECT_ROOT, 'csp-router', 'state-config.yaml'),
+].find(p => existsSync(p));
 
 function loadConfig() {
   try {
@@ -151,21 +157,20 @@ function detectGitState(config) {
   for (const [state, { pattern }] of Object.entries(config.git.states)) {
     if (new RegExp(pattern, 'm').test(output)) return state;
   }
-  return output ? 'dirty' : 'clean';
+  if (output) return 'dirty';
+  // Empty output means clean only inside a git repo; otherwise unknown.
+  return existsSync(join(PROJECT_ROOT, '.git')) ? 'clean' : 'unknown';
 }
 
 function detectTechStack(config) {
   const stacks = [];
   for (const [lang, { files, confidence, glob }] of Object.entries(config.tech_stack.indicators)) {
-    if (Array.isArray(files)) {
-      const found = files.some(f => existsSync(join(PROJECT_ROOT, f)));
-      if (found) {
-        stacks.push({ lang, confidence });
-      } else if (glob && Array.isArray(glob)) {
-        // Simple glob check via ls
-        const matches = run(`ls ${glob[0]} 2>/dev/null | head -1`);
-        if (matches) stacks.push({ lang, confidence: confidence * 0.8 });
-      }
+    const conf = typeof confidence === 'number' ? confidence : 0.5;
+    if (Array.isArray(files) && files.some(f => existsSync(join(PROJECT_ROOT, f)))) {
+      stacks.push({ lang, confidence: conf });
+    } else if (Array.isArray(glob)) {
+      const matched = glob.some(g => run(`ls ${g} 2>/dev/null | head -1`));
+      if (matched) stacks.push({ lang, confidence: conf * 0.8 });
     }
   }
   // Sort by confidence desc, return top match
@@ -176,25 +181,23 @@ function detectTechStack(config) {
 function detectPhase(config) {
   const phases = [];
   for (const [phase, { files, weight }] of Object.entries(config.phase.signals)) {
-    const found = files.some(f => {
-      const full = join(PROJECT_ROOT, f);
-      if (f.endsWith('/')) return existsSync(full);
-      return existsSync(full);
-    });
-    if (found) phases.push({ phase, weight });
+    if (!Array.isArray(files)) continue;
+    const found = files.some(f => existsSync(join(PROJECT_ROOT, f)));
+    if (found) phases.push({ phase, weight: typeof weight === 'number' ? weight : 0 });
   }
   phases.sort((a, b) => b.weight - a.weight);
   return phases[0]?.phase || 'building'; // default
 }
 
 function detectTestStatus(config) {
+  if (!config.test_status?.command) return 'unknown';
   try {
     const raw = run(config.test_status.command);
     if (!raw || raw.includes('unknown')) return 'unknown';
     const data = JSON.parse(raw);
     return data.status || 'unknown';
   } catch {
-    return config.test_status.fallback;
+    return config.test_status.fallback || 'unknown';
   }
 }
 

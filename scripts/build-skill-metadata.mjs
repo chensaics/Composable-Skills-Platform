@@ -6,15 +6,15 @@ import { join, resolve } from 'node:path';
 import { parseSimpleYaml } from '../shared/scripts/lib/yaml.mjs';
 
 const V2_FIELDS = ['phase', 'domain', 'role', 'scope', 'model_rules', 'tools', 'dependencies', 'related_skills', 'anti_rationalizations'];
-const LAYER_DIRS = ['csp-meta', 'csp-workflow', 'csp-patterns', 'csp-runtime', 'csp-router'];
 
 function findSkills(baseDir) {
   const results = [];
-  for (const layer of LAYER_DIRS) {
-    const skillsDir = join(baseDir, layer, 'skills');
-    if (!existsSync(skillsDir)) continue;
-    scan(skillsDir, results);
-  }
+  // Skills live in packages/<pkg>/<layer>/skills/<name>/SKILL.md (csp-code layers
+  // plus domain packages); csp-router itself is a single root-level SKILL.md.
+  const packagesDir = join(baseDir, 'packages');
+  if (existsSync(packagesDir)) scan(packagesDir, results);
+  const routerMd = join(baseDir, 'csp-router', 'SKILL.md');
+  if (existsSync(routerMd)) results.push({ name: 'csp-router', path: routerMd });
   return results;
 }
 

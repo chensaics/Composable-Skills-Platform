@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(import.meta.dirname, '..');
-const SCRIPT = join(ROOT, 'packages/csp-code/packages/csp-code/csp-workflow/skills/csp-code-spec/scripts/code_spec.sh');
+const SCRIPT = join(ROOT, 'packages/csp-code/csp-workflow/skills/csp-code-spec/scripts/code_spec.sh');
 const TARGET_GIT = execFileSync('git', ['-C', ROOT, 'rev-parse', '--is-inside-work-tree'], { encoding: 'utf8' }).trim();
 
 // Run code_spec.sh against a fixture root via CSP_PROJECT_ROOT (never cd into TARGET_ROOT).

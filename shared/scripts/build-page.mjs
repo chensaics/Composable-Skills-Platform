@@ -30,7 +30,7 @@ const LAYER_MAP = {
 const CJK_RE = /[㐀-䶿一-鿿豈-﫿]/;
 
 // ─── Parse trigger_index from triggers.yaml ──────────────────────────
-// Returns { keyword: [skill, ...], ... }. Mirrors build-graph.mjs.
+// Returns { keyword: [skill, ...], ... }. Mirrors build-skpg.mjs.
 function parseTriggerIndex(text) {
   const index = {};
   const lines = text.split('\n');

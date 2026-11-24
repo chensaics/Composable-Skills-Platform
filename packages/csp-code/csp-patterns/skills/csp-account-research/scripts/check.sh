@@ -24,8 +24,14 @@ case "$cmd" in
   doctor)
     echo "[sub-skills]"
     for s in signal-scan depth-research deliverable; do
+      # 两种布局均合法：references/$s/SKILL.md（目录式）或 references/$s.md（扁平式）
       f="$SKILL_DIR/references/$s/SKILL.md"
-      [ -f "$f" ] && good "$s SKILL.md present" || err "$s SKILL.md MISSING ($f)"
+      flat="$SKILL_DIR/references/$s.md"
+      if [ -f "$f" ] || [ -f "$flat" ]; then
+        good "$s SKILL.md present"
+      else
+        err "$s SKILL.md MISSING ($f 或 $flat)"
+      fi
     done
     echo "[shared assets]"
     for a in account_research_toolkit.py phase-0-task-definition.md phase-0.5-validation.md phase-1-pool-construction.md phase-2-5-execution.md anti-patterns.md quality-checklist.md cross-skill-fallback.md; do

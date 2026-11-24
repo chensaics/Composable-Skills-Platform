@@ -34,6 +34,9 @@ const KNOWN_MAPPINGS = {
   'csp-debug-session': ['csp-systematic-debugging'],
   'csp-rapid-prototype': ['csp-quick-dev', 'csp-brainstorming'],
   'csp-codebase-onboarding': ['csp-map-codebase', 'csp-explore'],
+  'csp-validate-phase': ['csp-verify-phase'],
+  'csp-code-reviewer': ['csp-code-review'],
+  'csp-quick-prototype': ['csp-quick-dev', 'csp-html-prototype'],
 };
 
 // ── Load registry ────────────────────────────────────────────────────────────
@@ -240,12 +243,23 @@ function main() {
     const items = inner.split(',');
     let modified = false;
     const newItems = [];
+    const seenNames = new Set();
 
     for (const item of items) {
       const name = item.trim().replace(/^["']|["']$/g, '').trim();
       if (name === '') {
         newItems.push(item);
         continue;
+      }
+
+      // Deduplicate skill names within one list (double entries double-count
+      // in confidence scoring). Patterns lists are left untouched.
+      if (SKILL_LIST_KEYS.has(key)) {
+        if (seenNames.has(name)) {
+          modified = true;
+          continue;
+        }
+        seenNames.add(name);
       }
 
       // Skip non-skill tokens (regex patterns etc.)
@@ -297,6 +311,46 @@ function main() {
         lines[i] = `# ${line} # FIXED: all skill references invalid, commented out`;
       }
     }
+  }
+
+  // ── Phase 2b: Prune trigger entries left without a usable skills list ────
+  // Entries whose skills line is missing or fully commented out crash the
+  // router's keyword scoring and can never route — drop key + weight lines.
+  const prunedEntries = [];
+  let inTriggerIndex = false;
+  for (let i = 0; i < lines.length; i++) {
+    if (linesToRemove.has(i)) continue;
+    const secMatch = lines[i].match(sectionRe);
+    if (secMatch) {
+      inTriggerIndex = secMatch[1] === 'trigger_index';
+      continue;
+    }
+    if (!inTriggerIndex) continue;
+    const keyMatch = lines[i].match(triggerKeyRe);
+    if (!keyMatch) continue;
+
+    let hasSkills = false;
+    for (let j = i + 1; j < Math.min(i + 4, lines.length); j++) {
+      const lm = lines[j].match(listKeyRe);
+      if (lm && lm[2] === 'skills' && lm[3].trim().length > 0) {
+        hasSkills = true;
+        break;
+      }
+      if (lines[j].match(triggerKeyRe)) break;
+    }
+    if (!hasSkills) {
+      linesToRemove.add(i);
+      for (let j = i + 1; j < Math.min(i + 4, lines.length); j++) {
+        if (lines[j].match(/^\s*weight\s*:/)) linesToRemove.add(j);
+        if (lines[j].match(triggerKeyRe)) break;
+      }
+      prunedEntries.push(keyMatch[2]);
+    }
+  }
+  if (prunedEntries.length > 0) {
+    console.log(`── Pruned entries without skills (${prunedEntries.length}) ──`);
+    for (const key of prunedEntries) console.log(`  "${key}"`);
+    console.log('');
   }
 
   // ── Phase 3: Remove duplicate lines ──────────────────────────────────────
@@ -353,6 +407,7 @@ function main() {
   console.log(`  Prefix fixes (csp- added): ${prefixFixes.length}`);
   console.log(`  Mapping fixes:             ${mapFixes.length}`);
   console.log(`  Commented out:             ${commentedOut.length}`);
+  console.log(`  Pruned (no skills left):   ${prunedEntries.length}`);
   console.log(`  Total changes:             ${prefixFixes.length + mapFixes.length + commentedOut.length + duplicateFixes.length}`);
   console.log('\nDone. Fixed file written to:', TRIGGERS_PATH);
 }

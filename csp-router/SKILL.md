@@ -114,9 +114,9 @@ scope: design
 - 定义在 `triggers.yaml` 的 `intent_patterns` 段中以 `patterns:` 字段
 
 与关键词匹配的关系：
-1. 关键词精确匹配 → confidence 0.9
-2. 正则模式匹配 → confidence 0.7
-3. 意图推断 → confidence 0.5
+1. 关键词与意图均为子串/正则匹配，命中后按 `weight/50` 归一化计分
+2. 含正则元字符的 pattern（如 `re\s*factor`、`production.*issue`）按正则匹配，其余按子串匹配
+3. 最终置信度 = keyword×0.4 + intent×0.3 + context×0.3（各分量封顶 1）
 
 ### 5. 置信度评分
 
@@ -193,7 +193,7 @@ Context score 考虑:
 **决策**: {routing_decision}
 ```
 
-### 8. 输出格式
+### 9. 输出格式
 
 ```
 ## 路由决策
@@ -221,7 +221,6 @@ Context score 考虑:
 2. **高置信度匹配**: >80% → 直接路由
 3. **上下文增强**: 状态检测调整权重
 4. **技术栈探测**: 语言/框架匹配
-5. **历史偏好**: 上次使用的 skill 优先
 
 ## 文件参考
 
@@ -232,5 +231,5 @@ Context score 考虑:
 | `registry.json` | 全量 skill 注册表 |
 | `csp-router/skpg/graph.json` | 技能知识图谱 |
 | `csp-router/federation.yaml` | 联邦路由注册表（多包能力发现 + 安装建议） |
-| `.csp/state.json` | 当前项目状态快照
+| `.csp/state.json` | 当前项目状态快照 |
 | `references/code-modification-routing.md` | 改码类意图路由决策详述 |

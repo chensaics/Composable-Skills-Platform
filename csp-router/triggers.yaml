@@ -13,7 +13,7 @@ trigger_index:
     skills: [csp-code-review]
     weight: 40
   "debug":
-    skills: [csp-debug, csp-systematic-debugging, csp-systematic-debugging]
+    skills: [csp-debug, csp-systematic-debugging]
     weight: 50
   "调试":
     skills: [csp-debug, csp-systematic-debugging]
@@ -57,18 +57,10 @@ trigger_index:
   "验证":
     skills: [csp-verify-phase]
     weight: 50
-  "ship":
 #     skills: [csp-ship] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "发布":
 #     skills: [csp-ship] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "deploy":
 #     skills: [csp-ship] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "部署":
 #     skills: [csp-ship] # FIXED: all skill references invalid, commented out
-    weight: 45
   "propose":
     skills: [csp-plan-phase, csp-spec-driven-development]
     weight: 50
@@ -108,9 +100,7 @@ trigger_index:
   "性能":
     skills: [csp-performance-optimizer]
     weight: 40
-  "csp-agents":
 #     skills: [csp-help] # FIXED: all skill references invalid, commented out
-    weight: 50
   "party mode":
     skills: [csp-party-mode]
     weight: 50
@@ -150,106 +140,58 @@ trigger_index:
   "ideate":
     skills: [csp-brainstorming]
     weight: 45
-  "quick dev":
 #     skills: [csp-quick-dev] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "prototype":
 #     skills: [csp-quick-dev, csp-quick-dev] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "原型":
 #     skills: [csp-quick-dev, csp-quick-dev] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "快速验证":
-    weight: 40
   "MVP":
     skills: [ csp-mvp-scoping]
     weight: 45
-  "rapid":
 #     skills: [csp-quick-dev] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "adversarial review":
 #     skills: [csp-review-adversarial, csp-adversarial-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "challenge":
 #     skills: [csp-review-adversarial] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "edge cases":
 #     skills: [csp-review-edge-case] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "boundary conditions":
 #     skills: [csp-review-edge-case] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "editorial review":
 #     skills: [csp-review-editorial-prose, csp-review-editorial-structure] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "proofread":
 #     skills: [csp-review-editorial-prose] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "shard":
 #     skills: [csp-shard-doc] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "split document":
 #     skills: [csp-shard-doc] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "index":
 #     skills: [csp-index-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "table of contents":
 #     skills: [csp-index-docs] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "elicit":
 #     skills: [csp-advanced-elicitation] # FIXED: all skill references invalid, commented out
-    weight: 50
   "extract":
     skills: [ csp-extract]
     weight: 45
-  "structure":
 #     skills: [csp-advanced-elicitation, csp-review-editorial-structure] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "analyze":
 #     skills: [csp-analysis-phase, csp-analyze-dependencies] # FIXED: all skill references invalid, commented out
-    weight: 45
-  "explore opportunity":
 #     skills: [csp-analysis-phase] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "validate idea":
 #     skills: [csp-analysis-phase] # FIXED: all skill references invalid, commented out
-    weight: 50
   "requirements":
     skills: [ csp-interview-me]
     weight: 50
   "需求":
     skills: [ csp-interview-me]
     weight: 50
-  "PRD":
 #     skills: [csp-planning-phase] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "用户故事":
 #     skills: [csp-planning-phase] # FIXED: all skill references invalid, commented out
-    weight: 50
-  "user stories":
 #     skills: [csp-planning-phase] # FIXED: all skill references invalid, commented out
-    weight: 50
   "architecture":
     skills: [ csp-plan-phase]
     weight: 50
   "架构":
     skills: [ csp-plan-phase]
     weight: 50
-  "create stories":
 #     skills: [csp-solutioning-phase] # FIXED: all skill references invalid, commented out
-    weight: 50
   "实现":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 50
   "implement":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 50
   "编码":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 45
   "code":
-    skills: [csp-implementation-phase, csp-implementation-phase, csp-code-graph, csp-code-understanding, csp-code-spec, csp-code-wiki]
+    skills: [csp-implementation-phase, csp-code-graph, csp-code-understanding, csp-code-spec, csp-code-wiki]
     weight: 45
   "api":
     skills: [csp-backend-patterns]
@@ -270,19 +212,19 @@ trigger_index:
     skills: [csp-code-simplification]
     weight: 40
   "开发":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 45
   "build":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 45
   "添加功能":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 45
   "添加":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 40
   "创建":
-    skills: [csp-implementation-phase, csp-implementation-phase]
+    skills: [csp-implementation-phase]
     weight: 40
 
   # ─── Indie Developer Skills Triggers ───
@@ -494,192 +436,72 @@ trigger_index:
 # ─── 技术栈探测规则 ───
 
   # ─── auto-generated triggers (generate-triggers.mjs) ───
-  "a11y":
 #     skills: [csp-a11y-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "a11y architect":
 #     skills: [csp-a11y-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "a11y-architect":
 #     skills: [csp-a11y-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add":
 #     skills: [csp-add-backlog, csp-add-phase, csp-add-tests, csp-add-todo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add backlog":
 #     skills: [csp-add-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add phase":
 #     skills: [csp-add-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add tests":
 #     skills: [csp-add-tests] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add todo":
 #     skills: [csp-add-todo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add-backlog":
 #     skills: [csp-add-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add-phase":
 #     skills: [csp-add-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add-tests":
 #     skills: [csp-add-tests] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "add-todo":
 #     skills: [csp-add-todo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "adversarial code review":
 #     skills: [csp-adversarial-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "adversarial 审查":
 #     skills: [csp-adversarial-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "adversarial-reviewer":
 #     skills: [csp-adversarial-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "advisor":
 #     skills: [csp-advisor-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "advisor researcher":
 #     skills: [csp-advisor-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "advisor-researcher":
 #     skills: [csp-advisor-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ai integration phase":
 #     skills: [csp-ai-integration-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ai researcher":
 #     skills: [csp-ai-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ai-integration-phase":
 #     skills: [csp-ai-integration-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ai-researcher":
 #     skills: [csp-ai-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "analyze dependencies":
 #     skills: [csp-analyze-dependencies] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "analyze dependencies 分析":
 #     skills: [csp-analyze-dependencies] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "analyze-dependencies":
 #     skills: [csp-analyze-dependencies] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "api contract code review":
 #     skills: [csp-api-contract-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "api contract review":
 #     skills: [csp-api-contract-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "api contract 审查":
 #     skills: [csp-api-contract-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "api-contract-reviewer":
 #     skills: [csp-api-contract-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "aside":
 #     skills: [csp-aside] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "assumptions":
 #     skills: [csp-assumptions-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "assumptions analyzer":
 #     skills: [csp-assumptions-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "assumptions-analyzer":
 #     skills: [csp-assumptions-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "audit":
     skills: [ csp-audit]
     weight: 40
-  "audit fix":
 #     skills: [csp-audit-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit fix 审计":
 #     skills: [csp-audit-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit milestone":
 #     skills: [csp-audit-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit milestone 审计":
 #     skills: [csp-audit-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit uat":
 #     skills: [csp-audit-uat] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit uat 审计":
 #     skills: [csp-audit-uat] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit-fix":
 #     skills: [csp-audit-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit-milestone":
 #     skills: [csp-audit-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "audit-uat":
 #     skills: [csp-audit-uat] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "auto":
 #     skills: [csp-auto-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "auto update":
 #     skills: [csp-auto-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "auto-update":
 #     skills: [csp-auto-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "build error resolver":
 #     skills: [csp-build-error-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "build error resolver 构建":
 #     skills: [csp-build-error-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "build fix":
 #     skills: [csp-build-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "build fix 构建":
 #     skills: [csp-build-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "build-error-resolver":
 #     skills: [csp-build-error-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "build-fix":
 #     skills: [csp-build-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "capture":
 #     skills: [csp-capture] # FIXED: all skill references invalid, commented out
-    weight: 40
   "check":
     skills: [ csp-check]
     weight: 40
-  "check todos":
 #     skills: [csp-check-todos] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "check-todos":
 #     skills: [csp-check-todos] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "checker":
 #     skills: [csp-ui-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "checkpoint":
 #     skills: [csp-checkpoint] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "chief":
 #     skills: [csp-chief-of-staff] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "chief of staff":
 #     skills: [csp-chief-of-staff] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "chief-of-staff":
 #     skills: [csp-chief-of-staff] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cleanup":
 #     skills: [csp-cleanup] # FIXED: all skill references invalid, commented out
-    weight: 40
   "cli":
     skills: [csp-cli-teams]
     weight: 40
@@ -689,843 +511,305 @@ trigger_index:
   "cli-teams":
     skills: [csp-cli-teams]
     weight: 40
-  "code architect":
 #     skills: [csp-code-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code code review":
 #     skills: [csp-code-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code explorer":
 #     skills: [csp-code-explorer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code fixer":
 #     skills: [csp-code-fixer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "code graph":
     skills: [csp-code-graph]
     weight: 40
-  "code review":
 #     skills: [csp-code-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code review fix":
 #     skills: [csp-code-review-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code 审查":
 #     skills: [csp-code-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code-architect":
 #     skills: [csp-code-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code-explorer":
 #     skills: [csp-code-explorer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code-fixer":
 #     skills: [csp-code-fixer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "code-graph":
     skills: [csp-code-graph]
     weight: 40
-  "code-review-fix":
 #     skills: [csp-code-review-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "code-reviewer":
 #     skills: [csp-code-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "coherence code review":
 #     skills: [csp-coherence-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "coherence review":
 #     skills: [csp-coherence-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "coherence 审查":
 #     skills: [csp-coherence-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "coherence-reviewer":
 #     skills: [csp-coherence-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "comment":
 #     skills: [csp-comment-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "comment analyzer":
 #     skills: [csp-comment-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "comment-analyzer":
 #     skills: [csp-comment-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common coding style":
 #     skills: [csp-cursor-rules-common-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common cursor rules":
 #     skills: [csp-cursor-rules-common-coding-style, csp-cursor-rules-common-hooks, csp-cursor-rules-common-patterns, csp-cursor-rules-common-security, csp-cursor-rules-common-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common hooks":
 #     skills: [csp-cursor-rules-common-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common patterns":
 #     skills: [csp-cursor-rules-common-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common security":
 #     skills: [csp-cursor-rules-common-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common testing":
 #     skills: [csp-cursor-rules-common-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-agents agents":
 #     skills: [csp-cursor-rules-common-agents] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-agents cursor rules":
 #     skills: [csp-cursor-rules-common-agents] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-development-workflow cursor rules":
 #     skills: [csp-cursor-rules-common-development-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-development-workflow development workflow":
 #     skills: [csp-cursor-rules-common-development-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-git-workflow cursor rules":
 #     skills: [csp-cursor-rules-common-git-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-git-workflow git workflow":
 #     skills: [csp-cursor-rules-common-git-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-performance cursor rules":
 #     skills: [csp-cursor-rules-common-performance] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "common-performance performance":
 #     skills: [csp-cursor-rules-common-performance] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "complete":
 #     skills: [csp-complete-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "complete milestone":
 #     skills: [csp-complete-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "complete-milestone":
 #     skills: [csp-complete-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
   "compound learning":
     skills: [csp-compound-learning]
     weight: 40
   "compound-learning":
     skills: [csp-compound-learning]
     weight: 40
-  "config":
 #     skills: [csp-config] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "config 配置":
 #     skills: [csp-config] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "conversation":
 #     skills: [csp-conversation-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "conversation analyzer":
 #     skills: [csp-conversation-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "conversation-analyzer":
 #     skills: [csp-conversation-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cost":
 #     skills: [csp-cost-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cost report":
 #     skills: [csp-cost-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cost-report":
 #     skills: [csp-cost-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp build error":
 #     skills: [csp-cpp-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp code review":
 #     skills: [csp-cpp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp review":
 #     skills: [csp-cpp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp test":
 #     skills: [csp-cpp-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp 审查":
 #     skills: [csp-cpp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp 构建错误":
 #     skills: [csp-cpp-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp 测试":
 #     skills: [csp-cpp-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp-build":
 #     skills: [csp-cpp-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp-review":
 #     skills: [csp-cpp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cpp-test":
 #     skills: [csp-cpp-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "critic":
 #     skills: [csp-critic] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules common":
 #     skills: [csp-cursor-rules-common-coding-style, csp-cursor-rules-common-hooks, csp-cursor-rules-common-patterns, csp-cursor-rules-common-security, csp-cursor-rules-common-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules common-agents":
 #     skills: [csp-cursor-rules-common-agents] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules common-development-workflow":
 #     skills: [csp-cursor-rules-common-development-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules common-git-workflow":
 #     skills: [csp-cursor-rules-common-git-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules common-performance":
 #     skills: [csp-cursor-rules-common-performance] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules golang":
 #     skills: [csp-cursor-rules-golang-coding-style, csp-cursor-rules-golang-hooks, csp-cursor-rules-golang-patterns, csp-cursor-rules-golang-security, csp-cursor-rules-golang-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules kotlin":
 #     skills: [csp-cursor-rules-kotlin-coding-style, csp-cursor-rules-kotlin-hooks, csp-cursor-rules-kotlin-patterns, csp-cursor-rules-kotlin-security, csp-cursor-rules-kotlin-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules php":
 #     skills: [csp-cursor-rules-php-coding-style, csp-cursor-rules-php-hooks, csp-cursor-rules-php-patterns, csp-cursor-rules-php-security, csp-cursor-rules-php-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules python":
 #     skills: [csp-cursor-rules-python-coding-style, csp-cursor-rules-python-hooks, csp-cursor-rules-python-patterns, csp-cursor-rules-python-security, csp-cursor-rules-python-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules swift":
 #     skills: [csp-cursor-rules-swift-coding-style, csp-cursor-rules-swift-hooks, csp-cursor-rules-swift-patterns, csp-cursor-rules-swift-security, csp-cursor-rules-swift-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor rules typescript":
 #     skills: [csp-cursor-rules-typescript-coding-style, csp-cursor-rules-typescript-hooks, csp-cursor-rules-typescript-patterns, csp-cursor-rules-typescript-security, csp-cursor-rules-typescript-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-agents":
 #     skills: [csp-cursor-rules-common-agents] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-coding-style":
 #     skills: [csp-cursor-rules-common-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-development-workflow":
 #     skills: [csp-cursor-rules-common-development-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-git-workflow":
 #     skills: [csp-cursor-rules-common-git-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-hooks":
 #     skills: [csp-cursor-rules-common-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-patterns":
 #     skills: [csp-cursor-rules-common-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-performance":
 #     skills: [csp-cursor-rules-common-performance] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-security":
 #     skills: [csp-cursor-rules-common-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-common-testing":
 #     skills: [csp-cursor-rules-common-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-golang-coding-style":
 #     skills: [csp-cursor-rules-golang-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-golang-hooks":
 #     skills: [csp-cursor-rules-golang-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-golang-patterns":
 #     skills: [csp-cursor-rules-golang-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-golang-security":
 #     skills: [csp-cursor-rules-golang-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-golang-testing":
 #     skills: [csp-cursor-rules-golang-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-kotlin-coding-style":
 #     skills: [csp-cursor-rules-kotlin-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-kotlin-hooks":
 #     skills: [csp-cursor-rules-kotlin-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-kotlin-patterns":
 #     skills: [csp-cursor-rules-kotlin-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-kotlin-security":
 #     skills: [csp-cursor-rules-kotlin-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-kotlin-testing":
 #     skills: [csp-cursor-rules-kotlin-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-php-coding-style":
 #     skills: [csp-cursor-rules-php-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-php-hooks":
 #     skills: [csp-cursor-rules-php-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-php-patterns":
 #     skills: [csp-cursor-rules-php-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-php-security":
 #     skills: [csp-cursor-rules-php-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-php-testing":
 #     skills: [csp-cursor-rules-php-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-python-coding-style":
 #     skills: [csp-cursor-rules-python-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-python-hooks":
 #     skills: [csp-cursor-rules-python-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-python-patterns":
 #     skills: [csp-cursor-rules-python-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-python-security":
 #     skills: [csp-cursor-rules-python-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-python-testing":
 #     skills: [csp-cursor-rules-python-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-swift-coding-style":
 #     skills: [csp-cursor-rules-swift-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-swift-hooks":
 #     skills: [csp-cursor-rules-swift-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-swift-patterns":
 #     skills: [csp-cursor-rules-swift-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-swift-security":
 #     skills: [csp-cursor-rules-swift-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-swift-testing":
 #     skills: [csp-cursor-rules-swift-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-typescript-coding-style":
 #     skills: [csp-cursor-rules-typescript-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-typescript-hooks":
 #     skills: [csp-cursor-rules-typescript-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-typescript-patterns":
 #     skills: [csp-cursor-rules-typescript-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-typescript-security":
 #     skills: [csp-cursor-rules-typescript-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "cursor-rules-typescript-testing":
 #     skills: [csp-cursor-rules-typescript-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "dart build error":
 #     skills: [csp-dart-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "dart 构建错误":
 #     skills: [csp-dart-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "dart-build-resolver":
 #     skills: [csp-dart-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data migration code review":
 #     skills: [csp-data-migration-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data migration review":
 #     skills: [csp-data-migration-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data migration 审查":
 #     skills: [csp-data-migration-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data pipeline code review":
 #     skills: [csp-data-pipeline-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data pipeline review":
 #     skills: [csp-data-pipeline-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data pipeline 审查":
 #     skills: [csp-data-pipeline-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data-migration-reviewer":
 #     skills: [csp-data-migration-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "data-pipeline-reviewer":
 #     skills: [csp-data-pipeline-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "database code review":
 #     skills: [csp-database-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "database review":
 #     skills: [csp-database-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "database 审查":
 #     skills: [csp-database-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "database-reviewer":
 #     skills: [csp-database-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "debug session manager":
 #     skills: [csp-debug-session-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "debug session manager 调试":
 #     skills: [csp-debug-session-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "debug-session-manager":
 #     skills: [csp-debug-session-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "debugger":
 #     skills: [csp-debugger] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "deployment verification agent":
 #     skills: [csp-deployment-verification-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "deployment-verification-agent":
 #     skills: [csp-deployment-verification-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "designer":
 #     skills: [csp-designer, csp-ux-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "developer":
 #     skills: [csp-developer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "diagnose":
 #     skills: [csp-diagnose-issues] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "diagnose issues":
 #     skills: [csp-diagnose-issues] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "diagnose-issues":
 #     skills: [csp-diagnose-issues] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discovery":
 #     skills: [csp-discovery-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discovery phase":
 #     skills: [csp-discovery-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discovery-phase":
 #     skills: [csp-discovery-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss":
 #     skills: [csp-discuss-phase, csp-discuss-phase-assumptions, csp-discuss-phase-power] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss phase":
 #     skills: [csp-discuss-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss phase assumptions":
 #     skills: [csp-discuss-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss phase power":
 #     skills: [csp-discuss-phase-power] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss-phase":
 #     skills: [csp-discuss-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss-phase-assumptions":
 #     skills: [csp-discuss-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "discuss-phase-power":
 #     skills: [csp-discuss-phase-power] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "do":
 #     skills: [csp-do] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc classifier":
 #     skills: [csp-doc-classifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc synthesizer":
 #     skills: [csp-doc-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc updater":
 #     skills: [csp-doc-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc verifier":
 #     skills: [csp-doc-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc writer":
 #     skills: [csp-doc-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc-classifier":
 #     skills: [csp-doc-classifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc-synthesizer":
 #     skills: [csp-doc-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc-updater":
 #     skills: [csp-doc-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc-verifier":
 #     skills: [csp-doc-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "doc-writer":
 #     skills: [csp-doc-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "document specialist":
 #     skills: [csp-document-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "document-specialist":
 #     skills: [csp-document-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
   "domain":
     skills: [ csp-domain-driven-design]
     weight: 40
-  "domain researcher":
 #     skills: [csp-domain-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "domain-researcher":
 #     skills: [csp-domain-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
   "e2e":
     skills: [ csp-e2e-case-automation, csp-e2e-deep-audit]
     weight: 40
-  "e2e runner":
 #     skills: [csp-e2e-runner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "e2e-runner":
 #     skills: [csp-e2e-runner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ecc":
 #     skills: [csp-ecc-guide] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ecc guide":
 #     skills: [csp-ecc-guide] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ecc-guide":
 #     skills: [csp-ecc-guide] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "edit":
 #     skills: [csp-edit-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "edit phase":
 #     skills: [csp-edit-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "edit-phase":
 #     skills: [csp-edit-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval auditor":
 #     skills: [csp-eval-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval code review":
 #     skills: [csp-eval-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval planner":
 #     skills: [csp-eval-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval review":
 #     skills: [csp-eval-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval 审查":
 #     skills: [csp-eval-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval-auditor":
 #     skills: [csp-eval-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval-planner":
 #     skills: [csp-eval-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "eval-review":
 #     skills: [csp-eval-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "evolve":
 #     skills: [csp-evolve] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "execute":
 #     skills: [csp-execute-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "execute plan":
 #     skills: [csp-execute-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "execute-plan":
 #     skills: [csp-execute-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "executor":
 #     skills: [csp-executor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "extract-learnings":
 #     skills: [csp-extract-learnings] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fast":
 #     skills: [csp-fast] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fastapi code review":
 #     skills: [csp-fastapi-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fastapi review":
 #     skills: [csp-fastapi-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fastapi 审查":
 #     skills: [csp-fastapi-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fastapi-review":
 #     skills: [csp-fastapi-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feasibility code review":
 #     skills: [csp-feasibility-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feasibility review":
 #     skills: [csp-feasibility-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feasibility 审查":
 #     skills: [csp-feasibility-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feasibility-reviewer":
 #     skills: [csp-feasibility-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feature":
 #     skills: [csp-feature-dev] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feature dev":
 #     skills: [csp-feature-dev] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "feature-dev":
 #     skills: [csp-feature-dev] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix a11y architect":
 #     skills: [csp-a11y-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix add backlog":
 #     skills: [csp-add-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix add phase":
 #     skills: [csp-add-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix add tests":
 #     skills: [csp-add-tests] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix add todo":
 #     skills: [csp-add-todo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix advisor researcher":
 #     skills: [csp-advisor-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ai integration phase":
 #     skills: [csp-ai-integration-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ai researcher":
 #     skills: [csp-ai-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix analyst":
 #     skills: [csp-analyst] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix analyze dependencies":
 #     skills: [csp-analyze-dependencies] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix architect":
 #     skills: [csp-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix aside":
 #     skills: [csp-aside] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix assumptions analyzer":
 #     skills: [csp-assumptions-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix audit fix":
 #     skills: [csp-audit-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix audit milestone":
 #     skills: [csp-audit-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix audit uat":
 #     skills: [csp-audit-uat] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix auto update":
 #     skills: [csp-auto-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix autonomous":
 #     skills: [csp-autonomous] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix build error resolver":
 #     skills: [csp-build-error-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix build fix":
 #     skills: [csp-build-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix capture":
 #     skills: [csp-capture] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix check todos":
 #     skills: [csp-check-todos] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix checkpoint":
 #     skills: [csp-checkpoint] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix chief of staff":
 #     skills: [csp-chief-of-staff] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix cleanup":
 #     skills: [csp-cleanup] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix cli teams":
     skills: [csp-cli-teams]
     weight: 40
-  "fix code architect":
 #     skills: [csp-code-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix code explorer":
 #     skills: [csp-code-explorer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix code fixer":
 #     skills: [csp-code-fixer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix code graph":
     skills: [csp-code-graph]
     weight: 40
-  "fix code review fix":
 #     skills: [csp-code-review-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix comment analyzer":
 #     skills: [csp-comment-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix compact":
 #     skills: [csp-compact] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix complete milestone":
 #     skills: [csp-complete-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix compound learning":
     skills: [csp-compound-learning]
     weight: 40
-  "fix config":
 #     skills: [csp-config] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix conversation analyzer":
 #     skills: [csp-conversation-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix cost report":
 #     skills: [csp-cost-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix cpp build":
 #     skills: [csp-cpp-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix critic":
 #     skills: [csp-critic] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix dart build":
 #     skills: [csp-dart-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix debug session manager":
 #     skills: [csp-debug-session-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix debugger":
 #     skills: [csp-debugger] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix deployment verification agent":
 #     skills: [csp-deployment-verification-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix designer":
 #     skills: [csp-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix developer":
 #     skills: [csp-developer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix diagnose issues":
 #     skills: [csp-diagnose-issues] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix discovery phase":
 #     skills: [csp-discovery-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix discuss phase":
 #     skills: [csp-discuss-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix discuss phase assumptions":
 #     skills: [csp-discuss-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix discuss phase power":
 #     skills: [csp-discuss-phase-power] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix do":
 #     skills: [csp-do] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix doc classifier":
 #     skills: [csp-doc-classifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix doc synthesizer":
 #     skills: [csp-doc-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix doc updater":
 #     skills: [csp-doc-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix doc verifier":
 #     skills: [csp-doc-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix doc writer":
 #     skills: [csp-doc-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix document specialist":
 #     skills: [csp-document-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix domain researcher":
 #     skills: [csp-domain-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix e2e runner":
 #     skills: [csp-e2e-runner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ecc guide":
 #     skills: [csp-ecc-guide] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix edit phase":
 #     skills: [csp-edit-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix eval auditor":
 #     skills: [csp-eval-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix eval planner":
 #     skills: [csp-eval-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix evolve":
 #     skills: [csp-evolve] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix execute plan":
 #     skills: [csp-execute-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix executor":
 #     skills: [csp-executor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix extract learnings":
 #     skills: [csp-extract-learnings] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix fast":
 #     skills: [csp-fast] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix feature dev":
 #     skills: [csp-feature-dev] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix flutter build":
 #     skills: [csp-flutter-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix forensics":
 #     skills: [csp-forensics] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix framework selector":
 #     skills: [csp-framework-selector] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix fullstack spec generator":
     skills: [csp-fullstack-spec-generator]
     weight: 40
-  "fix gan build":
 #     skills: [csp-gan-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix gan design":
 #     skills: [csp-gan-design] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix gan evaluator":
 #     skills: [csp-gan-evaluator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix gan generator":
 #     skills: [csp-gan-generator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix gan planner":
 #     skills: [csp-gan-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix git master":
 #     skills: [csp-git-master] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix go build":
 #     skills: [csp-go-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix gradle build":
 #     skills: [csp-gradle-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix graduation":
 #     skills: [csp-graduation] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix graph architecture":
     skills: [csp-graph-architecture]
     weight: 40
@@ -1538,555 +822,201 @@ trigger_index:
   "fix graph refactor":
     skills: [csp-graph-refactor]
     weight: 40
-  "fix graphify":
 #     skills: [csp-graphify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix harmonyos app resolver":
 #     skills: [csp-harmonyos-app-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix harness audit":
 #     skills: [csp-harness-audit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix harness optimizer":
 #     skills: [csp-harness-optimizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix health":
 #     skills: [csp-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix homelab architect":
 #     skills: [csp-homelab-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix hookify":
 #     skills: [csp-hookify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix hookify configure":
 #     skills: [csp-hookify-configure] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix hookify help":
 #     skills: [csp-hookify-help] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix hookify list":
 #     skills: [csp-hookify-list] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix import":
 #     skills: [csp-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix inbox":
 #     skills: [csp-inbox] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ingest docs":
 #     skills: [csp-ingest-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix insert phase":
 #     skills: [csp-insert-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix instinct export":
 #     skills: [csp-instinct-export] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix instinct import":
 #     skills: [csp-instinct-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix instinct status":
 #     skills: [csp-instinct-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix integration checker":
 #     skills: [csp-integration-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix intel updater":
 #     skills: [csp-intel-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix jira":
 #     skills: [csp-jira] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix kotlin build":
 #     skills: [csp-kotlin-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix learn":
 #     skills: [csp-learn] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix learn eval":
 #     skills: [csp-learn-eval] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix lifecycle":
 #     skills: [csp-lifecycle] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix lifecycle orchestrator":
     skills: [csp-lifecycle-orchestrator]
     weight: 40
-  "fix list phase assumptions":
 #     skills: [csp-list-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix list workspaces":
 #     skills: [csp-list-workspaces] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix loop operator":
 #     skills: [csp-loop-operator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix loop start":
 #     skills: [csp-loop-start] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix loop status":
 #     skills: [csp-loop-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix manager":
 #     skills: [csp-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix marketing agent":
 #     skills: [csp-marketing-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix marketing campaign":
 #     skills: [csp-marketing-campaign] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix milestone summary":
 #     skills: [csp-milestone-summary] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix mobile performance auditor":
 #     skills: [csp-mobile-performance-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix model route":
 #     skills: [csp-model-route] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix multi backend":
 #     skills: [csp-multi-backend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix multi execute":
 #     skills: [csp-multi-execute] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix multi frontend":
 #     skills: [csp-multi-frontend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix multi plan":
 #     skills: [csp-multi-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix multi workflow":
 #     skills: [csp-multi-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix mvp phase":
 #     skills: [csp-mvp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix network architect":
 #     skills: [csp-network-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix network troubleshooter":
 #     skills: [csp-network-troubleshooter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix new milestone":
 #     skills: [csp-new-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix new project":
 #     skills: [csp-new-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix new workspace":
 #     skills: [csp-new-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix next":
 #     skills: [csp-next] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix node repair":
 #     skills: [csp-node-repair] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix note":
 #     skills: [csp-note] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ns context":
 #     skills: [csp-ns-context] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ns ideate":
 #     skills: [csp-ns-ideate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ns manage":
 #     skills: [csp-ns-manage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ns project":
 #     skills: [csp-ns-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ns workflow":
 #     skills: [csp-ns-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix nyquist auditor":
 #     skills: [csp-nyquist-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix opensource forker":
 #     skills: [csp-opensource-forker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix opensource packager":
 #     skills: [csp-opensource-packager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix opensource sanitizer":
 #     skills: [csp-opensource-sanitizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix orch add feature":
 #     skills: [csp-orch-add-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix orch build mvp":
 #     skills: [csp-orch-build-mvp] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix orch change feature":
 #     skills: [csp-orch-change-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix orch fix defect":
 #     skills: [csp-orch-fix-defect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix orch refine code":
 #     skills: [csp-orch-refine-code] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pattern mapper":
 #     skills: [csp-pattern-mapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pause work":
 #     skills: [csp-pause-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix phase":
 #     skills: [csp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix phase researcher":
 #     skills: [csp-phase-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix plan checker":
 #     skills: [csp-plan-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix plan milestone gaps":
 #     skills: [csp-plan-milestone-gaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix plan prd":
 #     skills: [csp-plan-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix plan review convergence":
 #     skills: [csp-plan-review-convergence] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix planner":
 #     skills: [csp-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix plant seed":
 #     skills: [csp-plant-seed] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pm":
 #     skills: [csp-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pm2":
 #     skills: [csp-pm2] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pr":
 #     skills: [csp-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pr branch":
 #     skills: [csp-pr-branch] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pr test analyzer":
 #     skills: [csp-pr-test-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix profile user":
 #     skills: [csp-profile-user] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix progress":
 #     skills: [csp-progress] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix project init":
 #     skills: [csp-project-init] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix project researcher":
 #     skills: [csp-project-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix projects":
 #     skills: [csp-projects] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix promote":
 #     skills: [csp-promote] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix prp commit":
 #     skills: [csp-prp-commit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix prp implement":
 #     skills: [csp-prp-implement] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix prp plan":
 #     skills: [csp-prp-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix prp pr":
 #     skills: [csp-prp-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix prp prd":
 #     skills: [csp-prp-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix prune":
 #     skills: [csp-prune] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix psm":
 #     skills: [csp-psm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix pytorch build":
 #     skills: [csp-pytorch-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix qa tester":
 #     skills: [csp-qa-tester] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix quality gate":
 #     skills: [csp-quality-gate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix quick":
 #     skills: [csp-quick] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix rag architect":
 #     skills: [csp-rag-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix react build":
 #     skills: [csp-react-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix react native build":
 #     skills: [csp-react-native-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix reapply patches":
 #     skills: [csp-reapply-patches] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix refactor clean":
 #     skills: [csp-refactor-clean] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix remove phase":
 #     skills: [csp-remove-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix remove workspace":
 #     skills: [csp-remove-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix requirement decomposition":
     skills: [csp-requirement-decomposition]
     weight: 40
-  "fix research synthesizer":
 #     skills: [csp-research-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix resume project":
 #     skills: [csp-resume-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix resume session":
 #     skills: [csp-resume-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix resume work":
 #     skills: [csp-resume-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix review":
 #     skills: [csp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix review backlog":
 #     skills: [csp-review-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix review pr":
 #     skills: [csp-review-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix roadmapper":
 #     skills: [csp-roadmapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix rust build":
 #     skills: [csp-rust-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix santa loop":
 #     skills: [csp-santa-loop] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix save session":
 #     skills: [csp-save-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix scan":
 #     skills: [csp-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix scientist":
     skills: [csp-scientist]
     weight: 40
-  "fix security auditor":
 #     skills: [csp-security-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix security scan":
 #     skills: [csp-security-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix seo specialist":
 #     skills: [csp-seo-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix session report":
 #     skills: [csp-session-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix sessions":
 #     skills: [csp-sessions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix settings":
 #     skills: [csp-settings] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix settings advanced":
 #     skills: [csp-settings-advanced] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix settings integrations":
 #     skills: [csp-settings-integrations] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix setup pm":
 #     skills: [csp-setup-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix silent failure hunter":
 #     skills: [csp-silent-failure-hunter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix sketch":
 #     skills: [csp-sketch] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix sketch wrap up":
 #     skills: [csp-sketch-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix skill":
     skills: [csp-skill]
     weight: 40
-  "fix skill create":
 #     skills: [csp-skill-create] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix skill health":
 #     skills: [csp-skill-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix spike":
 #     skills: [csp-spike] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix spike wrap up":
 #     skills: [csp-spike-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix springboot security":
     skills: [csp-springboot-security]
     weight: 40
-  "fix stats":
 #     skills: [csp-stats] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix surface":
 #     skills: [csp-surface] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix sync skills":
 #     skills: [csp-sync-skills] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix tech stack advisor":
     skills: [csp-tech-stack-advisor]
     weight: 40
-  "fix tech writer":
 #     skills: [csp-tech-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix test coverage":
 #     skills: [csp-test-coverage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix thread":
 #     skills: [csp-thread] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix tracer":
 #     skills: [csp-tracer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix transition":
 #     skills: [csp-transition] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix type design analyzer":
 #     skills: [csp-type-design-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ui auditor":
 #     skills: [csp-ui-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ui checker":
 #     skills: [csp-ui-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ui phase":
 #     skills: [csp-ui-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ui researcher":
 #     skills: [csp-ui-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ultraplan phase":
 #     skills: [csp-ultraplan-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix undo":
 #     skills: [csp-undo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix update":
 #     skills: [csp-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix update codemaps":
 #     skills: [csp-update-codemaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix update docs":
 #     skills: [csp-update-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix user profiler":
 #     skills: [csp-user-profiler] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix ux designer":
 #     skills: [csp-ux-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix validate phase":
 #     skills: [csp-validate-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix verifier":
 #     skills: [csp-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix verify":
 #     skills: [csp-verify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix verify work":
 #     skills: [csp-verify-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix workspace":
 #     skills: [csp-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix workstreams":
 #     skills: [csp-workstreams] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fix writer":
 #     skills: [csp-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter build error":
 #     skills: [csp-flutter-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter code review":
 #     skills: [csp-flutter-review, csp-flutter-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter review":
 #     skills: [csp-flutter-review, csp-flutter-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter test":
 #     skills: [csp-flutter-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter testing":
 #     skills: [csp-flutter-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter 审查":
 #     skills: [csp-flutter-review, csp-flutter-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter 构建错误":
 #     skills: [csp-flutter-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter 测试":
 #     skills: [csp-flutter-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter-build":
 #     skills: [csp-flutter-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter-review":
 #     skills: [csp-flutter-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter-reviewer":
 #     skills: [csp-flutter-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "flutter-test":
 #     skills: [csp-flutter-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "forensics":
 #     skills: [csp-forensics] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "framework":
 #     skills: [csp-framework-selector] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "framework selector":
 #     skills: [csp-framework-selector] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "framework-selector":
 #     skills: [csp-framework-selector] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fsharp code review":
 #     skills: [csp-fsharp-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fsharp review":
 #     skills: [csp-fsharp-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fsharp 审查":
 #     skills: [csp-fsharp-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "fsharp-reviewer":
 #     skills: [csp-fsharp-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fullstack":
     skills: [csp-fullstack-spec-generator]
     weight: 40
@@ -2096,108 +1026,42 @@ trigger_index:
   "fullstack-spec-generator":
     skills: [csp-fullstack-spec-generator]
     weight: 40
-  "gan":
 #     skills: [csp-gan-design, csp-gan-evaluator, csp-gan-generator, csp-gan-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan build error":
 #     skills: [csp-gan-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan design":
 #     skills: [csp-gan-design] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan evaluator":
 #     skills: [csp-gan-evaluator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan generator":
 #     skills: [csp-gan-generator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan planner":
 #     skills: [csp-gan-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan 构建错误":
 #     skills: [csp-gan-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan-build":
 #     skills: [csp-gan-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan-design":
 #     skills: [csp-gan-design] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan-evaluator":
 #     skills: [csp-gan-evaluator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan-generator":
 #     skills: [csp-gan-generator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gan-planner":
 #     skills: [csp-gan-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
   "git":
     skills: [ csp-git-recovery]
     weight: 40
-  "git master":
 #     skills: [csp-git-master] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "git-master":
 #     skills: [csp-git-master] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go build error":
 #     skills: [csp-go-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go code review":
 #     skills: [csp-go-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go review":
 #     skills: [csp-go-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go test":
 #     skills: [csp-go-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go testing":
 #     skills: [csp-go-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go 审查":
 #     skills: [csp-go-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go 构建错误":
 #     skills: [csp-go-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go 测试":
 #     skills: [csp-go-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go-build":
 #     skills: [csp-go-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go-review":
 #     skills: [csp-go-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "go-test":
 #     skills: [csp-go-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "golang coding style":
 #     skills: [csp-cursor-rules-golang-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "golang cursor rules":
 #     skills: [csp-cursor-rules-golang-coding-style, csp-cursor-rules-golang-hooks, csp-cursor-rules-golang-patterns, csp-cursor-rules-golang-security, csp-cursor-rules-golang-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "golang hooks":
 #     skills: [csp-cursor-rules-golang-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "golang security":
 #     skills: [csp-cursor-rules-golang-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gradle build error":
 #     skills: [csp-gradle-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gradle 构建错误":
 #     skills: [csp-gradle-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "gradle-build":
 #     skills: [csp-gradle-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "graduation":
 #     skills: [csp-graduation] # FIXED: all skill references invalid, commented out
-    weight: 40
   "graph":
     skills: [csp-graph-architecture, csp-graph-impact, csp-graph-refactor]
     weight: 40
@@ -2240,192 +1104,70 @@ trigger_index:
   "graph-review":
     skills: [csp-graph-review]
     weight: 40
-  "graphify":
 #     skills: [csp-graphify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harmonyos":
 #     skills: [csp-harmonyos-app-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harmonyos app resolver":
 #     skills: [csp-harmonyos-app-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harmonyos-app-resolver":
 #     skills: [csp-harmonyos-app-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harness":
 #     skills: [csp-harness-audit, csp-harness-optimizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harness audit":
 #     skills: [csp-harness-audit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harness optimizer":
 #     skills: [csp-harness-optimizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harness-audit":
 #     skills: [csp-harness-audit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "harness-optimizer":
 #     skills: [csp-harness-optimizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "health":
 #     skills: [csp-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "healthcare code review":
 #     skills: [csp-healthcare-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "healthcare review":
 #     skills: [csp-healthcare-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "healthcare 审查":
 #     skills: [csp-healthcare-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "healthcare-reviewer":
 #     skills: [csp-healthcare-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "homelab":
 #     skills: [csp-homelab-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "homelab architect":
 #     skills: [csp-homelab-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "homelab-architect":
 #     skills: [csp-homelab-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify":
 #     skills: [csp-hookify, csp-hookify-configure, csp-hookify-help, csp-hookify-list] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify configure":
 #     skills: [csp-hookify-configure] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify help":
 #     skills: [csp-hookify-help] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify list":
 #     skills: [csp-hookify-list] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify-configure":
 #     skills: [csp-hookify-configure] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify-help":
 #     skills: [csp-hookify-help] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hookify-list":
 #     skills: [csp-hookify-list] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "import":
 #     skills: [csp-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "inbox":
 #     skills: [csp-inbox] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ingest":
 #     skills: [csp-ingest-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ingest docs":
 #     skills: [csp-ingest-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ingest-docs":
 #     skills: [csp-ingest-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "insert":
 #     skills: [csp-insert-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "insert phase":
 #     skills: [csp-insert-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "insert-phase":
 #     skills: [csp-insert-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct":
 #     skills: [csp-instinct-export, csp-instinct-import, csp-instinct-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct export":
 #     skills: [csp-instinct-export] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct import":
 #     skills: [csp-instinct-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct status":
 #     skills: [csp-instinct-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct-export":
 #     skills: [csp-instinct-export] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct-import":
 #     skills: [csp-instinct-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "instinct-status":
 #     skills: [csp-instinct-status] # FIXED: all skill references invalid, commented out
-    weight: 40
   "integration":
     skills: [ csp-integration-design]
     weight: 40
-  "integration checker":
 #     skills: [csp-integration-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "integration-checker":
 #     skills: [csp-integration-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "intel updater":
 #     skills: [csp-intel-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "intel-updater":
 #     skills: [csp-intel-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "jira":
 #     skills: [csp-jira] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin build error":
 #     skills: [csp-kotlin-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin code review":
 #     skills: [csp-kotlin-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin coding style":
 #     skills: [csp-cursor-rules-kotlin-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin cursor rules":
 #     skills: [csp-cursor-rules-kotlin-coding-style, csp-cursor-rules-kotlin-hooks, csp-cursor-rules-kotlin-patterns, csp-cursor-rules-kotlin-security, csp-cursor-rules-kotlin-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin hooks":
 #     skills: [csp-cursor-rules-kotlin-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin review":
 #     skills: [csp-kotlin-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin security":
 #     skills: [csp-cursor-rules-kotlin-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin test":
 #     skills: [csp-kotlin-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin 审查":
 #     skills: [csp-kotlin-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin 构建错误":
 #     skills: [csp-kotlin-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin 测试":
 #     skills: [csp-kotlin-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin-build":
 #     skills: [csp-kotlin-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin-review":
 #     skills: [csp-kotlin-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "kotlin-test":
 #     skills: [csp-kotlin-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "learn":
 #     skills: [csp-learn, csp-learn-eval] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "learn eval":
 #     skills: [csp-learn-eval] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "learn-eval":
 #     skills: [csp-learn-eval] # FIXED: all skill references invalid, commented out
-    weight: 40
   "lifecycle":
     skills: [ csp-lifecycle-orchestrator]
     weight: 40
@@ -2477,447 +1219,153 @@ trigger_index:
   "产品发现":
     skills: [csp-product-discovery-orchestrator]
     weight: 40
-  "list":
 #     skills: [csp-list-phase-assumptions, csp-list-workspaces] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "list phase assumptions":
 #     skills: [csp-list-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "list workspaces":
 #     skills: [csp-list-workspaces] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "list-phase-assumptions":
 #     skills: [csp-list-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "list-workspaces":
 #     skills: [csp-list-workspaces] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "llm app code review":
 #     skills: [csp-llm-app-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "llm app review":
 #     skills: [csp-llm-app-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "llm app 审查":
 #     skills: [csp-llm-app-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "llm-app-reviewer":
 #     skills: [csp-llm-app-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop":
 #     skills: [csp-loop-operator, csp-loop-start, csp-loop-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop operator":
 #     skills: [csp-loop-operator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop start":
 #     skills: [csp-loop-start] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop status":
 #     skills: [csp-loop-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop-operator":
 #     skills: [csp-loop-operator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop-start":
 #     skills: [csp-loop-start] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "loop-status":
 #     skills: [csp-loop-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "manage":
 #     skills: [csp-ns-manage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "marketing":
 #     skills: [csp-marketing-agent, csp-marketing-campaign] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "marketing agent":
 #     skills: [csp-marketing-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "marketing campaign":
 #     skills: [csp-marketing-campaign] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "marketing-agent":
 #     skills: [csp-marketing-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "marketing-campaign":
 #     skills: [csp-marketing-campaign] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "milestone":
 #     skills: [csp-milestone-summary] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "milestone summary":
 #     skills: [csp-milestone-summary] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "milestone summary 里程碑":
 #     skills: [csp-milestone-summary] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "milestone-summary":
 #     skills: [csp-milestone-summary] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mle code review":
 #     skills: [csp-mle-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mle review":
 #     skills: [csp-mle-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mle 审查":
 #     skills: [csp-mle-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mle-reviewer":
 #     skills: [csp-mle-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mobile performance auditor":
 #     skills: [csp-mobile-performance-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mobile performance auditor 移动端":
 #     skills: [csp-mobile-performance-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mobile-performance-auditor":
 #     skills: [csp-mobile-performance-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "model route":
 #     skills: [csp-model-route] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "model-route":
 #     skills: [csp-model-route] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi backend":
 #     skills: [csp-multi-backend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi execute":
 #     skills: [csp-multi-execute] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi frontend":
 #     skills: [csp-multi-frontend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi plan":
 #     skills: [csp-multi-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi workflow":
 #     skills: [csp-multi-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi-backend":
 #     skills: [csp-multi-backend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi-execute":
 #     skills: [csp-multi-execute] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi-frontend":
 #     skills: [csp-multi-frontend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi-plan":
 #     skills: [csp-multi-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "multi-workflow":
 #     skills: [csp-multi-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mvp":
 #     skills: [csp-mvp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mvp phase":
 #     skills: [csp-mvp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "mvp-phase":
 #     skills: [csp-mvp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network":
 #     skills: [csp-network-architect, csp-network-troubleshooter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network architect":
 #     skills: [csp-network-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network architect 网络":
 #     skills: [csp-network-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network config code review":
 #     skills: [csp-network-config-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network config review":
 #     skills: [csp-network-config-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network config 审查":
 #     skills: [csp-network-config-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network troubleshooter":
 #     skills: [csp-network-troubleshooter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network troubleshooter 网络":
 #     skills: [csp-network-troubleshooter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network-architect":
 #     skills: [csp-network-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network-config-reviewer":
 #     skills: [csp-network-config-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "network-troubleshooter":
 #     skills: [csp-network-troubleshooter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new":
 #     skills: [csp-new-milestone, csp-new-project, csp-new-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new milestone":
 #     skills: [csp-new-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new project":
 #     skills: [csp-new-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new workspace":
 #     skills: [csp-new-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new-milestone":
 #     skills: [csp-new-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new-project":
 #     skills: [csp-new-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "new-workspace":
 #     skills: [csp-new-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "next":
 #     skills: [csp-next] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "node":
 #     skills: [csp-node-repair] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "node repair":
 #     skills: [csp-node-repair] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "node-repair":
 #     skills: [csp-node-repair] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "note":
 #     skills: [csp-note] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns code review":
 #     skills: [csp-ns-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns context":
 #     skills: [csp-ns-context] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns ideate":
 #     skills: [csp-ns-ideate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns manage":
 #     skills: [csp-ns-manage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns project":
 #     skills: [csp-ns-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns project 项目":
 #     skills: [csp-ns-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns review":
 #     skills: [csp-ns-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns workflow":
 #     skills: [csp-ns-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns workflow 工作流":
 #     skills: [csp-ns-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns 审查":
 #     skills: [csp-ns-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns-context":
 #     skills: [csp-ns-context] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns-ideate":
 #     skills: [csp-ns-ideate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns-manage":
 #     skills: [csp-ns-manage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns-project":
 #     skills: [csp-ns-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns-review":
 #     skills: [csp-ns-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ns-workflow":
 #     skills: [csp-ns-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "nyquist":
 #     skills: [csp-nyquist-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "nyquist auditor":
 #     skills: [csp-nyquist-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "nyquist-auditor":
 #     skills: [csp-nyquist-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource":
 #     skills: [csp-opensource-forker, csp-opensource-packager, csp-opensource-sanitizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource forker":
 #     skills: [csp-opensource-forker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource packager":
 #     skills: [csp-opensource-packager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource sanitizer":
 #     skills: [csp-opensource-sanitizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource-forker":
 #     skills: [csp-opensource-forker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource-packager":
 #     skills: [csp-opensource-packager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "opensource-sanitizer":
 #     skills: [csp-opensource-sanitizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch":
 #     skills: [csp-orch-add-feature, csp-orch-build-mvp, csp-orch-change-feature, csp-orch-fix-defect, csp-orch-refine-code] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch add feature":
 #     skills: [csp-orch-add-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch build mvp":
 #     skills: [csp-orch-build-mvp] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch change feature":
 #     skills: [csp-orch-change-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch fix defect":
 #     skills: [csp-orch-fix-defect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch refine code":
 #     skills: [csp-orch-refine-code] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch-add-feature":
 #     skills: [csp-orch-add-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch-build-mvp":
 #     skills: [csp-orch-build-mvp] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch-change-feature":
 #     skills: [csp-orch-change-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch-fix-defect":
 #     skills: [csp-orch-fix-defect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "orch-refine-code":
 #     skills: [csp-orch-refine-code] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pattern":
 #     skills: [csp-pattern-mapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pattern mapper":
 #     skills: [csp-pattern-mapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pattern-mapper":
 #     skills: [csp-pattern-mapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pause":
 #     skills: [csp-pause-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pause work":
 #     skills: [csp-pause-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pause-work":
 #     skills: [csp-pause-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "phase":
 #     skills: [csp-phase, csp-phase-researcher, csp-ui-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "phase researcher":
 #     skills: [csp-phase-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "phase researcher 阶段":
 #     skills: [csp-phase-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "phase 阶段":
 #     skills: [csp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "phase-researcher":
 #     skills: [csp-phase-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php code review":
 #     skills: [csp-php-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php coding style":
 #     skills: [csp-cursor-rules-php-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php cursor rules":
 #     skills: [csp-cursor-rules-php-coding-style, csp-cursor-rules-php-hooks, csp-cursor-rules-php-patterns, csp-cursor-rules-php-security, csp-cursor-rules-php-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php hooks":
 #     skills: [csp-cursor-rules-php-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php patterns":
 #     skills: [csp-cursor-rules-php-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php review":
 #     skills: [csp-php-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php security":
 #     skills: [csp-cursor-rules-php-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php testing":
 #     skills: [csp-cursor-rules-php-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php 审查":
 #     skills: [csp-php-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "php-reviewer":
 #     skills: [csp-php-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan checker":
 #     skills: [csp-plan-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan checker 规划":
 #     skills: [csp-plan-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan milestone gaps":
 #     skills: [csp-plan-milestone-gaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan milestone gaps 规划":
 #     skills: [csp-plan-milestone-gaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan prd":
 #     skills: [csp-plan-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan prd 规划":
 #     skills: [csp-plan-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan review convergence":
 #     skills: [csp-plan-review-convergence] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan review convergence 规划":
 #     skills: [csp-plan-review-convergence] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan-checker":
 #     skills: [csp-plan-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan-milestone-gaps":
 #     skills: [csp-plan-milestone-gaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan-prd":
 #     skills: [csp-plan-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plan-review-convergence":
 #     skills: [csp-plan-review-convergence] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "planner":
 #     skills: [csp-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plant":
 #     skills: [csp-plant-seed] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plant seed":
 #     skills: [csp-plant-seed] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "plant-seed":
 #     skills: [csp-plant-seed] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pm":
 #     skills: [csp-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pm2":
 #     skills: [csp-pm2] # FIXED: all skill references invalid, commented out
-    weight: 40
   "postgres best practices":
     skills: [csp-postgres-patterns]
     weight: 40
@@ -2930,285 +1378,99 @@ trigger_index:
   "postgres-patterns":
     skills: [csp-postgres-patterns]
     weight: 40
-  "pr":
 #     skills: [csp-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pr branch":
 #     skills: [csp-pr-branch] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pr test analyzer":
 #     skills: [csp-pr-test-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pr test analyzer 测试":
 #     skills: [csp-pr-test-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pr-branch":
 #     skills: [csp-pr-branch] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pr-test-analyzer":
 #     skills: [csp-pr-test-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "previous comments code review":
 #     skills: [csp-previous-comments-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "previous comments review":
 #     skills: [csp-previous-comments-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "previous comments 审查":
 #     skills: [csp-previous-comments-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "previous-comments-reviewer":
 #     skills: [csp-previous-comments-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "product lens code review":
 #     skills: [csp-product-lens-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "product lens review":
 #     skills: [csp-product-lens-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "product lens 审查":
 #     skills: [csp-product-lens-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "product-lens-reviewer":
 #     skills: [csp-product-lens-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "profile":
 #     skills: [csp-profile-user] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "profile user":
 #     skills: [csp-profile-user] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "profile-user":
 #     skills: [csp-profile-user] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "progress":
 #     skills: [csp-progress] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "project init":
 #     skills: [csp-project-init] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "project init 项目":
 #     skills: [csp-project-init] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "project researcher":
 #     skills: [csp-project-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "project researcher 项目":
 #     skills: [csp-project-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "project-init":
 #     skills: [csp-project-init] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "project-researcher":
 #     skills: [csp-project-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "projects":
 #     skills: [csp-projects] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "promote":
 #     skills: [csp-promote] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp":
 #     skills: [csp-prp-commit, csp-prp-implement, csp-prp-plan, csp-prp-pr, csp-prp-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp commit":
 #     skills: [csp-prp-commit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp implement":
 #     skills: [csp-prp-implement] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp plan":
 #     skills: [csp-prp-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp pr":
 #     skills: [csp-prp-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp prd":
 #     skills: [csp-prp-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp-commit":
 #     skills: [csp-prp-commit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp-implement":
 #     skills: [csp-prp-implement] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp-plan":
 #     skills: [csp-prp-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp-pr":
 #     skills: [csp-prp-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prp-prd":
 #     skills: [csp-prp-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "prune":
 #     skills: [csp-prune] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "psm":
 #     skills: [csp-psm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python code review":
 #     skills: [csp-python-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python coding style":
 #     skills: [csp-cursor-rules-python-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python cursor rules":
 #     skills: [csp-cursor-rules-python-coding-style, csp-cursor-rules-python-hooks, csp-cursor-rules-python-patterns, csp-cursor-rules-python-security, csp-cursor-rules-python-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python hooks":
 #     skills: [csp-cursor-rules-python-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python patterns":
 #     skills: [csp-cursor-rules-python-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python review":
 #     skills: [csp-python-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python security":
 #     skills: [csp-cursor-rules-python-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python 审查":
 #     skills: [csp-python-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "python-review":
 #     skills: [csp-python-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pytorch build error":
 #     skills: [csp-pytorch-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pytorch 构建错误":
 #     skills: [csp-pytorch-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "pytorch-build-resolver":
 #     skills: [csp-pytorch-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "qa tester":
 #     skills: [csp-qa-tester] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "qa-tester":
 #     skills: [csp-qa-tester] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "quality":
 #     skills: [csp-quality-gate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "quality gate":
 #     skills: [csp-quality-gate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "quality gate 质量":
 #     skills: [csp-quality-gate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "quality-gate":
 #     skills: [csp-quality-gate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "quick":
 #     skills: [csp-quick] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rag":
 #     skills: [csp-rag-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rag architect":
 #     skills: [csp-rag-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rag-architect":
 #     skills: [csp-rag-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react build error":
 #     skills: [csp-react-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react code review":
 #     skills: [csp-react-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react native build error":
 #     skills: [csp-react-native-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react native code review":
 #     skills: [csp-react-native-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react native review":
 #     skills: [csp-react-native-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react native 审查":
 #     skills: [csp-react-native-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react native 构建错误":
 #     skills: [csp-react-native-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react review":
 #     skills: [csp-react-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react test":
 #     skills: [csp-react-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react 审查":
 #     skills: [csp-react-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react 构建错误":
 #     skills: [csp-react-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react 测试":
 #     skills: [csp-react-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react-build":
 #     skills: [csp-react-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react-native-build-resolver":
 #     skills: [csp-react-native-build-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react-native-reviewer":
 #     skills: [csp-react-native-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react-review":
 #     skills: [csp-react-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "react-test":
 #     skills: [csp-react-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reapply":
 #     skills: [csp-reapply-patches] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reapply patches":
 #     skills: [csp-reapply-patches] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reapply-patches":
 #     skills: [csp-reapply-patches] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "refactor clean":
 #     skills: [csp-refactor-clean] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "refactor clean 重构":
 #     skills: [csp-refactor-clean] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "refactor-clean":
 #     skills: [csp-refactor-clean] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reliability code review":
 #     skills: [csp-reliability-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reliability review":
 #     skills: [csp-reliability-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reliability 审查":
 #     skills: [csp-reliability-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "reliability-reviewer":
 #     skills: [csp-reliability-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "remove":
 #     skills: [csp-remove-phase, csp-remove-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "remove phase":
 #     skills: [csp-remove-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "remove workspace":
 #     skills: [csp-remove-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "remove-phase":
 #     skills: [csp-remove-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "remove-workspace":
 #     skills: [csp-remove-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
   "requirement":
     skills: [csp-requirement-decomposition, csp-requirement-prioritization]
     weight: 40
@@ -3221,318 +1483,118 @@ trigger_index:
   "research":
     skills: [ csp-research-report-writing]
     weight: 40
-  "research synthesizer":
 #     skills: [csp-research-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "research synthesizer 研究":
 #     skills: [csp-research-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "research-synthesizer":
 #     skills: [csp-research-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "researcher":
 #     skills: [csp-ai-researcher, csp-ui-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume":
 #     skills: [csp-resume-project, csp-resume-session, csp-resume-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume project":
 #     skills: [csp-resume-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume session":
 #     skills: [csp-resume-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume work":
 #     skills: [csp-resume-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume-project":
 #     skills: [csp-resume-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume-session":
 #     skills: [csp-resume-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "resume-work":
 #     skills: [csp-resume-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review a11y architect":
 #     skills: [csp-a11y-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review add backlog":
 #     skills: [csp-add-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review add phase":
 #     skills: [csp-add-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review add tests":
 #     skills: [csp-add-tests] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review add todo":
 #     skills: [csp-add-todo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review adversarial code":
 #     skills: [csp-adversarial-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review advisor researcher":
 #     skills: [csp-advisor-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ai integration phase":
 #     skills: [csp-ai-integration-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ai researcher":
 #     skills: [csp-ai-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review analyst":
 #     skills: [csp-analyst] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review analyze dependencies":
 #     skills: [csp-analyze-dependencies] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review api contract code":
 #     skills: [csp-api-contract-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review architect":
 #     skills: [csp-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review aside":
 #     skills: [csp-aside] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review assumptions analyzer":
 #     skills: [csp-assumptions-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review audit fix":
 #     skills: [csp-audit-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review audit milestone":
 #     skills: [csp-audit-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review audit uat":
 #     skills: [csp-audit-uat] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review auto update":
 #     skills: [csp-auto-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review autonomous":
 #     skills: [csp-autonomous] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review backlog":
 #     skills: [csp-review-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review backlog 审查":
 #     skills: [csp-review-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review build error resolver":
 #     skills: [csp-build-error-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review build fix":
 #     skills: [csp-build-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review capture":
 #     skills: [csp-capture] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review check todos":
 #     skills: [csp-check-todos] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review checkpoint":
 #     skills: [csp-checkpoint] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review chief of staff":
 #     skills: [csp-chief-of-staff] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review cleanup":
 #     skills: [csp-cleanup] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review cli teams":
     skills: [csp-cli-teams]
     weight: 40
-  "review code architect":
 #     skills: [csp-code-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review code code":
 #     skills: [csp-code-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review code explorer":
 #     skills: [csp-code-explorer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review code fixer":
 #     skills: [csp-code-fixer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review code graph":
     skills: [csp-code-graph]
     weight: 40
-  "review code review fix":
 #     skills: [csp-code-review-fix] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review coherence code":
 #     skills: [csp-coherence-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review comment analyzer":
 #     skills: [csp-comment-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review compact":
 #     skills: [csp-compact] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review complete milestone":
 #     skills: [csp-complete-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review compound learning":
     skills: [csp-compound-learning]
     weight: 40
-  "review config":
 #     skills: [csp-config] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review conversation analyzer":
 #     skills: [csp-conversation-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review cost report":
 #     skills: [csp-cost-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review cpp code":
 #     skills: [csp-cpp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review critic":
 #     skills: [csp-critic] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review data migration code":
 #     skills: [csp-data-migration-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review data pipeline code":
 #     skills: [csp-data-pipeline-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review database code":
 #     skills: [csp-database-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review debug session manager":
 #     skills: [csp-debug-session-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review debugger":
 #     skills: [csp-debugger] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review deployment verification agent":
 #     skills: [csp-deployment-verification-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review designer":
 #     skills: [csp-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review developer":
 #     skills: [csp-developer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review diagnose issues":
 #     skills: [csp-diagnose-issues] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review discovery phase":
 #     skills: [csp-discovery-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review discuss phase":
 #     skills: [csp-discuss-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review discuss phase assumptions":
 #     skills: [csp-discuss-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review discuss phase power":
 #     skills: [csp-discuss-phase-power] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review do":
 #     skills: [csp-do] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review doc classifier":
 #     skills: [csp-doc-classifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review doc synthesizer":
 #     skills: [csp-doc-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review doc updater":
 #     skills: [csp-doc-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review doc verifier":
 #     skills: [csp-doc-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review doc writer":
 #     skills: [csp-doc-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review document specialist":
 #     skills: [csp-document-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review domain researcher":
 #     skills: [csp-domain-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review e2e runner":
 #     skills: [csp-e2e-runner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ecc guide":
 #     skills: [csp-ecc-guide] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review edit phase":
 #     skills: [csp-edit-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review eval auditor":
 #     skills: [csp-eval-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review eval code":
 #     skills: [csp-eval-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review eval planner":
 #     skills: [csp-eval-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review evolve":
 #     skills: [csp-evolve] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review execute plan":
 #     skills: [csp-execute-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review executor":
 #     skills: [csp-executor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review extract learnings":
 #     skills: [csp-extract-learnings] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review fast":
 #     skills: [csp-fast] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review fastapi code":
 #     skills: [csp-fastapi-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review feasibility code":
 #     skills: [csp-feasibility-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review feature dev":
 #     skills: [csp-feature-dev] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review flutter code":
 #     skills: [csp-flutter-review, csp-flutter-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review forensics":
 #     skills: [csp-forensics] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review framework selector":
 #     skills: [csp-framework-selector] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review fsharp code":
 #     skills: [csp-fsharp-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review fullstack spec generator":
     skills: [csp-fullstack-spec-generator]
     weight: 40
-  "review gan design":
 #     skills: [csp-gan-design] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review gan evaluator":
 #     skills: [csp-gan-evaluator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review gan generator":
 #     skills: [csp-gan-generator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review gan planner":
 #     skills: [csp-gan-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review git master":
 #     skills: [csp-git-master] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review go code":
 #     skills: [csp-go-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review graduation":
 #     skills: [csp-graduation] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review graph architecture":
     skills: [csp-graph-architecture]
     weight: 40
@@ -3545,983 +1607,363 @@ trigger_index:
   "review graph refactor":
     skills: [csp-graph-refactor]
     weight: 40
-  "review graphify":
 #     skills: [csp-graphify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review harmonyos app resolver":
 #     skills: [csp-harmonyos-app-resolver] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review harness audit":
 #     skills: [csp-harness-audit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review harness optimizer":
 #     skills: [csp-harness-optimizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review health":
 #     skills: [csp-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review healthcare code":
 #     skills: [csp-healthcare-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review homelab architect":
 #     skills: [csp-homelab-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review hookify":
 #     skills: [csp-hookify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review hookify configure":
 #     skills: [csp-hookify-configure] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review hookify help":
 #     skills: [csp-hookify-help] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review hookify list":
 #     skills: [csp-hookify-list] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review import":
 #     skills: [csp-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review inbox":
 #     skills: [csp-inbox] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ingest docs":
 #     skills: [csp-ingest-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review insert phase":
 #     skills: [csp-insert-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review instinct export":
 #     skills: [csp-instinct-export] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review instinct import":
 #     skills: [csp-instinct-import] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review instinct status":
 #     skills: [csp-instinct-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review integration checker":
 #     skills: [csp-integration-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review intel updater":
 #     skills: [csp-intel-updater] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review jira":
 #     skills: [csp-jira] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review kotlin code":
 #     skills: [csp-kotlin-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review learn":
 #     skills: [csp-learn] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review learn eval":
 #     skills: [csp-learn-eval] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review lifecycle":
 #     skills: [csp-lifecycle] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review lifecycle orchestrator":
     skills: [csp-lifecycle-orchestrator]
     weight: 40
-  "review list phase assumptions":
 #     skills: [csp-list-phase-assumptions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review list workspaces":
 #     skills: [csp-list-workspaces] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review llm app code":
 #     skills: [csp-llm-app-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review loop operator":
 #     skills: [csp-loop-operator] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review loop start":
 #     skills: [csp-loop-start] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review loop status":
 #     skills: [csp-loop-status] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review manager":
 #     skills: [csp-manager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review marketing agent":
 #     skills: [csp-marketing-agent] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review marketing campaign":
 #     skills: [csp-marketing-campaign] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review milestone summary":
 #     skills: [csp-milestone-summary] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review mle code":
 #     skills: [csp-mle-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review mobile performance auditor":
 #     skills: [csp-mobile-performance-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review model route":
 #     skills: [csp-model-route] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review multi backend":
 #     skills: [csp-multi-backend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review multi execute":
 #     skills: [csp-multi-execute] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review multi frontend":
 #     skills: [csp-multi-frontend] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review multi plan":
 #     skills: [csp-multi-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review multi workflow":
 #     skills: [csp-multi-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review mvp phase":
 #     skills: [csp-mvp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review network architect":
 #     skills: [csp-network-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review network config code":
 #     skills: [csp-network-config-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review network troubleshooter":
 #     skills: [csp-network-troubleshooter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review new milestone":
 #     skills: [csp-new-milestone] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review new project":
 #     skills: [csp-new-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review new workspace":
 #     skills: [csp-new-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review next":
 #     skills: [csp-next] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review node repair":
 #     skills: [csp-node-repair] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review note":
 #     skills: [csp-note] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ns code":
 #     skills: [csp-ns-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ns context":
 #     skills: [csp-ns-context] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ns ideate":
 #     skills: [csp-ns-ideate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ns manage":
 #     skills: [csp-ns-manage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ns project":
 #     skills: [csp-ns-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ns workflow":
 #     skills: [csp-ns-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review nyquist auditor":
 #     skills: [csp-nyquist-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review opensource forker":
 #     skills: [csp-opensource-forker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review opensource packager":
 #     skills: [csp-opensource-packager] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review opensource sanitizer":
 #     skills: [csp-opensource-sanitizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review orch add feature":
 #     skills: [csp-orch-add-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review orch build mvp":
 #     skills: [csp-orch-build-mvp] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review orch change feature":
 #     skills: [csp-orch-change-feature] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review orch fix defect":
 #     skills: [csp-orch-fix-defect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review orch refine code":
 #     skills: [csp-orch-refine-code] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pattern mapper":
 #     skills: [csp-pattern-mapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pause work":
 #     skills: [csp-pause-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review phase":
 #     skills: [csp-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review phase researcher":
 #     skills: [csp-phase-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review php code":
 #     skills: [csp-php-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review plan checker":
 #     skills: [csp-plan-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review plan milestone gaps":
 #     skills: [csp-plan-milestone-gaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review plan prd":
 #     skills: [csp-plan-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review plan review convergence":
 #     skills: [csp-plan-review-convergence] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review planner":
 #     skills: [csp-planner] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review plant seed":
 #     skills: [csp-plant-seed] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pm":
 #     skills: [csp-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pm2":
 #     skills: [csp-pm2] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pr":
 #     skills: [csp-pr, csp-review-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pr branch":
 #     skills: [csp-pr-branch] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pr test analyzer":
 #     skills: [csp-pr-test-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review pr 审查":
 #     skills: [csp-review-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review previous comments code":
 #     skills: [csp-previous-comments-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review product lens code":
 #     skills: [csp-product-lens-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review profile user":
 #     skills: [csp-profile-user] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review progress":
 #     skills: [csp-progress] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review project init":
 #     skills: [csp-project-init] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review project researcher":
 #     skills: [csp-project-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review projects":
 #     skills: [csp-projects] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review promote":
 #     skills: [csp-promote] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review prp commit":
 #     skills: [csp-prp-commit] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review prp implement":
 #     skills: [csp-prp-implement] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review prp plan":
 #     skills: [csp-prp-plan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review prp pr":
 #     skills: [csp-prp-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review prp prd":
 #     skills: [csp-prp-prd] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review prune":
 #     skills: [csp-prune] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review psm":
 #     skills: [csp-psm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review python code":
 #     skills: [csp-python-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review qa tester":
 #     skills: [csp-qa-tester] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review quality gate":
 #     skills: [csp-quality-gate] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review quick":
 #     skills: [csp-quick] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review rag architect":
 #     skills: [csp-rag-architect] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review react code":
 #     skills: [csp-react-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review react native code":
 #     skills: [csp-react-native-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review reapply patches":
 #     skills: [csp-reapply-patches] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review refactor clean":
 #     skills: [csp-refactor-clean] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review reliability code":
 #     skills: [csp-reliability-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review remove phase":
 #     skills: [csp-remove-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review remove workspace":
 #     skills: [csp-remove-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review requirement decomposition":
     skills: [csp-requirement-decomposition]
     weight: 40
-  "review research synthesizer":
 #     skills: [csp-research-synthesizer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review resume project":
 #     skills: [csp-resume-project] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review resume session":
 #     skills: [csp-resume-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review resume work":
 #     skills: [csp-resume-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review review":
 #     skills: [csp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review review backlog":
 #     skills: [csp-review-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review review pr":
 #     skills: [csp-review-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review roadmapper":
 #     skills: [csp-roadmapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review rust code":
 #     skills: [csp-rust-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review santa loop":
 #     skills: [csp-santa-loop] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review save session":
 #     skills: [csp-save-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review scan":
 #     skills: [csp-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review scientist":
     skills: [csp-scientist]
     weight: 40
-  "review scope guardian code":
 #     skills: [csp-scope-guardian-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review security auditor":
 #     skills: [csp-security-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review security code":
 #     skills: [csp-security-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review security scan":
 #     skills: [csp-security-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review seo specialist":
 #     skills: [csp-seo-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review session report":
 #     skills: [csp-session-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review sessions":
 #     skills: [csp-sessions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review settings":
 #     skills: [csp-settings] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review settings advanced":
 #     skills: [csp-settings-advanced] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review settings integrations":
 #     skills: [csp-settings-integrations] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review setup pm":
 #     skills: [csp-setup-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review silent failure hunter":
 #     skills: [csp-silent-failure-hunter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review sketch":
 #     skills: [csp-sketch] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review sketch wrap up":
 #     skills: [csp-sketch-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review skill":
     skills: [csp-skill]
     weight: 40
-  "review skill create":
 #     skills: [csp-skill-create] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review skill health":
 #     skills: [csp-skill-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review spike":
 #     skills: [csp-spike] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review spike wrap up":
 #     skills: [csp-spike-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review springboot security":
     skills: [csp-springboot-security]
     weight: 40
-  "review stats":
 #     skills: [csp-stats] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review surface":
 #     skills: [csp-surface] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review sync skills":
 #     skills: [csp-sync-skills] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review tech stack advisor":
     skills: [csp-tech-stack-advisor]
     weight: 40
-  "review tech writer":
 #     skills: [csp-tech-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review test coverage":
 #     skills: [csp-test-coverage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review thread":
 #     skills: [csp-thread] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review tracer":
 #     skills: [csp-tracer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review transition":
 #     skills: [csp-transition] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review type design analyzer":
 #     skills: [csp-type-design-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ui auditor":
 #     skills: [csp-ui-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ui checker":
 #     skills: [csp-ui-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ui code":
 #     skills: [csp-ui-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ui phase":
 #     skills: [csp-ui-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ui researcher":
 #     skills: [csp-ui-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ultraplan phase":
 #     skills: [csp-ultraplan-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review undo":
 #     skills: [csp-undo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review update":
 #     skills: [csp-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review update codemaps":
 #     skills: [csp-update-codemaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review update docs":
 #     skills: [csp-update-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review user profiler":
 #     skills: [csp-user-profiler] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review ux designer":
 #     skills: [csp-ux-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review validate phase":
 #     skills: [csp-validate-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review verifier":
 #     skills: [csp-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review verify":
 #     skills: [csp-verify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review verify work":
 #     skills: [csp-verify-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review workspace":
 #     skills: [csp-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review workstreams":
 #     skills: [csp-workstreams] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review writer":
 #     skills: [csp-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review 审查":
 #     skills: [csp-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review-backlog":
 #     skills: [csp-review-backlog] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review-pr":
 #     skills: [csp-review-pr] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "roadmapper":
 #     skills: [csp-roadmapper] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust build error":
 #     skills: [csp-rust-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust code review":
 #     skills: [csp-rust-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust review":
 #     skills: [csp-rust-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust test":
 #     skills: [csp-rust-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust 审查":
 #     skills: [csp-rust-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust 构建错误":
 #     skills: [csp-rust-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust 测试":
 #     skills: [csp-rust-test] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust-build":
 #     skills: [csp-rust-build] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust-review":
 #     skills: [csp-rust-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "rust-test":
 #     skills: [csp-rust-test] # FIXED: all skill references invalid, commented out
-    weight: 40
   "santa":
     skills: [ csp-santa-method]
     weight: 40
-  "santa loop":
 #     skills: [csp-santa-loop] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "santa-loop":
 #     skills: [csp-santa-loop] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "save":
 #     skills: [csp-save-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "save session":
 #     skills: [csp-save-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "save-session":
 #     skills: [csp-save-session] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "scan":
 #     skills: [csp-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "scan 扫描":
 #     skills: [csp-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
   "scientist":
     skills: [csp-scientist]
     weight: 40
-  "scope guardian code review":
 #     skills: [csp-scope-guardian-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "scope guardian review":
 #     skills: [csp-scope-guardian-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "scope guardian 审查":
 #     skills: [csp-scope-guardian-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "scope-guardian-reviewer":
 #     skills: [csp-scope-guardian-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security auditor":
 #     skills: [csp-security-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security auditor 安全":
 #     skills: [csp-security-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security code review":
 #     skills: [csp-security-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security review":
 #     skills: [csp-security-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security scan":
 #     skills: [csp-security-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security scan 安全":
 #     skills: [csp-security-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security 审查":
 #     skills: [csp-security-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security-auditor":
 #     skills: [csp-security-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security-reviewer":
 #     skills: [csp-security-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "security-scan":
 #     skills: [csp-security-scan] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "seo":
 #     skills: [csp-seo-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "seo specialist":
 #     skills: [csp-seo-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "seo-specialist":
 #     skills: [csp-seo-specialist] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "session":
 #     skills: [csp-session-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "session report":
 #     skills: [csp-session-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "session report 会话":
 #     skills: [csp-session-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "session-report":
 #     skills: [csp-session-report] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sessions":
 #     skills: [csp-sessions] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "settings":
 #     skills: [csp-settings, csp-settings-advanced, csp-settings-integrations] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "settings advanced":
 #     skills: [csp-settings-advanced] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "settings integrations":
 #     skills: [csp-settings-integrations] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "settings-advanced":
 #     skills: [csp-settings-advanced] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "settings-integrations":
 #     skills: [csp-settings-integrations] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "setup pm":
 #     skills: [csp-setup-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "setup-pm":
 #     skills: [csp-setup-pm] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "silent":
 #     skills: [csp-silent-failure-hunter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "silent failure hunter":
 #     skills: [csp-silent-failure-hunter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "silent-failure-hunter":
 #     skills: [csp-silent-failure-hunter] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sketch":
 #     skills: [csp-sketch, csp-sketch-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sketch wrap up":
 #     skills: [csp-sketch-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sketch-wrap-up":
 #     skills: [csp-sketch-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "skill create":
 #     skills: [csp-skill-create] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "skill create 技能":
 #     skills: [csp-skill-create] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "skill health":
 #     skills: [csp-skill-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "skill health 技能":
 #     skills: [csp-skill-health] # FIXED: all skill references invalid, commented out
-    weight: 40
   "skill 技能":
     skills: [csp-skill]
     weight: 40
-  "skill-create":
 #     skills: [csp-skill-create] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "skill-health":
 #     skills: [csp-skill-health] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "spike":
 #     skills: [csp-spike, csp-spike-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "spike wrap up":
 #     skills: [csp-spike-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "spike-wrap-up":
 #     skills: [csp-spike-wrap-up] # FIXED: all skill references invalid, commented out
-    weight: 40
   "springboot security":
     skills: [csp-springboot-security]
     weight: 40
   "springboot-security":
     skills: [csp-springboot-security]
     weight: 40
-  "stats":
 #     skills: [csp-stats] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "surface":
 #     skills: [csp-surface] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "swift coding style":
 #     skills: [csp-cursor-rules-swift-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "swift cursor rules":
 #     skills: [csp-cursor-rules-swift-coding-style, csp-cursor-rules-swift-hooks, csp-cursor-rules-swift-patterns, csp-cursor-rules-swift-security, csp-cursor-rules-swift-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "swift hooks":
 #     skills: [csp-cursor-rules-swift-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "swift patterns":
 #     skills: [csp-cursor-rules-swift-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "swift security":
 #     skills: [csp-cursor-rules-swift-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "swift testing":
 #     skills: [csp-cursor-rules-swift-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sync":
 #     skills: [csp-sync-skills] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sync skills":
 #     skills: [csp-sync-skills] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "sync-skills":
 #     skills: [csp-sync-skills] # FIXED: all skill references invalid, commented out
-    weight: 40
   "tech":
     skills: [csp-tech-stack-advisor, csp-tech-risk-assessment, csp-tech-solution-design, csp-tech-task-breakdown]
     weight: 40
   "tech stack advisor":
     skills: [csp-tech-stack-advisor]
     weight: 40
-  "tech writer":
 #     skills: [csp-tech-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
   "tech-stack-advisor":
     skills: [csp-tech-stack-advisor]
     weight: 40
-  "tech-writer":
 #     skills: [csp-tech-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "test coverage":
 #     skills: [csp-test-coverage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "test coverage 测试":
 #     skills: [csp-test-coverage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "test-coverage":
 #     skills: [csp-test-coverage] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "tester":
 #     skills: [csp-qa-tester] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "thread":
 #     skills: [csp-thread] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "tracer":
 #     skills: [csp-tracer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "transition":
 #     skills: [csp-transition] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "type":
 #     skills: [csp-type-design-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "type design analyzer":
 #     skills: [csp-type-design-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "type-design-analyzer":
 #     skills: [csp-type-design-analyzer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "typescript coding style":
 #     skills: [csp-cursor-rules-typescript-coding-style] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "typescript cursor rules":
 #     skills: [csp-cursor-rules-typescript-coding-style, csp-cursor-rules-typescript-hooks, csp-cursor-rules-typescript-patterns, csp-cursor-rules-typescript-security, csp-cursor-rules-typescript-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "typescript hooks":
 #     skills: [csp-cursor-rules-typescript-hooks] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "typescript patterns":
 #     skills: [csp-cursor-rules-typescript-patterns] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "typescript security":
 #     skills: [csp-cursor-rules-typescript-security] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "typescript testing":
 #     skills: [csp-cursor-rules-typescript-testing] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui auditor":
 #     skills: [csp-ui-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui checker":
 #     skills: [csp-ui-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui code review":
 #     skills: [csp-ui-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui phase":
 #     skills: [csp-ui-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui phase 阶段":
 #     skills: [csp-ui-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui researcher":
 #     skills: [csp-ui-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui review":
 #     skills: [csp-ui-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui 审查":
 #     skills: [csp-ui-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui-auditor":
 #     skills: [csp-ui-auditor] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui-checker":
 #     skills: [csp-ui-checker] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui-phase":
 #     skills: [csp-ui-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui-researcher":
 #     skills: [csp-ui-researcher] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ui-review":
 #     skills: [csp-ui-review] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ultraplan":
 #     skills: [csp-ultraplan-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ultraplan phase":
 #     skills: [csp-ultraplan-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ultraplan-phase":
 #     skills: [csp-ultraplan-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "undo":
 #     skills: [csp-undo] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update":
 #     skills: [csp-update, csp-update-codemaps, csp-update-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update codemaps":
 #     skills: [csp-update-codemaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update codemaps 更新":
 #     skills: [csp-update-codemaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update docs":
 #     skills: [csp-update-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update docs 更新":
 #     skills: [csp-update-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update 更新":
 #     skills: [csp-update] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update-codemaps":
 #     skills: [csp-update-codemaps] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "update-docs":
 #     skills: [csp-update-docs] # FIXED: all skill references invalid, commented out
-    weight: 40
   "user":
     skills: [ csp-user-story-decomposition, csp-user-feedback-analysis, csp-user-system-design]
     weight: 40
-  "user profiler":
 #     skills: [csp-user-profiler] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "user-profiler":
 #     skills: [csp-user-profiler] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ux designer":
 #     skills: [csp-ux-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "ux-designer":
 #     skills: [csp-ux-designer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "validate":
 #     skills: [csp-validate-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "validate phase":
 #     skills: [csp-validate-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "validate phase 验证":
 #     skills: [csp-validate-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "validate-phase":
 #     skills: [csp-validate-phase] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "verifier":
 #     skills: [csp-verifier] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "verify work":
 #     skills: [csp-verify-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "verify work 验证":
 #     skills: [csp-verify-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "verify 验证":
 #     skills: [csp-verify] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "verify-work":
 #     skills: [csp-verify-work] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "workflow":
 #     skills: [csp-ns-workflow] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "workspace":
 #     skills: [csp-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "workspace 工作区":
 #     skills: [csp-workspace] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "workstreams":
 #     skills: [csp-workstreams] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "writer":
 #     skills: [csp-writer] # FIXED: all skill references invalid, commented out
-    weight: 40
 
   # ─── auto-generated triggers (generate-triggers.mjs) ───
-  "bugfix":
 #     skills: [csp-bugfix-chain] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "bugfix chain":
 #     skills: [csp-bugfix-chain] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "bugfix-chain":
 #     skills: [csp-bugfix-chain] # FIXED: all skill references invalid, commented out
-    weight: 40
   "codebase":
     skills: [csp-codebase-audit]
     weight: 40
@@ -4531,15 +1973,11 @@ trigger_index:
   "codebase-audit":
     skills: [csp-codebase-audit]
     weight: 40
-  "fix bugfix chain":
 #     skills: [csp-bugfix-chain] # FIXED: all skill references invalid, commented out
-    weight: 40
   "fix codebase audit":
     skills: [csp-codebase-audit]
     weight: 40
-  "review bugfix chain":
 #     skills: [csp-bugfix-chain] # FIXED: all skill references invalid, commented out
-    weight: 40
   "review codebase audit":
     skills: [csp-codebase-audit]
     weight: 40
@@ -5430,15 +2868,9 @@ trigger_index:
     weight: 40
 
   # ─── auto-generated triggers (generate-triggers.mjs) ───
-  "fix hub":
 #     skills: [csp-hub] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "hub":
 #     skills: [csp-hub] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review hub":
 #     skills: [csp-hub] # FIXED: all skill references invalid, commented out
-    weight: 40
 
   # ─── auto-generated triggers (generate-triggers.mjs) ───
   "fix python coding standards":
@@ -5812,21 +3244,11 @@ trigger_index:
     weight: 40
 
   # ─── auto-generated triggers (generate-triggers.mjs) ───
-  "correctness code review":
 #     skills: [csp-correctness-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "correctness review":
 #     skills: [csp-correctness-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "correctness 审查":
 #     skills: [csp-correctness-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "correctness-reviewer":
 #     skills: [csp-correctness-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
-  "review correctness code":
 #     skills: [csp-correctness-reviewer] # FIXED: all skill references invalid, commented out
-    weight: 40
 
   # ─── auto-generated triggers (generate-triggers.mjs) ───
   "agent":
@@ -6668,6 +4090,53 @@ trigger_index:
   "teach":
     skills: [csp-teach]
     weight: 40
+
+  # ─── auto-generated triggers (generate-triggers.mjs) ───
+  "fix product hunt":
+    skills: [csp-product-hunt]
+    weight: 40
+  "fix session archive":
+    skills: [csp-session-archive]
+    weight: 40
+  "fix social intel":
+    skills: [csp-social-intel]
+    weight: 40
+  "product hunt":
+    skills: [csp-product-hunt]
+    weight: 40
+  "product-hunt":
+    skills: [csp-product-hunt]
+    weight: 40
+  "review product hunt":
+    skills: [csp-product-hunt]
+    weight: 40
+  "review session archive":
+    skills: [csp-session-archive]
+    weight: 40
+  "review social intel":
+    skills: [csp-social-intel]
+    weight: 40
+  "session":
+    skills: [csp-session-archive]
+    weight: 40
+  "session archive":
+    skills: [csp-session-archive]
+    weight: 40
+  "session archive 会话":
+    skills: [csp-session-archive]
+    weight: 40
+  "session-archive":
+    skills: [csp-session-archive]
+    weight: 40
+  "social":
+    skills: [csp-social-intel]
+    weight: 40
+  "social intel":
+    skills: [csp-social-intel]
+    weight: 40
+  "social-intel":
+    skills: [csp-social-intel]
+    weight: 40
 stack_rules:
   python:
     files: ["pyproject.toml", "setup.py", "requirements.txt", "Pipfile"]
@@ -6904,7 +4373,7 @@ stack_rules:
     skills: [csp-product-pulse]
     weight: 40
   "product":
-    skills: [csp-product-pulse, csp-product-discovery-orchestrator, csp-product-spec, csp-product-research, csp-product-design-convergence]
+    skills: [csp-product-pulse, csp-product-discovery-orchestrator, csp-product-spec, csp-product-research, csp-product-design-convergence, csp-product-hunt]
     weight: 40
   "上线":
     skills: [csp-shipping-and-launch]
@@ -7922,7 +5391,7 @@ stack_rules:
 intent_patterns:
   implement_feature:
     patterns: ["implement", "build", "create", "add", "develop", "实现", "开发", "添加", "创建"]
-    skills: [csp-implementation-phase, csp-implementation-phase, csp-tdd]
+    skills: [csp-implementation-phase, csp-tdd]
     phase_hint: build
     weight: 50
 

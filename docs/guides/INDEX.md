@@ -12,3 +12,4 @@
 | `UPDATE.md` | 更新指南 | Active | 2026-08 |
 | `SKILL-AUTHORING.md` | 技能编写最佳实践（英文） | Active | 2026-08 |
 | `SKILL-AUTHORING_zh.md` | 技能编写最佳实践（中文） | Active | 2026-08 |
+| `ENGINEERING.md` | 工程管线与供应链安全（单一真相源、构建校验、安装完整性） | Active | 2026-11 |

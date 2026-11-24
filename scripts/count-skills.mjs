@@ -51,9 +51,9 @@ const checks = [
   { file: 'README_zh.md',              re: /^(\d+)\s*个技能分布/gm },
   { file: 'README_zh.md',              re: /全部\s*(\d+)\s*个/g },
   { file: 'README_zh.md',              re: /总计：(\d+)\s*个技能/g },
-  { file: 'docs/SKILL-INDEX.md',       re: /状态：(\d+)\s*个技能/g },
-  { file: 'docs/INSTALL.md',           re: /Total:\s*(\d+)\s+skills/g },
-  { file: 'docs/INSTALL_zh.md',        re: /总计[:：]\s*(\d+)\s*个\s*skills/g },
+  { file: 'docs/reference/SKILL-INDEX.md', re: /状态：(\d+)\s*个技能/g },
+  { file: 'docs/guides/INSTALL.md',      re: /Total:\s*(\d+)\s+skills/g },
+  { file: 'docs/guides/INSTALL_zh.md',   re: /总计[:：]\s*(\d+)\s*个\s*skills/g },
   { file: 'assets/dashboard-overview.svg', re: /data-total="(\d+)"/g },
 ];
 

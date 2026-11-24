@@ -4,6 +4,8 @@
 
 The CSP v2 router implements a 5-stage intelligent routing pipeline that combines state detection, keyword matching, intent classification, confidence scoring, and knowledge graph enhancement to route user tasks to the most appropriate skills.
 
+> **Execution model:** in-session routing is driven by the L0 `csp-router/SKILL.md` decision table (the LLM matches triggers and applies the rules). The `.mjs` scripts below are the executable reference implementation of the scoring pipeline — run them manually (`node shared/scripts/state-detector.mjs && CLAUDE_USER_PROMPT='…' node shared/scripts/confidence-router.mjs`) or wire them into your own hooks. No hook config ships with the package.
+
 ## Pipeline Stages
 
 ### Stage 1: State Detection (Pre-Router Hook)
@@ -31,10 +33,10 @@ node shared/scripts/state-detector.mjs
 ```json
 {
   "git_status": "clean",
-  "tech_stack": ["python", "typescript"],
+  "tech_stack": [{ "lang": "typescript", "confidence": 0.95 }],
   "phase": "building",
-  "test_status": "passing",
-  "timestamp": "2026-06-19T10:30:00Z"
+  "test_status": "unknown",
+  "detected_at": "2026-06-19T10:30:00Z"
 }
 ```
 
@@ -59,7 +61,7 @@ Reads `triggers.yaml` to map user input keywords to candidate skills:
 ```
 
 #### 2.2 Intent Classification
-Semantic pattern matching identifies the user's intent:
+Pattern matching identifies the user's intent. Patterns may be plain substrings or regexes (e.g. `re\s*factor`, `production.*issue`); regex-capable patterns are matched with `RegExp`, the rest as substrings:
 - **build**: Implementation, feature development
 - **debug**: Problem investigation, bug fixing
 - **plan**: Architecture design, task breakdown
@@ -93,19 +95,16 @@ confidence = keyword_score × 0.4
 | Current phase matches skill phase | +0.2 |
 | Tech stack matches skill domain | +0.15 |
 | Git dirty + debug skill | +0.1 |
-| Git conflict + merge skill | +0.15 |
+| Git conflict + git-recovery/merge skill | +0.15 |
+
+Each component (keyword / intent / context) is capped at 1 before weighting.
 
 **Output format:**
-```json
-{
-  "skill": "csp-tdd",
-  "confidence": 0.78,
-  "breakdown": {
-    "keyword_score": 0.85,
-    "intent_score": 0.72,
-    "context_score": 0.75
-  }
-}
+```
+[router] Confidence-ranked skills:
+  1. csp-tdd [build] — 78%
+  2. csp-implementation-phase [build] — 65%
+[router] Decision: Top 3 candidates — user should confirm
 ```
 
 ---
@@ -155,7 +154,7 @@ Modifying csp-tdd affects: [csp-python-testing, csp-react-testing]
 ```
 
 #### 5.3 Path Finding
-Finds shortest path between skills for multi-skill workflows:
+Multi-skill workflow paths are derived by traversing `depends_on`/`related_to` edges (the agent walks the graph; `query-skpg.mjs` exposes `node`/`stats`/`list` queries, not a built-in shortest-path command):
 ```
 csp-brainstorming → csp-writing-plans → csp-executing-plans
 ```
@@ -196,7 +195,6 @@ Signals are evaluated in priority order (highest first):
 2. **High confidence match** — >80% → direct route
 3. **Context enhancement** — State detection adjusts weights
 4. **Tech stack detection** — Language/framework match
-5. **Historical preference** — Previously used skill gets bonus
 
 ---
 

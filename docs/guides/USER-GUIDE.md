@@ -202,6 +202,24 @@ Router 决策:
 输出: 安全漏洞报告 + 修复建议
 ```
 
+### 常见工作流技能链速查
+
+| 场景 | 输入示例 | 技能链 |
+|------|----------|--------|
+| **功能开发** | "开发用户认证功能" | brainstorming → spec → plan → execute → tdd → review → verify → ship |
+| **Bug 修复** | "这个 Django 项目有个 bug" | debug + django-patterns → fix → tdd → verify |
+| **代码审查** | "帮我做个 code review" | code-review + 语言 reviewer → REVIEW.md |
+| **需求澄清** | "我想做个什么，但不太确定" | interview-me → brainstorming → spec |
+| **接手新项目** | "我刚接手这个项目" | explore → map-codebase → 架构映射 |
+| **快速原型** | "快速做一个 demo" | brainstorming → implement → basic-check |
+| **安全审计** | "进行安全审查" | security-review + 框架安全 skill → 审查报告 |
+| **部署上线** | "把应用部署到 Vercel" | platform-deploy + indie-deploy-ops → 线上应用 |
+| **接入支付** | "集成 Stripe 订阅支付" | payment-integration + subscription-management + webhook-architecture |
+| **性能优化** | "应用太慢了" | frontend-performance + backend-performance + db-performance |
+| **国际化** | "添加多语言支持" | i18n-frameworks + locale-management → 本地化应用 |
+
+路由排障：`/csp-why`（为什么选这个 skill）· `/csp-debug-router`（匹配日志）· `/csp-stats`（使用统计）· `/csp-doctor`（安装健康度）。
+
 ---
 
 ## Skill 层速查

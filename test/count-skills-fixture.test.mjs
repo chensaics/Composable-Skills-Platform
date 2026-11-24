@@ -16,8 +16,8 @@ function fixture(readme, run) {
     copyFileSync(SCRIPT, join(root, 'scripts', 'count-skills.mjs'));
     writeFileSync(join(root, 'csp-router', 'registry.json'), JSON.stringify({
       version: '1.0', total_skills: 2, skills: [
-        { path: 'packages/csp-code/packages/csp-code/csp-workflow/skills/one/SKILL.md' },
-        { path: 'packages/csp-code/packages/csp-code/csp-patterns/agents/reviewer.md' },
+        { path: 'packages/csp-code/csp-workflow/skills/one/SKILL.md' },
+        { path: 'packages/csp-code/csp-patterns/agents/reviewer.md' },
       ],
     }));
     writeFileSync(join(root, 'README.md'), readme);

@@ -1,80 +1,18 @@
 // shared/scripts/confidence-router.mjs
-// Confidence scoring router: keyword + context + history → ranked skills
-// Runs as a hook after state-detector and keyword-detector
+// Confidence scoring router: keyword + intent + context → ranked skills
+// Runs standalone (argv / CLAUDE_USER_PROMPT) or as a UserPromptSubmit hook
+// (prompt arrives via stdin JSON payload).
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { parseSimpleYaml } from './lib/yaml.mjs';
 
 const PROJECT_ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 const CSP_ROOT = resolve(import.meta.dirname, '..', '..', 'csp-router');
 
-function parseSimpleYAML(yamlStr) {
-  // Simple YAML parser for our specific structure
-  const result = {};
-  let currentSection = null;
-  let currentKey = null;
-  let currentSubKey = null;
-
-  const lines = yamlStr.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const trimmed = line.trim();
-
-    // Skip comments and empty lines
-    if (!trimmed || trimmed.startsWith('#')) continue;
-
-    // Detect indentation level
-    const indent = line.match(/^(\s*)/)[1].length;
-
-    // Top-level keys (no indent)
-    if (indent === 0 && trimmed.endsWith(':') && !trimmed.includes(' ')) {
-      currentSection = trimmed.slice(0, -1);
-      result[currentSection] = {};
-      currentKey = null;
-      continue;
-    }
-
-    // Second-level keys (2-space indent)
-    if (indent === 2 && trimmed.endsWith(':') && !trimmed.startsWith('-')) {
-      const keyMatch = trimmed.match(/^"?([^"]+)"?:\s*$/);
-      if (keyMatch && !result[currentSection][keyMatch[1]]) {
-        currentKey = keyMatch[1];
-        result[currentSection][currentKey] = {};
-        currentSubKey = null;
-        continue;
-      }
-    }
-
-    // Third-level properties (4-space indent)
-    if (indent >= 4 && currentKey !== null) {
-      // Array value
-      if (trimmed.startsWith('patterns:') || trimmed.startsWith('skills:')) {
-        const arrMatch = trimmed.match(/^\w+:\s*\[(.+)\]/);
-        if (arrMatch) {
-          const propName = trimmed.split(':')[0];
-          result[currentSection][currentKey][propName] = arrMatch[1]
-            .split(',')
-            .map(s => s.trim().replace(/"/g, ''));
-        }
-        continue;
-      }
-
-      // Simple value
-      const kvMatch = trimmed.match(/^"?([^"]+)"?:\s*"?(.+?)"?\s*$/);
-      if (kvMatch) {
-        const [, prop, val] = kvMatch;
-        result[currentSection][currentKey][prop] = val.replace(/"/g, '');
-      }
-    }
-  }
-
-  return result;
-}
-
 function loadYaml(file) {
   try {
-    const content = readFileSync(join(CSP_ROOT, file), 'utf8');
-    return parseSimpleYAML(content);
+    return parseSimpleYaml(readFileSync(join(CSP_ROOT, file), 'utf8'));
   } catch {
     return null;
   }
@@ -88,29 +26,63 @@ function loadState() {
   }
 }
 
+function readInput() {
+  const fromEnv = process.env.CLAUDE_USER_PROMPT || process.argv.slice(2).join(' ');
+  if (fromEnv) return fromEnv;
+  // Hook context: UserPromptSubmit payload is JSON on stdin.
+  if (!process.stdin.isTTY) {
+    try {
+      const payload = JSON.parse(readFileSync(0, 'utf8'));
+      return payload.prompt || '';
+    } catch {
+      return '';
+    }
+  }
+  return '';
+}
+
+function addScore(scores, skill, value) {
+  scores[skill] = (scores[skill] || 0) + value;
+}
+
 function keywordScore(input, triggers) {
   const lower = input.toLowerCase();
   const scores = {};
 
-  for (const [keyword, { skills, weight }] of Object.entries(triggers.trigger_index || {})) {
+  for (const [keyword, entry] of Object.entries(triggers.trigger_index || {})) {
+    const skills = entry?.skills;
+    const weight = Number(entry?.weight) || 0;
+    if (!Array.isArray(skills) || skills.length === 0) continue;
     if (lower.includes(keyword.toLowerCase())) {
-      for (const skill of skills) {
-        scores[skill] = (scores[skill] || 0) + weight / 50; // Normalize to 0-1
+      for (const skill of new Set(skills)) {
+        addScore(scores, skill, weight / 50); // Normalize to 0-1
       }
     }
   }
   return scores;
 }
 
-function intentScore(input, intents) {
-  const lower = input.toLowerCase();
+function matchPattern(input, pattern) {
+  // Patterns may be plain substrings or regexes (e.g. "re\\s*factor",
+  // "production.*issue"). Try regex first, fall back to substring.
+  try {
+    return new RegExp(pattern, 'i').test(input);
+  } catch {
+    return input.toLowerCase().includes(String(pattern).toLowerCase());
+  }
+}
+
+function intentScore(input, triggers) {
   const scores = {};
 
-  for (const [, { patterns, skills, weight }] of Object.entries(intents.intent_patterns || {})) {
-    const matched = patterns.some(p => lower.includes(p.toLowerCase()));
-    if (matched) {
-      for (const skill of skills) {
-        scores[skill] = (scores[skill] || 0) + weight / 50;
+  for (const [, entry] of Object.entries(triggers.intent_patterns || {})) {
+    const patterns = entry?.patterns;
+    const skills = entry?.skills;
+    const weight = Number(entry?.weight) || 0;
+    if (!Array.isArray(patterns) || !Array.isArray(skills)) continue;
+    if (patterns.some(p => matchPattern(input, p))) {
+      for (const skill of new Set(skills)) {
+        addScore(scores, skill, weight / 50);
       }
     }
   }
@@ -122,22 +94,34 @@ function contextScore(metadata, state) {
   if (!metadata?.skills) return scores;
 
   const currentPhase = state.phase;
+  const topLang = state.tech_stack?.[0]?.lang;
 
   for (const [skill, meta] of Object.entries(metadata.skills)) {
     // Phase match bonus
-    if (meta.phase === currentPhase) {
-      scores[skill] = (scores[skill] || 0) + 0.2;
+    if (meta.phase && meta.phase === currentPhase) {
+      addScore(scores, skill, 0.2);
     }
 
     // Tech stack match bonus
-    if (meta.domain === 'language' && state.tech_stack?.length > 0) {
-      const topLang = state.tech_stack[0]?.lang;
-      if (skill.toLowerCase().includes(topLang)) {
-        scores[skill] = (scores[skill] || 0) + 0.15;
+    if (meta.domain === 'language' && topLang) {
+      if (skill.toLowerCase().includes(topLang.toLowerCase())) {
+        addScore(scores, skill, 0.15);
       }
+    }
+
+    // Git state bonuses
+    if (state.git_status === 'dirty' && skill.includes('debug')) {
+      addScore(scores, skill, 0.1);
+    }
+    if (state.git_status === 'conflict' && (skill.includes('git-recovery') || skill.includes('merge'))) {
+      addScore(scores, skill, 0.15);
     }
   }
   return scores;
+}
+
+function capScores(map) {
+  return Object.fromEntries(Object.entries(map).map(([k, v]) => [k, Math.min(v, 1)]));
 }
 
 function mergeScores(...scoreMaps) {
@@ -151,7 +135,7 @@ function mergeScores(...scoreMaps) {
 }
 
 function main() {
-  const input = process.env.CLAUDE_USER_PROMPT || process.argv.slice(2).join(' ') || '';
+  const input = readInput();
   if (!input) return;
 
   const triggers = loadYaml('triggers.yaml');
@@ -160,26 +144,23 @@ function main() {
 
   if (!triggers) return;
 
-  // Calculate component scores
-  const kwScores = keywordScore(input, triggers);
-  const intentScores = intentScore(input, triggers);
-  const ctxScores = contextScore(metadata, state);
+  // Component scores, each capped at 1 before weighting
+  const kwScores = capScores(keywordScore(input, triggers));
+  const intentScores = capScores(intentScore(input, triggers));
+  const ctxScores = capScores(contextScore(metadata, state));
 
-  // Merge with weights
   const final = mergeScores(
     Object.fromEntries(Object.entries(kwScores).map(([k, v]) => [k, v * 0.4])),
     Object.fromEntries(Object.entries(intentScores).map(([k, v]) => [k, v * 0.3])),
     Object.fromEntries(Object.entries(ctxScores).map(([k, v]) => [k, v * 0.3]))
   );
 
-  // Sort by confidence desc
   const ranked = Object.entries(final)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5);
 
   if (ranked.length === 0) return;
 
-  // Output routing hint
   const lines = ranked.map(([skill, score], i) => {
     const confidence = Math.min(Math.round(score * 100), 99);
     const meta = metadata?.skills?.[skill] || {};
@@ -190,7 +171,6 @@ function main() {
   console.log('[router] Confidence-ranked skills:');
   console.log(lines.join('\n'));
 
-  // Decision guidance
   const topScore = ranked[0]?.[1] || 0;
   if (topScore > 0.8) {
     console.log(`[router] Decision: Direct route → ${ranked[0][0]}`);

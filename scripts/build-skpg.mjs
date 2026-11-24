@@ -43,12 +43,21 @@ function loadTriggers() {
 
 function findSkillFrontmatter(baseDir) {
   const results = {};
-  const dirs = ['csp-meta', 'csp-workflow', 'csp-patterns', 'csp-runtime'];
-
-  for (const dir of dirs) {
-    const skillsDir = join(baseDir, dir, 'skills');
-    if (!existsSync(skillsDir)) continue;
-    scanDir(skillsDir, results);
+  // Skills live in packages/<pkg>/<layer>/skills/<name>/SKILL.md; scanning the
+  // old root-level layer dirs silently produced an empty map.
+  const packagesDir = join(baseDir, 'packages');
+  if (existsSync(packagesDir)) scanDir(packagesDir, results);
+  const routerMd = join(baseDir, 'csp-router', 'SKILL.md');
+  if (existsSync(routerMd)) {
+    const content = readFileSync(routerMd, 'utf8');
+    const match = content.match(/^---\n([\s\S]*?)\n---/);
+    if (match) {
+      try {
+        results['csp-router'] = parseSimpleYaml(match[1]);
+      } catch (e) {
+        // Skip malformed frontmatter
+      }
+    }
   }
   return results;
 }

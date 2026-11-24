@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="660" viewBox="0 0 900 660" font-family="-apple-system, 'Segoe UI', 'PingFang SC', sans-serif">
+  <rect width="900" height="660" fill="#ffffff"/>
+  <text x="24" y="34" font-size="18" font-weight="700" fill="#111827">CSP Architecture Overview</text>
+  <text x="24" y="54" font-size="12" fill="#6b7280">709 entries · 5 layers · on-demand loading · single source of truth: SKILL.md frontmatter</text>
+
+  <!-- Section 1: five layers -->
+  <text x="24" y="84" font-size="13" font-weight="700" fill="#374151">1 · Five-layer on-demand loading (only L0 resident, ~2,000 tokens)</text>
+  <g font-size="12">
+    <rect x="24" y="96" width="852" height="40" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <rect x="24" y="96" width="180" height="40" rx="6" fill="#2563eb"/>
+    <text x="36" y="113" fill="#ffffff" font-weight="700">L0 csp-router</text>
+    <text x="36" y="128" fill="#dbeafe" font-size="10">resident · 1 entry</text>
+    <text x="216" y="113" fill="#111827" font-weight="600">Task classification + confidence scoring + state awareness + SKPG graph</text>
+    <text x="216" y="128" fill="#6b7280" font-size="10">registry.json · triggers.yaml · skpg/graph.json · federation.yaml</text>
+
+    <rect x="24" y="142" width="852" height="40" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <rect x="24" y="142" width="180" height="40" rx="6" fill="#7c3aed"/>
+    <text x="36" y="159" fill="#ffffff" font-weight="700">L1 csp-meta</text>
+    <text x="36" y="174" fill="#ede9fe" font-size="10">methodology · 32 entries</text>
+    <text x="216" y="159" fill="#111827" font-weight="600">Brainstorming · TDD · systematic debugging · spec-driven · scope guard</text>
+    <text x="216" y="174" fill="#6b7280" font-size="10">~300 tokens/skill · packages/csp-code/csp-meta</text>
+
+    <rect x="24" y="188" width="852" height="40" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <rect x="24" y="188" width="180" height="40" rx="6" fill="#059669"/>
+    <text x="36" y="205" fill="#ffffff" font-weight="700">L2 csp-workflow</text>
+    <text x="36" y="220" fill="#d1fae5" font-size="10">lifecycle · 212 entries</text>
+    <text x="216" y="205" fill="#111827" font-weight="600">plan → execute → verify → ship · PMS/CMS/TMS specs · lifecycle orchestrator</text>
+    <text x="216" y="220" fill="#6b7280" font-size="10">~500 tokens/skill · packages/csp-code/csp-workflow</text>
+
+    <rect x="24" y="234" width="852" height="40" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <rect x="24" y="234" width="180" height="40" rx="6" fill="#d97706"/>
+    <text x="36" y="251" fill="#ffffff" font-weight="700">L3 csp-patterns</text>
+    <text x="36" y="266" fill="#fef3c7" font-size="10">knowledge · 406 entries</text>
+    <text x="216" y="251" fill="#111827" font-weight="600">15+ language reviewers · framework patterns · security · indie-dev toolkit</text>
+    <text x="216" y="266" fill="#6b7280" font-size="10">~200–600 tokens/skill · packages/csp-code/csp-patterns + domain packages</text>
+
+    <rect x="24" y="280" width="852" height="40" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <rect x="24" y="280" width="180" height="40" rx="6" fill="#0d9488"/>
+    <text x="36" y="297" fill="#ffffff" font-weight="700">L4 csp-runtime</text>
+    <text x="36" y="312" fill="#ccfbf1" font-size="10">execution · 58 entries</text>
+    <text x="216" y="297" fill="#111827" font-weight="600">Autopilot · ralph loop · ultrawork parallel · continuous learning · token budget</text>
+    <text x="216" y="312" fill="#6b7280" font-size="10">~300 tokens/skill · packages/csp-code/csp-runtime</text>
+  </g>
+
+  <!-- Section 2: routing -->
+  <text x="24" y="352" font-size="13" font-weight="700" fill="#374151">2 · Routing decision (keyword 40% + intent 30% + context 30%)</text>
+  <g font-size="11">
+    <rect x="24" y="364" width="110" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="79" y="386" text-anchor="middle" fill="#1f2937">User input</text>
+    <text x="142" y="386" fill="#9ca3af" font-weight="700">→</text>
+    <rect x="158" y="364" width="140" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="228" y="380" text-anchor="middle" fill="#1f2937">State detection</text>
+    <text x="228" y="393" text-anchor="middle" fill="#6b7280" font-size="9">git / stack / phase</text>
+    <text x="306" y="386" fill="#9ca3af" font-weight="700">→</text>
+    <rect x="322" y="364" width="150" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="397" y="380" text-anchor="middle" fill="#1f2937">Keyword + intent match</text>
+    <text x="397" y="393" text-anchor="middle" fill="#6b7280" font-size="9">triggers.yaml</text>
+    <text x="480" y="386" fill="#9ca3af" font-weight="700">→</text>
+    <rect x="496" y="364" width="130" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="561" y="380" text-anchor="middle" fill="#1f2937">Confidence score</text>
+    <text x="561" y="393" text-anchor="middle" fill="#6b7280" font-size="9">+ SKPG check</text>
+    <text x="634" y="386" fill="#9ca3af" font-weight="700">→</text>
+    <rect x="650" y="364" width="226" height="36" rx="6" fill="#d1fae5" stroke="#6ee7b7"/>
+    <text x="763" y="380" text-anchor="middle" fill="#065f46" font-weight="600">&gt;80% direct route</text>
+    <text x="763" y="393" text-anchor="middle" fill="#047857" font-size="9">50–80% confirm top 3 · &lt;50% deep interview</text>
+  </g>
+  <text x="24" y="422" font-size="10" fill="#6b7280">Artifact handoff: predecessor outputs in .csp/ let successor skills skip completed phases (spec → plan → autopilot).</text>
+
+  <!-- Section 3: build pipeline -->
+  <text x="24" y="452" font-size="13" font-weight="700" fill="#374151">3 · Engineering pipeline (derived data — never hand-edit)</text>
+  <g font-size="11">
+    <rect x="24" y="464" width="190" height="36" rx="6" fill="#d1fae5" stroke="#6ee7b7"/>
+    <text x="119" y="480" text-anchor="middle" fill="#065f46" font-weight="600">SKILL.md frontmatter</text>
+    <text x="119" y="493" text-anchor="middle" fill="#047857" font-size="9">single source of truth</text>
+    <text x="222" y="486" fill="#9ca3af" font-weight="700">→</text>
+    <rect x="238" y="464" width="130" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="303" y="486" text-anchor="middle" fill="#1f2937">npm run build:all</text>
+    <text x="376" y="486" fill="#9ca3af" font-weight="700">→</text>
+    <rect x="392" y="464" width="100" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="442" y="486" text-anchor="middle" fill="#1f2937">registry.json</text>
+    <rect x="500" y="464" width="100" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="550" y="486" text-anchor="middle" fill="#1f2937">triggers.yaml</text>
+    <rect x="608" y="464" width="100" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="658" y="486" text-anchor="middle" fill="#1f2937">SKPG graph</text>
+    <rect x="716" y="464" width="160" height="36" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+    <text x="796" y="486" text-anchor="middle" fill="#1f2937">metadata · dashboard</text>
+  </g>
+  <text x="24" y="522" font-size="10" fill="#6b7280">npm test = validate:all + graph rebuild + invariant assertions · zero-runtime-dependency Node ≥18 ESM</text>
+
+  <!-- Section 4: governance -->
+  <text x="24" y="552" font-size="13" font-weight="700" fill="#374151">4 · Delivery governance (prompts/ + .csp/ living baselines)</text>
+  <g font-size="11">
+    <rect x="24" y="564" width="560" height="64" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="36" y="584" fill="#111827" font-weight="600">Agent pipeline 00 → 07</text>
+    <text x="36" y="600" fill="#6b7280" font-size="10">knowledge-hub → prd-writer → decomposer → tech-designer →</text>
+    <text x="36" y="614" fill="#6b7280" font-size="10">task-breaker → dev-lead (parallel worktrees) → release-manager → reviewer</text>
+    <rect x="600" y="564" width="276" height="64" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
+    <rect x="612" y="576" width="44" height="18" rx="9" fill="#db2777"/>
+    <text x="634" y="589" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">PMS</text>
+    <rect x="664" y="576" width="44" height="18" rx="9" fill="#2563eb"/>
+    <text x="686" y="589" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">CMS</text>
+    <rect x="716" y="576" width="44" height="18" rx="9" fill="#059669"/>
+    <text x="738" y="589" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">TMS</text>
+    <text x="612" y="612" fill="#6b7280" font-size="10">product / code / test specs — read before</text>
+    <text x="612" y="624" fill="#6b7280" font-size="10">each stage, write back deltas after ship</text>
+  </g>
+  <text x="24" y="650" font-size="10" fill="#9ca3af">Distribution: install.sh detects 22+ platforms and copies the five layers into each CLI's skills directory · no daemon</text>
+</svg>

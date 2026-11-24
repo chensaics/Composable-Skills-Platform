@@ -14,6 +14,7 @@ import { strict as assert } from 'node:assert';
 import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { resolve, join, basename, dirname } from 'node:path';
+import { parseSimpleYaml } from '../shared/scripts/lib/yaml.mjs';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const readJSON = (p) => JSON.parse(readFileSync(join(ROOT, p), 'utf8'));
@@ -74,13 +75,29 @@ test('graph: skill_count equals registry count', () => {
     `graph stats.skill_count (${graph.stats.skill_count}) != registry (${registry.skills.length})`);
 });
 
-test('graph: has the four expected edge types (derived from edges, not stats)', () => {
+test('graph: has the expected edge types (derived from edges, not stats)', () => {
   const kinds = new Set();
   for (const e of graph.edges) kinds.add(e.kind);
-  for (const k of ['contains', 'triggers', 'depends_on', 'related_to']) {
+  for (const k of ['contains', 'triggers', 'depends_on', 'related_to', 'mentions']) {
     assert.ok(kinds.has(k), `graph must contain "${k}" edges (found: ${[...kinds].join(', ')})`);
   }
   assert.equal(graph.stats.edge_count, graph.edges.length, 'stats.edge_count must equal edges.length');
+});
+
+test('graph: SKILL.md entries carry phase metadata (scanner regression guard)', () => {
+  const skillMdNames = new Set(registry.skills.filter(s => s.path.endsWith('SKILL.md')).map(s => s.name));
+  const nodes = Object.values(graph.nodes).filter(n => n.kind === 'skill' && skillMdNames.has(n.name));
+  const withPhase = nodes.filter(n => n.metadata?.phase);
+  assert.ok(nodes.length > 300, `expected 300+ SKILL.md nodes, got ${nodes.length}`);
+  assert.ok(withPhase.length / nodes.length >= 0.9,
+    `phase coverage ${(withPhase.length / nodes.length * 100).toFixed(1)}% < 90% — frontmatter scanner likely broken`);
+});
+
+test('metadata: skill-metadata.yaml is populated (context-score regression guard)', () => {
+  const meta = parseSimpleYaml(readText('csp-router/skill-metadata.yaml'));
+  const count = Object.keys(meta.skills || {}).length;
+  assert.ok(count >= 350, `skill-metadata.yaml has ${count} skills — builder scan path likely broken`);
+  assert.ok(meta.skills['csp-tdd']?.phase, 'csp-tdd must carry phase metadata');
 });
 
 test('graph: csp-tech-diagram is present (was previously missing)', () => {
@@ -92,6 +109,18 @@ test('graph: csp-tech-diagram is present (was previously missing)', () => {
 // (enforced by install.sh), not a build invariant — it doesn't exist in CI.
 
 // ── Triggers integrity ─────────────────────────────────────────────
+test('triggers: every trigger_index entry has a non-empty, duplicate-free skills array', () => {
+  const triggers = parseSimpleYaml(readText('csp-router/triggers.yaml'));
+  const entries = Object.entries(triggers.trigger_index || {});
+  assert.ok(entries.length > 500, `expected 500+ trigger entries, got ${entries.length}`);
+  for (const [keyword, entry] of entries) {
+    assert.ok(Array.isArray(entry?.skills) && entry.skills.length > 0,
+      `trigger "${keyword}" must have a non-empty skills array (router crashes otherwise)`);
+    assert.equal(new Set(entry.skills).size, entry.skills.length,
+      `trigger "${keyword}" has duplicate skills (double-counts in scoring)`);
+  }
+});
+
 test('triggers: every referenced skill exists in registry', () => {
   const regNames = new Set(registry.skills.map(s => s.name));
   const yaml = readText('csp-router/triggers.yaml');
@@ -123,8 +152,10 @@ test('version: VERSION file, package.json, install.sh, CLAUDE.md agree', () => {
 test('version: README skill-count matches registry', () => {
   const readme = readText('README.md');
   const readmeZh = readText('README_zh.md');
-  assert.match(readme, new RegExp(`Skills:\\s*${registry.skills.length}`), 'README badge skill count stale');
-  assert.match(readmeZh, new RegExp(`${registry.skills.length}\\s*个技能`), 'README_zh skill count stale');
+  const n = registry.skills.length;
+  assert.match(readme, new RegExp(`badge\\/entries-${n}-`), 'README entries badge count stale');
+  assert.match(readmeZh, new RegExp(`badge\\/entries-${n}-`), 'README_zh entries badge count stale');
+  assert.match(readmeZh, new RegExp(`${n}\\s*个条目`), 'README_zh entry count stale');
 });
 
 // ── csp-sdk CLI contract ───────────────────────────────────────────

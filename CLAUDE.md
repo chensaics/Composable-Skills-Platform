@@ -6,11 +6,11 @@
 
 ```
 L0  csp-router    — task classification + skill selection (always loaded, ~800 tokens)
-L1  packages/csp-code/csp-meta      — methodology: brainstorming, TDD, debugging, spec-driven (27 entries)
-L2  packages/csp-code/csp-workflow  — project lifecycle: plan → execute → verify → ship (206 entries)
-L3  packages/csp-code/csp-patterns  — language/framework patterns, reviewers, build-resolvers (419 entries)
-L4  packages/csp-code/csp-runtime   — autopilot, ralph, wiki, remember, self-improve (57 entries)
-Total: 706 entries across 5 layers (2 deprecated, carry redirect targets)
+L1  packages/csp-code/csp-meta      — methodology: brainstorming, TDD, debugging, spec-driven (32 entries)
+L2  packages/csp-code/csp-workflow  — project lifecycle: plan → execute → verify → ship (212 entries)
+L3  packages/csp-code/csp-patterns  — language/framework patterns, reviewers, build-resolvers (406 entries)
+L4  packages/csp-code/csp-runtime   — autopilot, ralph, wiki, remember, self-improve (58 entries)
+Total: 709 entries across 5 layers (397 skills + 116 agents + 153 commands + 36 workflows + 7 tools; 2 deprecated, carry redirect targets)
 ```
 
 ## Skill 内容规范（强制，所有新增/移植技能必须遵守）
@@ -48,17 +48,18 @@ npm test               # validate:all + build:graph + node --test test/ (20 inva
 
 ## Docs
 
-- [ARCHITECTURE.md](./docs/ARCHITECTURE.md) — full architecture design
-- [SKILL-INDEX.md](./docs/SKILL-INDEX.md) — complete skill index
-- [USER-GUIDE.md](./docs/USER-GUIDE.md) — user guide
-- [INSTALL.md](./docs/INSTALL.md) — installation guide
-- [UPDATE.md](./docs/UPDATE.md) — update guide
-- [VERSIONING.md](./docs/VERSIONING.md) — version management (X=arch/system-refactor, Y=module/feature, Z=fix)
+- [ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md) — full architecture design
+- [SKILL-INDEX.md](./docs/reference/SKILL-INDEX.md) — complete skill index
+- [USER-GUIDE.md](./docs/guides/USER-GUIDE.md) — user guide
+- [INSTALL.md](./docs/guides/INSTALL.md) — installation guide
+- [UPDATE.md](./docs/guides/UPDATE.md) — update guide
+- [ENGINEERING.md](./docs/guides/ENGINEERING.md) — build pipeline & supply-chain safety
+- [VERSIONING.md](./docs/reference/VERSIONING.md) — version management (X=arch/system-refactor, Y=module/feature, Z=fix)
 - [CONTRIBUTING.md](./CONTRIBUTING.md) — how to contribute a skill or fix (quality tiers, AI usage policy, skill review process)
 - [SKILL-TEMPLATE-v3.md](./shared/templates/SKILL-TEMPLATE-v3.md) — v3 增强版模板（quality tiers, type classification, CSO, token budgets）
 - [SKILL-SPEC.md](./docs/reference/SKILL-SPEC.md) — v3 规范（frontmatter + body structure requirements）
 - [scripts/README.md](./scripts/README.md) — build/validate/maintenance tooling reference
-- [docs/analysis/](./docs/analysis/project-review-2026-08.md) — audit reports + upgrade plans (project-review-2026-08, REVIEW-PROGRAMMING-SKILLS, cross-layer-testing-case-study)
+- [docs/reports/](./docs/reports/project-review-2026-08.md) — audit reports + upgrade plans (project-review-2026-08, REVIEW-PROGRAMMING-SKILLS, cross-layer-testing-case-study)
 
 ## CSP 知识中枢 & Agent 团队
 
@@ -91,7 +92,7 @@ npm test               # validate:all + build:graph + node --test test/ (20 inva
 <!-- csp-begin (do not edit between these markers) -->
 # CSP (Code Skills Package)
 
-本项目已安装 CSP 技能包（309 个 skills，五层架构）。
+本项目已安装 CSP 技能包（397 个 skills，五层架构）。
 
 ## 使用方式
 
@@ -108,327 +109,10 @@ npm test               # validate:all + build:graph + node --test test/ (20 inva
 3. **测试先于实现** — 写代码前先写测试（TDD）
 4. **验证先于完成** — 声称完成前必须运行验证命令
 
-## 技能质量（v3 规范）
+## 技能质量
 
 新增/编辑 skill 请使用 v3 模板 (`shared/templates/SKILL-TEMPLATE-v3.md`)，按技能类型（technique/pattern/reference/workflow/guardian）选择 Required Sections，目标 Tier B 以上。
 编写前加载 `csp-writing-skills` 获取结构化质量指南。
 验证：`node scripts/validate-skill-v3.mjs <skill-path> --strict`
 
-## 可用 Skills
-
-Skills 位于 `.claude/skills/` 目录，按五层架构组织。
-
-- **csp-router**: >
-- **csp-context-engineering**: Optimizes agent context setup. Use when starting a new session, when agent outpu
-- **csp-verification**: >
-- **csp-test-methodology**: >
-- **csp-mvp-scoping**: >
-- **csp-spec-contract**: Transform ideas, requirements, or discussions into CSP SPEC contracts with trace
-- **csp-receiving-code-review**: Use when receiving code review feedback, before implementing suggestions, especi
-- **csp-source-driven-development**: Grounds every implementation decision in official documentation. Use when you wa
-- **csp-doubt-driven-development**: Subjects every non-trivial decision to a fresh-context adversarial review before
-- **csp-using-skills**: Use when starting any conversation - establishes how to find and use skills, req
-- **csp-skill-optimizer**: Use when collecting user feedback on skill behavior, identifying skill coverage 
-- **csp-interview-me**: Extracts what the user actually wants instead of what they think they should wan
-- **csp-code-graph**: Code knowledge graph methodology and lifecycle orchestration. Use when starting 
-- **csp-executing-plans**: Use when you have a written implementation plan to execute in a separate session
-- **csp-using-git-worktrees**: Use when starting feature work that needs isolation from current workspace or be
-- **csp-requesting-code-review**: Use when completing tasks, implementing major features, or before merging to ver
-- **csp-systematic-debugging**: Use when encountering any bug, test failure, or unexpected behavior, before prop
-- **csp-writing-skills**: Use when creating new CSP skills, editing existing skills, or verifying skills meet quality standards before release. Covers frontmatter, body structure (v3 quality tiers A/B/C), skill type classification (technique/pattern/reference/workflow/guardian), CSO optimization, token budgets, and RED-GREEN-REFACTOR testing. Keywords: write skill, create skill, edit skill, skill quality, 编写技能, 创建技能, 技能模板. 
-- **csp-tdd**: >
-- **csp-party-mode**: Multi-agent collaboration for complex problem-solving with specialized AI agents
-- **csp-spec-driven-development**: CSP-native spec-driven methodology integrated with CSP phase workflows. Use when
-- **csp-scope-guard**: >
-- **csp-finishing-a-development-branch**: Use when implementation is complete, all tests pass, and you need to decide how 
-- **csp-agent-teams**: >
-- **csp-writing-plans**: Use when you have a spec or requirements for a multi-step task, before touching 
-- **csp-doc-review**: Review requirements or plan documents using parallel persona agents that surface
-- **csp-brainstorming**: >
-- **csp-competitive-analysis**: >
-- **csp-code-understanding**: 
-- **csp-prd-change-impact**: 
-- **csp-code-spec**: >
-- **csp-code-wiki**: >
-- **csp-knowledge-hub**: >
-- **csp-requirement-decomposition**: 
-- **csp-indie-deploy-ops**: >
-- **csp-fullstack-spec-generator**: 
-- **csp-hotfix**: 
-- **csp-graph-architecture**: Codebase architecture analysis via knowledge graph. Use when onboarding to a cod
-- **csp-user-story-decomposition**: >
-- **csp-lifecycle-orchestrator**: 
-- **csp-plan-phase**: 
-- **csp-graph-build**: Build and maintain the code knowledge graph. Use when indexing a new repository,
-- **csp-product-metrics-review**: >
-- **csp-domain-driven-design**: 
-- **csp-requirement-prioritization**: >
-- **csp-test-spec**: >
-- **csp-doc-lifecycle-manager**: Manage project documentation lifecycle: categorize, archive, index, and prune do
-- **csp-prd-traceability**: 
-- **csp-deprecation-and-migration**: Manages deprecation and migration. Use when removing old systems, APIs, or featu
-- **csp-tech-debt-paydown**: >
-- **csp-compound-learning**: Document a recently solved problem to compound your team's knowledge. Captures s
-- **csp-simple-dev**: 
-- **csp-compound-refresh**: Refresh stale learning and pattern docs under docs/solutions/ by reviewing them 
-- **csp-session-knowledge-extractor**: Extract reusable knowledge from development sessions and route to appropriate do
-- **csp-workflow-schema**: >
-- **csp-parallel-worktree**: >
-- **csp-project-doc-architect**: Design and maintain project documentation architecture: folder structure, naming
-- **csp-roadmap-update**: >
-- **csp-user-feedback-analysis**: >
-- **csp-qa-cr-review**: 系统化 Code Review 评审工作流。覆盖影响范围、安全性、代码质量、测试覆盖、性能、可维护性六个维度，支持大 CR 并行模式、蒸馏增强调用链追溯、增量版
-- **csp-tech-stack-advisor**: 
-- **csp-multi-review**: Structured code review using tiered persona agents, confidence-gated findings, a
-- **csp-design-hub**: 
-- **csp-explore**: Exploration phase specialist for understanding codebases, investigating patterns
-- **csp-implementation-phase**: Implementation phase specialist for executing planned work with proper patterns,
-- **csp-tech-task-breakdown**: 
-- **csp-codebase-audit**: Multi-dimensional codebase audit: parallel Explore agents investigate one dimens
-- **csp-product-spec**: >
-- **csp-graph-review**: Graph-powered code review with minimal context assembly and risk scoring. Use wh
-- **csp-tweak**: 
-- **csp-full**: 
-- **csp-tech-design-review**: 
-- **csp-defect-mining**: Systematic defect discovery via DIVERSE test methodologies — when a test suite h
-- **csp-product-discovery-orchestrator**: 
-- **csp-strategy**: Create or maintain STRATEGY.md - the product's target problem, approach, users, 
-- **csp-graph-refactor**: Graph-powered safe refactoring. Use when renaming symbols, moving code between m
-- **csp-product-pulse**: Generate a time-windowed pulse report on what users experienced and how the prod
-- **csp-tech-solution-design**: 
-- **csp-effort-estimation**: 
-- **csp-tech-risk-assessment**: 
-- **csp-integration-design**: 
-- **csp-solo-oncall**: >
-- **csp-prd-parser**: 
-- **csp-prd-generation**: >
-- **csp-legacy-modernization**: >
-- **csp-verify-phase**: Verification phase specialist ensuring all acceptance criteria are met, tests pa
-- **csp-graph-impact**: Graph-powered change impact analysis. Use when a diff or PR is ready and you nee
-- **csp-shipping-and-launch**: Prepares production launches. Use when preparing to deploy to production. Use wh
-- **csp-agentic-identity-trust**: Identity systems architect for autonomous AI agents — designs cryptographic iden
-- **csp-api-tester**: Comprehensive API testing specialist — functional validation, performance testin
-- **csp-data-engineer**: Data pipeline architect specializing in reliable ETL/ELT, lakehouse architecture
-- **csp-multi-agent-architect**: Systems architect for multi-agent AI pipelines — topology selection, context man
-- **csp-workflow-architect**: Workflow design specialist who maps complete workflow trees — happy paths, all b
-- **csp-prompt-engineer**: Prompt design and LLM behavior specialist — crafts, tests, and systematically op
-- **csp-project-standards-reviewer**: >
-- **csp-csharp-reviewer**: >
-- **csp-incident-commander**: Production and security incident management specialist — severity classification
-- **csp-springboot-reviewer**: >
-- **csp-web-performance-auditor**: Web performance engineer focused on Core Web Vitals, loading, rendering, and net
-- **csp-model-qa**: Independent ML model QA auditor — end-to-end audits from documentation review, d
-- **csp-test-engineer**: QA engineer specialized in test strategy, test writing, and coverage analysis. U
-- **csp-mcp-builder**: Model Context Protocol specialist who designs, builds, and tests MCP servers tha
-- **csp-minimal-change-engineer**: Surgical implementation specialist — fixes only what was asked, refuses scope cr
-- **csp-document-generator**: Programmatic document creation specialist — generates professional PDF, PPTX, DO
-- **csp-swift-actor-persistence**: Thread-safe data persistence in Swift using actors — in-memory cache with file-b
-- **csp-fal-ai-media**: Unified media generation via fal.ai MCP — image, video, and audio. Covers text-t
-- **csp-cloud-platform-patterns**: >
-- **csp-django-patterns**: Django architecture patterns, REST API design with DRF, ORM best practices, cach
-- **csp-web-artifacts**: 用于创建复杂、多组件的 HTML 网页，采用现代前端 Web 技术（React、Tailwind CSS、shadcn/ui）。适用于需要状态管理、路由或 sh
-- **csp-crosspost**: Multi-platform content distribution across X, LinkedIn, Threads, and Bluesky. Ad
-- **csp-flow-web**: >
-- **csp-deep-research**: Multi-source deep research using firecrawl and exa MCPs. Searches the web, synth
-- **csp-db-backup**: >
-- **csp-golang-patterns**: >
-- **csp-cross-layer-testing**: >
-- **csp-cicd-pipelines**: >
-- **csp-docs-lookup**: >
-- **csp-django-security**: Django security best practices, authentication, authorization, CSRF protection, 
-- **csp-code-review**: Comprehensive code review specialist for correctness, reuse, simplification, and
-- **csp-chart**: >
-- **csp-docker-patterns**: >
-- **csp-ruff-fixer**: >
-- **csp-tech-diagram**: >-
-- **csp-python-testing**: >
-- **csp-dmux-workflows**: Multi-agent orchestration using dmux (tmux pane manager for AI agents). Patterns
-- **csp-kotlin-testing**: Kotlin testing patterns with Kotest, MockK, coroutine testing, property-based te
-- **csp-user-analytics**: >
-- **csp-code-tour-guide**: >
-- **csp-codeql-analyst**: >
-- **csp-java-coding-standards**: Java coding standards for Spring Boot and Quarkus services: naming, immutability
-- **csp-agent-introspection-debugging**: Structured self-debugging workflow for AI agent failures using capture, diagnosi
-- **csp-jpa-patterns**: JPA/Hibernate patterns for entity design, relationships, query optimization, tra
-- **csp-frame**: >
-- **csp-investor-outreach**: Draft cold emails, warm intro blurbs, follow-ups, update emails, and investor co
-- **csp-agent-sort**: Build an evidence-backed CSP install plan for a specific repo by sorting skills,
-- **csp-webhook-architecture**: >
-- **csp-scope**: >
-- **csp-cpp-coding-standards**: C++ coding standards based on the C++ Core Guidelines (isocpp.github.io). Use wh
-- **csp-data-pipeline-patterns**: Production data pipeline patterns covering Airflow DAG design, dbt transformatio
-- **csp-java-testing**: >
-- **csp-access**: >
-- **csp-mcp-server-patterns**: Build MCP servers with Node/TypeScript SDK — tools, resources, prompts, Zod vali
-- **csp-pitch**: >
-- **csp-i18n-frameworks**: >
-- **csp-swift-protocol-di-testing**: Protocol-based dependency injection for testable Swift code — mock file system, 
-- **csp-bun-runtime**: Bun as runtime, package manager, bundler, and test runner. When to choose Bun vs
-- **csp-postgres-patterns**: >
-- **csp-sql-reviewer**: >
-- **csp-typescript-testing**: >
-- **csp-react-version-patterns**: >
-- **csp-deployment**: >
-- **csp-postgres-optimizer**: >
-- **csp-qa**: >
-- **csp-react-reviewer**: Expert React code reviewer specializing in hooks rules, component patterns, perf
-- **csp-market-research**: Conduct market research, competitive analysis, investor due diligence, and indus
-- **csp-observability-and-instrumentation**: Instruments code so production behavior is visible and diagnosable. Use when add
-- **csp-brand-voice**: Build a source-derived writing style profile from real posts, essays, launch not
-- **csp-springboot-security**: Spring Security best practices for authn/authz, validation, CSRF, secrets, heade
-- **csp-bench**: >
-- **csp-qa-test-engineering**: 全生命周期 QA 测试工程技能。覆盖需求分析→测试计划→测试用例→自动化执行→生产问题调查完整流程。涉及测试规划、测试策略、用例生成、接口测试、回归测试、生产调
-- **csp-subscription-management**: >
-- **csp-springboot-patterns**: Spring Boot architecture patterns, REST API design, layered services, data acces
-- **csp-changelog-management**: >
-- **csp-mock-strategies**: >
-- **csp-db-performance**: >
-- **csp-frontend-performance**: >
-- **csp-x-api**: X/Twitter API integration for posting tweets, threads, reading timelines, search
-- **csp-prompt-engineering**: Production prompt engineering covering template management with Jinja2/Mustache,
-- **csp-refactorer**: >
-- **csp-article-writing**: Write articles, guides, blog posts, tutorials, newsletter issues, and other long
-- **csp-python-coding-standards**: Python coding standards (Python 3.10+) covering naming & style (PEP 8), type ann
-- **csp-responsive-design**: Implement modern responsive layouts using container queries, fluid typography, C
-- **csp-journey**: >
-- **csp-cpp-testing**: Use only when writing/updating/fixing C++ tests, configuring GoogleTest/CTest, d
-- **csp-react-patterns**: React 18/19 patterns including hooks discipline, server/client component boundar
-- **csp-h5-visual-testing**: >
-- **csp-nestjs-patterns**: NestJS architecture patterns for modules, controllers, providers, DTO validation
-- **csp-sitemap**: >
-- **csp-search-first**: >
-- **csp-rust-testing**: Rust testing patterns including unit tests, integration tests, async testing, pr
-- **csp-board**: >
-- **csp-cross-platform-strategy**: >
-- **csp-platform-deploy**: >
-- **csp-flow-mobile**: >
-- **csp-paper-reader**: 解析、解读、探索、讲解、总结某领域最新论文或某篇具体论文。 触发词：解析论文、解读论文、论文总结、paper review、read paper、论文笔记、最新
-- **csp-vps-deploy**: >
-- **csp-everything-claude-code**: Development conventions and patterns for JavaScript projects with conventional c
-- **csp-product-capability**: Translate PRD intent, roadmap asks, or product discussions into an implementatio
-- **csp-frontend-patterns**: >
-- **csp-kotlin-patterns**: Idiomatic Kotlin patterns, best practices, and conventions for building robust, 
-- **csp-git-conventions**: >
-- **csp-html-prototype**: 生成用于 UI 线框图和模型图的交互式 HTML 原型页面。当用户要求创建原型、线框图、模型图、页面设计或 UI 布局时使用。支持移动端、桌面端和平板设备，并可
-- **csp-motion-plan**: >
-- **csp-stories**: >
-- **csp-refactoring-strategies**: >
-- **csp-exa-search**: Neural search via Exa MCP for web, code, and company research. Use when the user
-- **csp-db-state-assertion**: >
-- **csp-playwright-ui-test**: >
-- **csp-typescript-patterns**: >
-- **csp-fastapi-patterns**: FastAPI patterns for async APIs, dependency injection, Pydantic request and resp
-- **csp-strategic-compact**: Suggests manual context compaction at logical intervals to preserve context thro
-- **csp-mobile-performance**: >
-- **csp-backend-patterns**: >
-- **csp-infrastructure-as-code**: >
-- **csp-monitoring-alerting**: >
-- **csp-mle-workflow**: Production machine-learning engineering workflow for data contracts, reproducibl
-- **csp-eval-harness**: Formal evaluation framework for Claude Code sessions implementing eval-driven de
-- **csp-monorepo-tooling**: >
-- **csp-check**: >
-- **csp-code-simplification**: >
-- **csp-file-storage**: >
-- **csp-nextjs-turbopack**: Next.js 16+ and Turbopack — incremental bundling, FS caching, dev speed, and whe
-- **csp-frontend-slides**: Create stunning, animation-rich HTML presentations from scratch or by converting
-- **csp-oauth-integration**: >
-- **csp-probe**: >
-- **csp-avatar**: >
-- **csp-edge**: >
-- **csp-react-native-patterns**: >
-- **csp-webapp-testing**: >
-- **csp-visual-regression**: >
-- **csp-frontend-design**: Create distinctive, production-grade frontend interfaces with high design qualit
-- **csp-autonomous-loops**: Patterns and architectures for autonomous Claude Code loops — from simple sequen
-- **csp-api-governance**: >
-- **csp-motion-apply**: >
-- **csp-vllm-serving**: Production vLLM inference serving patterns covering Docker setup, continuous bat
-- **csp-e2e-testing**: >
-- **csp-kubernetes-patterns**: >
-- **csp-llm-app-development**: Production LLM application development patterns covering prompt engineering, fun
-- **csp-content-engine**: Create platform-native content systems for X, LinkedIn, TikTok, YouTube, newslet
-- **csp-db-migration**: >
-- **csp-browser-testing-with-devtools**: Tests in real browsers via Chrome DevTools MCP. Use when building or debugging a
-- **csp-video-editing**: AI-assisted video editing workflows for cutting, structuring, and augmenting rea
-- **csp-rust-patterns**: Idiomatic Rust patterns, ownership, error handling, traits, concurrency, and bes
-- **csp-package-publishing**: >
-- **csp-metric**: >
-- **csp-rag-architecture**: Production RAG architecture patterns covering chunking strategies, embedding mod
-- **csp-extract**: >
-- **csp-agentic-engineering**: >
-- **csp-python-reviewer**: Python coding specification and code review specialist. Covers PEP 8, type safet
-- **csp-coding-standards**: >
-- **csp-audit**: >
-- **csp-seo-engineering**: >
-- **csp-spec-adr**: >
-- **csp-investor-materials**: Create and update pitch decks, one-pagers, investor memos, accelerator applicati
-- **csp-tech-debt-assessment**: >
-- **csp-signal**: >
-- **csp-performance-optimizer**: Performance optimization specialist for identifying bottlenecks, improving effic
-- **csp-react-testing**: React component testing with React Testing Library, Vitest/Jest, MSW for network
-- **csp-prd**: >
-- **csp-content-hash-cache-pattern**: Cache expensive file processing results using SHA-256 content hashes — path-inde
-- **csp-api-codegen**: >
-- **csp-payment-integration**: >
-- **csp-data-analysis**: Implement analytics, data analysis, and visualization best practices using Pytho
-- **csp-locale-management**: >
-- **csp-python-patterns**: >
-- **csp-retro**: >
-- **csp-backend-performance**: >
-- **csp-pytorch-patterns**: PyTorch deep learning patterns and best practices for building robust, efficient
-- **csp-privacy-compliance**: >
-- **csp-brief**: >
-- **csp-poster**: >
-- **csp-golang-testing**: >
-- **csp-test**: >
-- **csp-security-review**: >
-- **csp-email-systems**: >
-- **csp-cancel**: Cancel any active CSP mode (autopilot, ralph, ultrawork, ultraqa, swarm, ultrapi
-- **csp-create-skill**: 标准技能创建向导 — 交互式引导用户创建高质量 CSP 新技能，自动完成脚手架、注册与校验。当用户想创建/新增/编写/迁移 skill（create skill
-- **csp-setup**: Use first for install/update routing — sends setup, doctor, or MCP requests to t
-- **csp-mcp-setup**: Configure popular MCP servers for enhanced agent capabilities
-- **csp-ralph**: Self-referential loop until task completion with configurable verification revie
-- **csp-reference**: CSP agent catalog, available tools, team pipeline routing, commit protocol, and 
-- **csp-autopilot**: Full autonomous execution from idea to working code
-- **csp-budget-enforcer**: >
-- **csp-deep-interview**: Socratic deep interview with mathematical ambiguity gating before explicit execu
-- **csp-deepinit**: Deep codebase initialization with hierarchical AGENTS.md documentation
-- **csp-ultraqa**: QA cycling workflow - test, verify, fix, repeat until goal met
-- **csp-team**: N coordinated agents on shared task list using Claude Code native teams
-- **csp-external-context**: Invoke parallel document-specialist agents for external web searches and documen
-- **csp-doctor**: Diagnose and fix code-skills-package installation issues
-- **csp-trace**: Evidence-driven tracing lane that orchestrates competing tracer hypotheses in Cl
-- **csp-ask**: Process-first advisor routing for Claude, Codex, or Gemini via `csp ask`, with a
-- **csp-model-selector**: >
-- **csp-linked-test-runner**: >
-- **csp-project-session-manager**: Worktree-first dev environment manager for issues, PRs, and features with option
-- **csp-release**: Generic release assistant — analyzes repo release rules, caches them in .csp/REL
-- **csp-skill**: Manage local skills - list, add, remove, search, edit, setup wizard
-- **csp-plan**: >
-- **csp-autoresearch**: Stateful single-mission improvement loop with strict evaluator contract, markdow
-- **csp-learner**: Extract a learned skill from the current conversation
-- **csp-scientist**: Orchestrate parallel scientist agents for comprehensive analysis with AUTO mode
-- **csp-ultrawork**: Parallel execution engine for high-throughput task completion
-- **csp-learning-loop**: >
-- **csp-wiki**: >
-- **csp-writer-memory**: Agentic memory system for writers - track characters, relationships, scenes, and
-- **csp-ccg**: Claude-Codex-Gemini tri-model orchestration via /ask codex + /ask gemini, then C
-- **csp-hud**: Configure HUD display options (layout, presets, display elements)
-- **csp-skillify**: Turn a repeatable workflow from the current session into a reusable CSP skill dr
-- **csp-debug**: Diagnose the current CSP session or repo state using logs, traces, state, and fo
-- **csp-file-organizer**: 通过理解上下文、查找重复文件、建议更合理的目录结构并自动化清理任务，智能整理你电脑中的文件与文件夹。降低整理负担，让数字工作空间长期保持整洁有序。
-- **csp-deep-dive**: 2-stage pipeline: trace (causal investigation) -> deep-interview (requirements c
-- **csp-complexity-classifier**: >
-- **csp-skill-creator**: Interactive skill creation wizard — guides users through creating new CSP skills
-- **csp-configure-notifications**: Configure notification integrations (Telegram, Discord, Slack) via natural langu
-- **csp-visual-verdict**: Structured visual QA verdict for screenshot-to-reference comparisons
-- **csp-self-improve**: Autonomous evolutionary code improvement engine with tournament selection
-- **csp-ultragoal**: Durable multi-goal workflow that persists plan/ledger artifacts under .csp/ultra
-- **csp-local-build-reminder**: Remind the user to rebuild CSP after editing TypeScript when running from a loca
-- **csp-remember**: Review reusable project knowledge and decide what belongs in project memory, not
-- **csp-cli-teams**: CLI-team runtime for claude, codex, or gemini workers in tmux panes when you nee
-
-## 如何使用
-
-使用 `Skill` 工具加载对应 skill 并严格遵循其流程。如果你认为哪怕只有 1% 的可能性某个 skill 适用，你必须调用该 skill 检查。
 <!-- csp-end -->
