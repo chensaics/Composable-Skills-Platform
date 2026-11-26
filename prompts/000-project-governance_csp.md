@@ -1,4 +1,4 @@
-使用 CSP 项目治理能力管理项目级规范：目录结构、产物路径、版本管理、文档边界。本文件是三件套（产品规划/开发/测试）的第四份——项目治理横切面。
+使用 CSP 项目治理能力管理项目级规范：目录结构、产物路径、版本管理、文档边界。
 
 > 项目治理 ≠ 开发流程。治理关注权威、路径、更新责任、新鲜度、引用和保留。跨项目的四层入口与产物规则由 `[[workflow:csp-knowledge-hub]]` 的 `references/project-entry-contract.md` 承载；本文只指引何时调用对应技能。先识别项目现有约定；下文单仓/monorepo 树是示例，不是强制迁移目标。
 
@@ -61,8 +61,8 @@
 |------|------|------|--------|--------|
 | **PMS** | Product Module Spec | `.csp/product-spec/` | Planning Phase 5 + 01 PRD | 02 拆解 / 03 技术方案 / 07 复盘 |
 | **CMS** | Code Module Spec | `.csp/code-spec/{app}/` | 00 棕地蒸馏 / 05 增量对齐 | 03 技术方案 ground / 05 开发 / CR |
-| **TMS** | Test Module Spec | `.csp/test-spec/{module}/` | Testing Phase TD + 03 Spec | TU/TI/TE 测试实施 / 门控 |
-| **DDS** | Data Dictionary Spec | `docs/architecture/DATA-SCHEMA.md` | S3 Spec 产出时同步更新 / 05 开发新字段时增量更新 | 全阶段——字段名唯一真相源 |
+| **TMS** | Test Module Spec | `.csp/test-spec/{module}/` | product-planning Phase 6 Spec | TU/TI/TE 测试实施 / 门控 |
+| **DDS** | Data Dictionary Spec | `docs/architecture/DATA-SCHEMA.md` | product-planning Phase 6 Spec 产出时同步更新 / 05 开发新字段时增量更新 | 全阶段——字段名唯一真相源 |
 
 **DDS 表命名规则**：表名按业务域命名，禁版本前缀（`v329_` `v328_` 等属于 migration chain，不属于表名）。已有违规表名记录技术债，下一轮架构迭代重命名。
 
@@ -74,7 +74,7 @@
 # 数据字典 — {project}
 
 > 所有表/字段/类型/约束的唯一真相源。Spec 定义单 feature 数据模型，本文档聚合全项目视角。
-> 更新触发：S3 Spec 产出时 + 05 开发新增字段时 + DB migration 变更时。
+> 更新触发：product-planning Phase 6 Spec 产出时 + 05 开发新增字段时 + DB migration 变更时。
 
 ## 枚举与常量
 | 名称 | 值 | 含义 | 所属 feature |
@@ -92,7 +92,7 @@
 ```
 
 **更新规则**：
-- S3 Spec 产出时，新增 entity → 在 DDS 中建表/加字段行，标注所属 feature
+- product-planning Phase 6 Spec 产出时，新增 entity → 在 DDS 中建表/加字段行，标注所属 feature
 - 05 开发中新发现需要字段 → **先改 DDS，再改 Spec，再写代码**（DDS 驱动 Spec 驱动代码，不要反过来）
 - DB migration 变更时 → 同步更新 DDS 对应字段行
 - 字段重命名/删字段 → DDS 中标记 `→ renamed to xxx` / `DEPRECATED vX.Y.Z`，保留历史记录
@@ -407,12 +407,9 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 | **集成审视** | Planning Phase 2.5 | `docs/analysis/INTEGRATION-NECESSITY-{date}.md` | ✅ |
 | **架构收敛** | Planning Phase 3 | `.csp/convergence/CONVERGED-FEATURE-PLAN.md` | ❌ |
 | **设计衔接** | Planning Phase 4 | `.csp/spark/` 工程设计链；需人读的成品在项目现有 docs 目录 | 按项目发布设置 |
-| **PRD SPEC** | Planning Phase 5 | `docs/prd/PRD-{version-slug}.md` + `PRD-INDEX.md` | ✅ |
-| **增长规划** | Planning Phase G | `docs/analysis/GROWTH-PLAN-{date}.md` | ✅ |
-| **PRD 工程升级** | Development 01 | `docs/prd/PRD-{slug}.md`(升级) | ✅ |
-| **需求拆解** | Development 02 | `.csp/decomposition/` | ❌ |
-| **技术方案** | Development 03 | `.csp/tech-design/` + `.csp/specs/` | ❌ |
-| **任务拆解** | Development 04 | `.csp/tasks/` | ❌ |
+| **PRD SPEC** | product-planning Phase 5 | `docs/prd/PRD-{version-slug}.md` + `PRD-INDEX.md` | ✅ |
+| **增长规划** | product-planning Phase G | `docs/analysis/GROWTH-PLAN-{date}.md` | ✅ |
+| **任务拆解** | product-planning Phase 7 | `.csp/tasks/` | ❌ |
 | **开发实施** | Development 05 | 项目实际源码根（`src/`、`apps/*`、`backend/`）与既有测试/迁移目录 | 代码依项目策略 |
 | **数据模型 Spec** | Development S3 | `.csp/specs/`（DDL 设计与数据契约） | 内部 |
 | **数据库迁移** | Development 05 | 项目实际的 Alembic/Flyway/Prisma 迁移目录 | 代码依项目策略 |
@@ -703,7 +700,7 @@ Agent 依功能审阅：根指令/路由卡应便于快速装载；长 PRD/CHANG
 
 ---
 
-## 四文档协作关系
+## 文档协作关系（v2）
 
 ```
 000-product-planning_csp.md
