@@ -78,7 +78,7 @@
 
 ## 五、执行流程
 
-### Phase 1：建 AGENTS.md 路由契约 → `.csp/AGENTS.md`
+### Phase 5：建 AGENTS.md 路由契约 → `.csp/AGENTS.md`
 6 节固定结构 + 操作路由表：项目概览 / 目录权威与依赖方向 / 三说明书定位 / manifest 索引约定 / 操作路由表（什么意图读什么目录）/ 闭环说明。进入 workspace 先读它；写入前读 schema/manifest；查询前读 `wiki/index.md`。
 **风格**：电报体（telegraph style）——短句、规则式、无废话；大型项目可分目录 scoped AGENTS.md（如 `docs/AGENTS.md`、`extensions/AGENTS.md`）就近约束，根 AGENTS.md 作入口指向。
 
@@ -87,9 +87,9 @@
 > - **`docs/` = 对外人类文档**（给人读，非流水线驱动产物）：安装/使用/架构/技能索引与编写规范/`analysis/` 报告/`strategy/` 战略/`prd/` PRD 原文。**门面 `README.md` 与发布元数据 `CHANGELOG.md`/`LICENSE` 在根目录，不属 `docs/`**——README 只做电梯演讲 + 指向 `docs/` 的链接表，不堆细节。
 > - **三层定位（权威见 `docs/README.md`）**：`README.md`（根，门面+路标）→ `docs/`（对外人类文档）→ `.csp/`（对内 agent 产物库，人不直接读）。编程产物不进 `docs/`，人类文档不进 `.csp/`，README 不堆细节。
 > - **原则**：驱动开发流水线的编程管理产物 → `.csp/`；给人读的非开发文档 → `docs/`。PRD 原文供人评审，PMS 是其工程消费蒸馏。strategy/roadmap 属编程管理（驱动版本规划）→ `docs/strategy/`（人类可读 + manifest 索引）。
-> - **不混放**：编程产物不散落 `docs/`；非编程文档不进 `.csp/`。散落 → Phase 1.5 整改归位。**所有 skill 产物统一落 `.csp/` 下对应子区**——测试运行证据→`.csp/artifacts/verify/evidence/`；L2 生命周期产物→`.csp/planning/`（原 `.planning/`）；Spark 设计链产物→`.csp/spark/`（原 `spark-output/`）；写作记忆→`.csp/writer-memory/`（原 `.csp-writer-memory/`）——或 `docs/` 给人读。禁止散落根目录裸目录（`evidence/`、`reports/`、`screenshots/`、`output/`、`spark-output/`、`.planning/`、`.csp-*/` 等）。
+> - **不混放**：编程产物不散落 `docs/`；非编程文档不进 `.csp/`。散落 → Phase 5.5 整改归位。**所有 skill 产物统一落 `.csp/` 下对应子区**——测试运行证据→`.csp/artifacts/verify/evidence/`；L2 生命周期产物→`.csp/planning/`（原 `.planning/`）；Spark 设计链产物→`.csp/spark/`（原 `spark-output/`）；写作记忆→`.csp/writer-memory/`（原 `.csp-writer-memory/`）——或 `docs/` 给人读。禁止散落根目录裸目录（`evidence/`、`reports/`、`screenshots/`、`output/`、`spark-output/`、`.planning/`、`.csp-*/` 等）。
 
-### Phase 1.5：既有文档整改（Reconcile）→ 严格按最新要求管理知识与文档
+### Phase 5.5：既有文档整改（Reconcile）→ 严格按最新要求管理知识与文档
 
 初始化或增量维护 hub 时，若发现**既有文档散落各地、版本不一致、命名/路径/结构不符合本规范、或有重复与陈旧产物**，按下述维度整改——**只整改治理层（路径/版本/索引/重复/陈旧），不改业务内容语义**：
 
@@ -117,13 +117,13 @@
 
 > 该阶段是"知识与文档治理"的体现——确保 hub 始终基于一致、整洁、符合最新约定的文档，而非放任散落与版本漂移。
 
-### Phase 2：建 manifest 唯一索引 → `.csp/manifest.json`
+### Phase 6：建 manifest 唯一索引 → `.csp/manifest.json`
 
-> 写盘前无需确认：schema 取默认 `auto` 直接生成，不询问；Phase 1.5 整改已自动执行（仅删除子步人工确认）。
+> 写盘前无需确认：schema 取默认 `auto` 直接生成，不询问；Phase 5.5 整改已自动执行（仅删除子步人工确认）。
 
-> CMS 时序前置：CMS（代码说明书）是 03 技术方案 ground 的依据。**棕地（代码已存在）必须在 00 蒸馏好 CMS**，否则 03 凭空设计、05 也读不到；绿地（无代码）CMS 在 05 随代码建立。详见 Phase 1.7。
+> CMS 时序前置：CMS（代码说明书）是 03 技术方案 ground 的依据。**棕地（代码已存在）必须在 00 蒸馏好 CMS**，否则 03 凭空设计、05 也读不到；绿地（无代码）CMS 在 05 随代码建立。详见 Phase 5.7。
 
-### Phase 1.7：棕地 CMS 蒸馏（条件：代码已存在且无 CMS）
+### Phase 5.7：棕地 CMS 蒸馏（条件：代码已存在且无 CMS）
 
 若项目已有代码（棕地）但 `.csp/code-spec/{app}/` 不存在 → 蒸馏 CMS 作为 hub 的一部分：
 1. **入口点蒸馏**：扫对外入口（HTTP `@app.route`/`router.get`、RPC `@Service`/`@grpc`、CLI `argparse`/`click`/`cobra`、定时 `@Scheduled`/`celery beat`、消息/事件 `@KafkaListener`/`@EventListener`），每入口输出 `{类型, 标识, file:line, 业务场景(推断,不确定标 [TBD])}`。
@@ -160,7 +160,7 @@
 - raw 下载成功 → 更新 hash/path/`status=ready`；失败 → 保留 item 标 `blocked`/`degraded`。
 - 删除来源 → 二次确认后从 `items` 移除。
 
-### Phase 3：内联 frontmatter 规范（供全链路实质页遵守）
+### Phase 8：内联 frontmatter 规范（供全链路实质页遵守）
 ```md
 ---
 type: concept|entity|faq|howto|reference|comparison|source-summary|archive|skill|module-spec|feature-spec|test-spec
@@ -175,7 +175,7 @@ updated: "2026-08-28"
 ```
 > 全链路约定：01 的 PMS 页 `type: module-spec`、03 的 Spec 页 `type: feature-spec`、03 的 TMS 页 `type: test-spec`、05 的 CMS 页同。所有阶段产出实质页必须带 frontmatter 并回写 manifest（见「manifest 回写约定」节）。
 
-### Phase 4：闭环（需求→code→test）
+### Phase 10：闭环（需求→code→test）
 ```
 需求对齐 (PMS 文档spec记录) ──manifest index──▶ code 开发 (CMS ground design/codegen)
         ▲                                                  │
@@ -187,7 +187,7 @@ updated: "2026-08-28"
 - **test**：TMS 需求→方法矩阵 + 存量用例，增量只对 delta。
 - **审查/ship**：CR 读 CMS+TMS；ship 后 PMS 闭环 + 三说明书 delta 折叠进 canonical。
 
-### Phase 5：CLI 辅助 → `scripts/hub_manifest.sh`
+### Phase 11：CLI 辅助 → `scripts/hub_manifest.sh`
 ```bash
 bash $SCRIPT status              # hub 健康度：items / built / pending / failed
 bash $SCRIPT locate <query>      # 跨 spec/wiki/memory 定位 → output_path + frontmatter
@@ -201,15 +201,15 @@ bash $SCRIPT list --type cms     # 按 source_type 列项
 
 **默认（auto-proceed，不询问、不暂停，直接执行）**：
 - **schema 模式** → 默认 `auto`（AI 生成 schema）**直接执行，不询问**；仅当用户显式提供 schema 时才用 `user`。
-- **Phase 1.5 既有文档整改** → 默认**自动执行**（版本对齐 / 散落归位 / front-matter 补全自动跑）；仅**业务文档删除**子步人工确认，临时产物（`.tmp/`、`*.zip`）可直接删。
+- **Phase 5.5 既有文档整改** → 默认**自动执行**（版本对齐 / 散落归位 / front-matter 补全自动跑）；仅**业务文档删除**子步人工确认，临时产物（`.tmp/`、`*.zip`）可直接删。
 - **初始化输入** → 默认采用探测所得资料源/项目名，自动继续。
 - **更新范围** → 默认自动执行 delta（added/changed）；仅当 diff 含**删除项**时转人工拍板。
-- **Phase 1.7 棕地 CMS 蒸馏** → 棕地自动执行蒸馏，不询问；绿地跳过。
+- **Phase 5.7 棕地 CMS 蒸馏** → 棕地自动执行蒸馏，不询问；绿地跳过。
 
 **唯一人工拍板（破坏性/不可逆/外向）**：
-- **source 真正删除**（无归档、无价值）→ 二次确认后从 manifest 移除；**归档移动（A 类 mv 进 milestones）→ 自动 re-point，不确认**（见 Phase 1.5「默认自动解决规则」）。
+- **source 真正删除**（无归档、无价值）→ 二次确认后从 manifest 移除；**归档移动（A 类 mv 进 milestones）→ 自动 re-point，不确认**（见 Phase 5.5「默认自动解决规则」）。
 - **00 hub 远程推送** → 默认 `off`（hub 基础设施 local commit 即可，不自动 push remote；显式推送才人工确认）。**注：06 release 的 push + GitHub Release 在 06 质量门控/审查子步骤 + 对账全过后自动执行（gate 即授权），不走本 gate。**
-- **业务文档删除**（Phase 1.5 整改）→ 人工确认；临时产物（`.tmp/`、`*.zip`）可直接删。
+- **业务文档删除**（Phase 5.5 整改）→ 人工确认；临时产物（`.tmp/`、`*.zip`）可直接删。
 
 ## 七、产物路径规范（与全链路同构）
 
@@ -298,7 +298,7 @@ git branch -d csp/hub-init   # 清理已合并的侧分支
 | 写前不查冲突 | 同主题重复页 | add 前 locate，命中即 update |
 | 凭据入 workspace | 安全风险 | 凭据不写入；00 hub 不自动 push，06 release 审核通过后自动 |
 | 各阶段不回写 manifest | 索引失效 | 产出实质页即回写 build_status |
-| 放任散落/版本漂移 | 文档散落各地、版本不一致、重复陈旧堆积 | Phase 1.5 整改：归位/版本对齐/删冗/修 front-matter，清单入册 |
+| 放任散落/版本漂移 | 文档散落各地、版本不一致、重复陈旧堆积 | Phase 5.5 整改：归位/版本对齐/删冗/修 front-matter，清单入册 |
 | 00 越权改正文 | 改业务内容语义 | 只动治理层（路径/版本/索引/front-matter）；正文归对应阶段 |
 | 删除不经确认 | 误删业务文档 | 临时产物可直接删；业务文档删除必须人工二次确认 |
 | 归档移动当删除问人 | A 类 mv 后问"删还是 re-point" | 归档移动自动 re-point 到 milestones 路径，不问 |
@@ -311,7 +311,7 @@ git branch -d csp/hub-init   # 清理已合并的侧分支
 ```markdown
 ### 下一步建议
 - [ ] hub 已就绪 → 进入 01 PRD 生成（首条 PMS 入 manifest）
-- [ ] 棕地项目 → 已蒸馏 CMS（见 Phase 1.7），03 可据此 ground 设计
+- [ ] 棕地项目 → 已蒸馏 CMS（见 Phase 5.7），03 可据此 ground 设计
 - [ ] 既有 spec → 批量入 manifest 后做 closed-loop 校验
 - [ ] 各阶段产物持续回写 manifest，保持索引实时
 当前产物：.csp/AGENTS.md + .csp/manifest.json（{N} items，{built} built，{pending} pending）+ .csp/lifecycle-state.json（初始化：00 done，current_stage=01-prd）。完成时按 README「进度播报」格式播报（00 转 ✓，current_stage 推进至 01-prd）。
@@ -328,7 +328,7 @@ git branch -d csp/hub-init   # 清理已合并的侧分支
 | 门面 | `README.md`（根） | 项目入口/电梯演讲 | 所有人 | 一句话定位/核心特性/Quick Start（可运行）/Further Reading 指向 `docs/` | 不堆细节；细节进 `docs/`；中英成对（`README_zh.md`） | 版本发布/特性变更 |
 | agent 指令 | `CLAUDE.md`（根） | Claude Code 工程指令 | agent | 路由规则/工程规范/文档边界/可用 skills 清单/版本 | 不堆业务细节；指向 `docs/` 与 `.csp/` | 结构/规范变更 |
 | agent 配置 | `.claude/` | Claude Code 运行时配置 | agent | `agents/`/`skills/`/`settings.json`/`hooks` | 安装器生成；managed 块（`<!-- csp-begin -->`）不手改 | 安装/更新 |
-| 路由契约 | `.csp/AGENTS.md` | 项目知识路由契约（00 产出） | agent | 项目概览/目录权威与依赖方向/三说明书定位/manifest 索引约定/操作路由表/闭环 | 电报体；6 节固定结构（见 Phase 1） | 00 初始化 + 结构变更增量 |
+| 路由契约 | `.csp/AGENTS.md` | 项目知识路由契约（00 产出） | agent | 项目概览/目录权威与依赖方向/三说明书定位/manifest 索引约定/操作路由表/闭环 | 电报体；6 节固定结构（见 Phase 5） | 00 初始化 + 结构变更增量 |
 | 产物索引 | `.csp/manifest.json` | 唯一产物索引 | agent | items（source_id/source_type/content_hash/build_status/raw_path/output_path） | content_hash 用 git blob；禁 mtime；每阶段回写 | 每阶段产出即回写 |
 | 流水线状态 | `.csp/lifecycle-state.json` | 阶段状态导航 | agent | pipeline_version/milestone/milestone_name/current_stage/last_updated/reconciled/prod_version/latest_release/stages[] | 阶段级+progress 摘要；不存全量任务 | 每阶段读/写；06 对账 |
 | 对外文档 | `docs/` | 人类文档 | 人 | install/usage/arch/skill-index/authoring/analysis/strategy/prd(intake) | 见 `docs/README.md`；编程产物不进 `docs/` | 持续 |
@@ -351,7 +351,7 @@ git branch -d csp/hub-init   # 清理已合并的侧分支
 - **docs/ vs .csp/ 边界**：编程产物→`.csp/`，人类对外文档→`docs/`；docs/ 临时产物（intake/specs/design/analysis/archived/research）蒸馏后删源，永久人读成品留。
 
 ### 13.3 棕地整合判定（引用）
-棕地项目逐份按"临时/工程产物 vs 长期人读成品"判定（标准见 `brownfield-doc-integration.md` Phase 1）：临时产物（PRD intake/specs/design/analysis findings/archived/research/solutions 工程详情）→ 归纳 `.csp/` + 删源；长期人读成品（`README`/`CLAUDE`/`docs/` 永久文档/`CONTRIBUTING`/`LICENSE`/`CHANGELOG`）→ 留原位整理。
+棕地项目逐份按"临时/工程产物 vs 长期人读成品"判定（标准见 `brownfield-doc-integration.md` Phase 5）：临时产物（PRD intake/specs/design/analysis findings/archived/research/solutions 工程详情）→ 归纳 `.csp/` + 删源；长期人读成品（`README`/`CLAUDE`/`docs/` 永久文档/`CONTRIBUTING`/`LICENSE`/`CHANGELOG`）→ 留原位整理。
 
 ## 输出风格
 

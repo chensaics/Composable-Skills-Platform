@@ -111,7 +111,7 @@ function discover(dir: string, out: string[] = []) {
 - 每路由按钮上限（超出记 `SKIPPED(cap)` 不静默截断）；大型审计分片 `--shard=i/N` + `AUDIT_TAG=_s$i` 各写各的 JSONL。
 
 ### L4 结构审计（三路静态 + 渲染引用链 + 两级引用扫描，可并行子代理）
-> **去重契约**：本层是结构审计（孤儿路由/隐藏后端功能/死按钮）的**实机主跑方**；`audit.md` Phase 0 只标"疑似"，须在此实机确认后才成 finding。`product-critic-review` 镜头 B（IA）与 `feature-gap-analysis` Phase 4（联动）均引用本层结构 findings，不自行做按钮级/路由级实机审计。
+> **去重契约**：本层是结构审计（孤儿路由/隐藏后端功能/死按钮）的**实机主跑方**；`audit.md` Phase 1 只标"疑似"，须在此实机确认后才成 finding。`product-critic-review` 镜头 B（IA）与 `feature-gap-analysis` Phase 10（联动）均引用本层结构 findings，不自行做按钮级/路由级实机审计。
 - **孤儿路由**：全部路由 × 全部导航源（sidebar 配置 / 设置分组 / 用户中心导航 / 命令面板 / 快捷键 / hub 内链 / deprecated 重定向中间件）交叉；区分 真孤儿 / redirect 别名 / 有意隐藏（运维页、骨架页、重复页）。
   - ⚠️ **先判渲染源再判数据源**（本轮实证）：静态扫描看到 `SETTINGS_GROUPS` 就以为它是导航，实际渲染的是 `UserCenterNav` 组件。缺"JSX 渲染引用链"分析这一步。必须追踪：哪个组件 `import` 了哪个数据常量 → 哪个组件实际渲染了导航条目 → 对比两者是否一致。
   - ⚠️ **两级引用扫描**（本轮实证）：第一轮按 `import` 扫描后，又补了字符串级（拼接路径、常量表、`getRoute()` 等动态构造）才最终确证 4 个孤儿。**必须两级扫描后两个结果取并集**，缺一级即漏报。

@@ -9,7 +9,7 @@
 
 ## 执行流程
 
-### Phase 1: 收集信号
+### Phase 5: 收集信号
 
 调用 `[[workflow:csp-skill-distiller]]` 收集执行观察：
 
@@ -24,7 +24,7 @@
 
 **输出**: 观察清单（每条含证据/阶段/影响）
 
-### Phase 2: 缺口分析
+### Phase 6: 缺口分析
 
 对照 CSP 技能体系分析每条观察：
 
@@ -37,7 +37,7 @@
 
 **输出**: 每条缺口 → 目标 skill 文件 + 改进方向
 
-### Phase 3: 编写/修改技能
+### Phase 8: 编写/修改技能
 
 对每个缺口，使用 `[[workflow:csp-writing-skills]]` 编写或修改技能：
 
@@ -59,7 +59,7 @@
 
 **Token 预算**: L1~300 / L2~500 / L3~200-600 / L4~300
 
-### Phase 4: 注册与构建
+### Phase 10: 注册与构建
 
 ```
 1. 更新 registry.json（或运行 npm run build:all 自动生成）
@@ -69,7 +69,7 @@
 5. 运行 npm run validate:all（验证全部通过）
 ```
 
-### Phase 5: 发布
+### Phase 11: 发布
 
 ```
 git add -A
@@ -111,7 +111,7 @@ completion_signal:
     新增规则: N 条
     补全 gate: N 条
   next_step:
-    recommended: "回到 Phase 1 — 这次修改后下次执行会有新的观察"
+    recommended: "回到 Phase 5 — 这次修改后下次执行会有新的观察"
   status:
     phase: ship
 ```

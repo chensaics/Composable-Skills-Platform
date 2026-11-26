@@ -51,7 +51,7 @@
 - 缺口：{需补的基线，决定是否限定范围继续}
 ```
 
-## 四、Phase 1：模块巡检（recon，只看不改）
+## 四、Phase 5：模块巡检（recon，只看不改）
 
 按选定范围对每个模块做"功能/代码/界面"三栖扫描，产出**模块巡检表**：
 
@@ -63,7 +63,7 @@
 - **界面层**：路由表 + 关键页快照（`csp-html-prototype`/`csp-visual-regression`）→ 入口可达性/信息架构/状态覆盖。
 - 红线：只读巡检，不改代码不改 spec；发现需修复 → 记为 finding，不"顺手改"。
 
-## 五、Phase 2：多角度审查（每角度独立成节，发现带依据）
+## 五、Phase 6：多角度审查（每角度独立成节，发现带依据）
 
 ### 必选四角度
 
@@ -100,14 +100,14 @@
 
 > 角度裁剪规则：必选 A–D 全做；扩展 E–J 按"项目特征命中 + 用户关注"裁剪，命中才做，不强凑；每个扩展角度同 A–D 输出格式。
 
-## 六、Phase 3：汇总与去重（交叉验证）
+## 六、Phase 8：汇总与去重（交叉验证）
 
 - 跨角度合并：同一问题被多角度命中（如"模块重组"与"性能"都指向某 god file）→ 合并为一条，标多维标签。
 - 严重度校准：Critical/High 亲自开 `file:line` 复核，剔除误报。
 - 排序：按 `影响面 × 紧急度 × 依据强度` 排序，输出 Top-N。
 - 反面证据：每条高优先建议附 ≥1 反例/风险（"做这个的代价/不做的风险"）。
 
-## 七、Phase 4：交棒 roadmap agent（出后续路径）
+## 七、Phase 10：交棒 roadmap agent（出后续路径）
 
 把审查发现转成 roadmap 的**实证输入**，然后调用 roadmap agent：
 
@@ -117,7 +117,7 @@
    docs/analysis/AUDIT-TO-ROADMAP-{date}.md
    | 主题候选 | 来源 finding | 涉及模块 | 价值假设 | 优先级 | SemVer 性质 | 建议版本批次 |
    ```
-3. **调用 roadmap agent**：把上述清单交给 `[[workflow:csp-roadmap-planner]]`。交棒声明：roadmap 读本清单定位下一版本主题；**本巡检的主题候选进入 roadmap Phase 2 后，必经 Phase 2.5「版本功能集成必要性审视」再过一遍**（6 维 self-critique：定位契合/场景必要/现有重叠/集成成本vs价值/依赖可行/攒批合理），裁决纳入/降级/剔除/合并——本巡检给的是"实证输入 + 优先级 + 依据"，是否真集成进项目系统由 Phase 2.5 决定，本巡检不替它兜底。
+3. **调用 roadmap agent**：把上述清单交给 `[[workflow:csp-roadmap-planner]]`。交棒声明：roadmap 读本清单定位下一版本主题；**本巡检的主题候选进入 roadmap Phase 6 后，必经 Phase 7「版本功能集成必要性审视」再过一遍**（6 维 self-critique：定位契合/场景必要/现有重叠/集成成本vs价值/依赖可行/攒批合理），裁决纳入/降级/剔除/合并——本巡检给的是"实证输入 + 优先级 + 依据"，是否真集成进项目系统由 Phase 7 决定，本巡检不替它兜底。
 4. **回写**：审查报告 + findings + 交棒清单回写 `.csp/manifest.json`（`source_type=doc`、`build_status=built`、`content_hash`）；roadmap agent 接手后回写其产物。
 
 ## 八、产物路径规范（与 00-07 同构）
@@ -158,5 +158,5 @@
 ## 十、衔接声明
 
 - 上游：`07` 复盘 findings / `csp-product-pulse` 体验信号 / 用户反馈 → 本流程输入。
-- 下游：本流程产出 → `[[workflow:csp-roadmap-planner]]` → Phase 2 版本主题 → **Phase 2.5 集成必要性审视（self-critique，裁决是否真纳入项目系统）** → `01` PRD → …
+- 下游：本流程产出 → `[[workflow:csp-roadmap-planner]]` → Phase 6 版本主题 → **Phase 7 集成必要性审视（self-critique，裁决是否真纳入项目系统）** → `01` PRD → …
 - 同级：`csp-competitive-analysis` / `csp-product-research` 的外部对标可并入角度 J。

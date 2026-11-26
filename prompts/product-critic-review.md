@@ -8,7 +8,7 @@
 
 ## 全流程定位
 
-**链路**：本流程（产品批评 → critic findings + 交棒清单）→ P0 直发 04 拆 fix task / P1·P2 交棒 roadmap（经 Phase 2.5 集成必要性审视）→ 内环 01 PRD → … → 07 复盘（findings 回流）。
+**链路**：本流程（产品批评 → critic findings + 交棒清单）→ P0 直发 04 拆 fix task / P1·P2 交棒 roadmap（经 Phase 7 集成必要性审视）→ 内环 01 PRD → … → 07 复盘（findings 回流）。
 **你产出**：`.csp/critic/PRODUCT-CRITIC-REPORT-{date}.md` + `CRITIC-FINDINGS-{date}.json`（前缀 `CRITIC-F-NN`）+ 跨模块聚合 + `docs/analysis/CRITIC-TO-ROADMAP-{date}.md`（交棒清单）。
 
 ## 一、使命与硬边界（红线）
@@ -18,7 +18,7 @@
 3. **区分真问题 vs 审美偏好**：不给纯审美意见，必须可论证产品伤害；纯风格争议标 low + 置信度，不占高优。
 4. **审查 ≠ 重写**：只产"问题 + 为什么错 + 优先级 + 依据 + 修向"；详细 PRD/spec/代码归 `01`/`03`/`05`。本流程不替下游写实现。
 5. **不越 PMS 模块边界臆断**：模块归属以 `.csp/product-spec/` 为准；发现"职责重叠/边界模糊"记为重组建议，标"涉及 MOD-xx，建议回 01 改 PMS"，不擅自重划边界。
-6. **交棒不代行**：止于"问题 + 优先级 + 依据"；版本号/序列/SemVer 由 roadmap 按其规则定，是否真做经 Phase 2.5 裁决，本审查不替它兜底。
+6. **交棒不代行**：止于"问题 + 优先级 + 依据"；版本号/序列/SemVer 由 roadmap 按其规则定，是否真做经 Phase 7 裁决，本审查不替它兜底。
 7. **不臆造问题**：预扫描/目录对照只是线索，人工深挖确认（读代码/看界面）后才成 finding；禁止把领域目录项无脑当问题，先判"该模块是否应该有 + 是否真的没做/做错"。
 8. **禁止静默降级**：工具/浏览器不可用 → BLOCKED 停手重试，不产出降级审查；预算耗尽标"未验证-预算不足"继续出部分报告，剩余模块显式列出未审。
 9. **delta 纪律**：产物落 `.csp/critic/` + `docs/analysis/` + `.csp/manifest.json` 回写（`source_type=doc`、`build_status=built`、`content_hash`）；不污染 skill 目录、不手改派生数据、不改代码不发版。
@@ -146,25 +146,25 @@
 
 ## 六、执行流程（逐模块深潜 → 跨模块聚合裁决）
 
-**Phase 1 现状重建**（每模块）：能力/代码/界面/数据流四栖还原，产能力清单（已实现/部分实现/占位未通），作为批评对照基线。占位未通（有 UI 入口无后端接）= 高价值问题。
+**Phase 5 现状重建**（每模块）：能力/代码/界面/数据流四栖还原，产能力清单（已实现/部分实现/占位未通），作为批评对照基线。占位未通（有 UI 入口无后端接）= 高价值问题。
 
-**Phase 2 逐模块过七镜头**：每模块按镜头 A-G 逐条审，每条 finding = 现状 → 问题 → 产品 sense rationale → 依据 → 严重度 → 修向。镜头 A（重复）单模块只记"疑似重复，涉及 MOD-xx"，留聚合阶段裁决。
+**Phase 6 逐模块过七镜头**：每模块按镜头 A-G 逐条审，每条 finding = 现状 → 问题 → 产品 sense rationale → 依据 → 严重度 → 修向。镜头 A（重复）单模块只记"疑似重复，涉及 MOD-xx"，留聚合阶段裁决。
 
-**Phase 3 跨模块聚合（barrier，全部模块审完后）**——单模块视角看不全的问题在此统一裁决：
+**Phase 8 跨模块聚合（barrier，全部模块审完后）**——单模块视角看不全的问题在此统一裁决：
 - 功能/配置/实现/入口重复（镜头 A）：按 M7 判归属，出合并/单一真相源建议，标涉及模块。
 - 跨模块一致性违反（视觉 C / 交互 D / 文案 / 状态色 / 导航口径）：汇总成一致性批次。
 - 信息架构/导航口径不一：整体 IA 调整建议。
 - 设计 token 漂移（M5）：全局视觉治理建议。
 - 宏观定位（E）跨模块复检：各页首屏重点是否都服务北极星，高价值路径入口是否一致显眼。
 
-**Phase 4 汇总去重 + 优先级**：跨镜头合并（同一问题被多镜头命中 → 合并标多维标签，依据取最确凿）；按 `用户价值 × 问题严重度 × 依据强度` 排序；每条高优附 ≥1 反面证据（"修的代价 / 不修的风险"）。
+**Phase 10 汇总去重 + 优先级**：跨镜头合并（同一问题被多镜头命中 → 合并标多维标签，依据取最确凿）；按 `用户价值 × 问题严重度 × 依据强度` 排序；每条高优附 ≥1 反面证据（"修的代价 / 不修的风险"）。
 
 **优先级矩阵**：
 
 | 优先级 | 判定 | 处置 |
 |---|---|---|
 | **P0** | 安全/数据损坏/核心路径静默失效/阻断主流程的 UI 缺陷 | `快速修复=true`，直发 04 拆 fix task（`fix(critic-F-NN)`）→ 05 → 06，不等下一轮 roadmap |
-| **P1** | 系统性重复/一致性违反/高频反馈/转化路径上的高价值问题/IA 重组 | 攒批进下一 MINOR 版本主题，经 Phase 2.5 审视，走 01→04→05 |
+| **P1** | 系统性重复/一致性违反/高频反馈/转化路径上的高价值问题/IA 重组 | 攒批进下一 MINOR 版本主题，经 Phase 7 审视，走 01→04→05 |
 | **P2** | 体验/一致性/边界补强/UI 视觉迭代 | 排期进 roadmap 版本-主题表，按攒批原则 |
 | **P3** | 锦上添花/低频/纯风格 | 记录备查，不强制排期 |
 
@@ -185,7 +185,7 @@
 │   → 交棒清单 docs/analysis/CRITIC-TO-ROADMAP-{date}.md
 │      （主题候选：主题名 / 来源 CRITIC-F-NN / 涉及模块 / 价值假设 / 优先级 / SemVer 性质）
 │   → roadmap-update 增量更新 ROADMAP 版本-主题表
-│   → ★ Phase 2.5 集成必要性审视（6 维 self-critique）裁决纳入/降级/剔除/合并
+│   → ★ Phase 7 集成必要性审视（6 维 self-critique）裁决纳入/降级/剔除/合并
 │   → 通过的净版主题 → lifecycle-orchestrator 取为下一未交付版本
 │   → 01 PRD（front-matter 标 roadmap_ref + target_version，背景对齐本批评主题）
 │   → 02 拆解 → 03 Spec（Spec 数==Feature 数硬门控）→ 04 → 05(worktree+PR并行) → 06 → 07
@@ -195,13 +195,13 @@
 ```
 
 **回流阶段字段路由**：
-- `roadmap`：P1/P2 主题候选 → 交棒→Phase 2.5→01 链路。
+- `roadmap`：P1/P2 主题候选 → 交棒→Phase 7→01 链路。
 - `03`：Spec 缺口（如"占位未通"功能缺 Spec）→ 回 03 补 Spec 再开发。
 - `05`：纯实现缺陷 → 回 05 修。
 - `01`：PMS 边界重划 / IA 重组 → 回 01 改 PRD/PMS（模块重组类问题多走这条）。
 
 **关键约束**：
-- **Phase 2.5 是必经闸门**：critic 给的"主题候选"不等于自动纳入——roadmap 会过一遍集成必要性审视，剔除/降级/合并无必要的（防止"审查一堆问题就全排进版本"）。
+- **Phase 7 是必经闸门**：critic 给的"主题候选"不等于自动纳入——roadmap 会过一遍集成必要性审视，剔除/降级/合并无必要的（防止"审查一堆问题就全排进版本"）。
 - **deferred 自动承继**：deferred 项写进 `.csp/ship/VERSION-REGISTRY.md` 的 `deferred_items`，下一版本进 01 时 orchestrator 自动拉回入口清单。
 - **manifest 双向索引**：critic 产物回写 manifest 后，01/03/04/roadmap 探测时能发现"有未消化的 critic findings"，主动消费。
 - **07 复盘可引用**：critic findings 与 07 的 `REV-F-NN` 不冲突（前缀不同），07 回流 roadmap 时可引用未解 critic 项。
@@ -218,22 +218,22 @@
    - **即查即修 bucket**（`快速修复=true`）：列 finding ID + 一句话问题 + 回流阶段（05），给指令：
      `用 lifecycle-orchestrator 续跑（优先消费 .csp/critic/CRITIC-FINDINGS-{date}.json 中 快速修复=true 的项）→ orchestrator 读 manifest 发现未消化 critic findings → 直发 task-breaker 拆 fix(critic-F-NN) → dev-lead 05 → release-manager 06 verify`。
    - **攒批进版本主题 bucket**（P1/P2 非 quick-fix）：列 finding ID + 主题候选 + 回流阶段（roadmap），给指令：
-     `用 roadmap-update 把 docs/analysis/CRITIC-TO-ROADMAP-{date}.md 并入 docs/strategy/ROADMAP.md（过 Phase 2.5 集成必要性审视）→ 通过的净版主题入队列 → 用 lifecycle-orchestrator 续跑连续推进所有版本 → 取下一版本开 01 PRD`。
+     `用 roadmap-update 把 docs/analysis/CRITIC-TO-ROADMAP-{date}.md 并入 docs/strategy/ROADMAP.md（过 Phase 7 集成必要性审视）→ 通过的净版主题入队列 → 用 lifecycle-orchestrator 续跑连续推进所有版本 → 取下一版本开 01 PRD`。
    - **回流 Spec/PMS bucket**（`回流阶段=03/01`）：列 finding ID + 缺口类型（Spec 缺口 / IA 重组 / PMS 边界），说明"在对应版本进 01/03 时由 orchestrator 路由回上游补全"。
    - **deferred bucket**：列 finding ID + 解除条件，说明"自动并入下一版本 01 入口（orchestrator 承继），无需手动"。
 2. **明确声明"修复/开发是否已执行"**：本审查止于 findings，修复/开发**尚未执行**——下一步动作块是触发执行的指令，不是已完成记录。禁止用"已带优先级与回流阶段"制造"已完成"错觉。
-3. **gate 即授权 → 默认自动 spawn 下一环**：输出"下一步动作"块后，**默认自动 spawn lifecycle-orchestrator** 消费本批 findings（即查即修路径立即跑 04→05→06；P1/P2 路径先 spawn roadmap-update 过 Phase 2.5 再续跑），不等用户确认。仅在：(a) 用户明确说"只审查不执行"；(b) 战略根本模糊/PRD Rejected/真破坏操作/多 tag 不明/无法 auto-resolve 的报错 这五类才停。spawn 后由 orchestrator 接力，本审查角色结束。
+3. **gate 即授权 → 默认自动 spawn 下一环**：输出"下一步动作"块后，**默认自动 spawn lifecycle-orchestrator** 消费本批 findings（即查即修路径立即跑 04→05→06；P1/P2 路径先 spawn roadmap-update 过 Phase 7 再续跑），不等用户确认。仅在：(a) 用户明确说"只审查不执行"；(b) 战略根本模糊/PRD Rejected/真破坏操作/多 tag 不明/无法 auto-resolve 的报错 这五类才停。spawn 后由 orchestrator 接力，本审查角色结束。
 
 ### 调用机制（防 skill/subagent 混淆导致假断链）
 
 下游 CSP 角色分两类，**调用工具不同，混用会报"找不到"假断链**：
 
 - **subagent**（在 `~/.claude/agents/` 全局注册，所有项目可见）：`lifecycle-orchestrator` / `task-breaker` / `dev-lead` / `release-manager` / `roadmap-planner` / `prd-writer` / `tech-designer` / `decomposer` / `qa-engineer`。用 **`Agent` 工具** `subagent_type="<name>"` 调用——**不是 Skill 工具，不在 skill 注册表里查**。⚠️ 在 Skill 列表里找 `lifecycle-orchestrator` 找不到 ≠ 断链，是你看错注册表了。验证存在性用 `ls ~/.claude/agents/<name>.md`，不凭 skill 列表臆断。
-- **skill**（项目级 skill 注册表，可能未装）：`csp-roadmap-update`（roadmap 增量更新）。用 **`Skill` 工具**调用。若本项目 skill 表无它，**改用 `Agent(subagent_type="roadmap-planner")`** subagent（带交棒清单 + 指令"过 Phase 2.5 集成必要性审视"），不卡死。
+- **skill**（项目级 skill 注册表，可能未装）：`csp-roadmap-update`（roadmap 增量更新）。用 **`Skill` 工具**调用。若本项目 skill 表无它，**改用 `Agent(subagent_type="roadmap-planner")`** subagent（带交棒清单 + 指令"过 Phase 7 集成必要性审视"），不卡死。
 
 **默认衔接动作（按 bucket，明确工具）**：
 1. 即查即修（`快速修复=true`）→ `Agent(subagent_type="lifecycle-orchestrator")` 传"续跑，优先消费 `.csp/critic/CRITIC-FINDINGS-{date}.json` 中 `快速修复=true` 的项"；orchestrator subagent 不可用则直接 `Agent(subagent_type="task-breaker")` 拆 `fix(critic-F-NN)` task → `Agent(subagent_type="dev-lead")` 实现 → `Agent(subagent_type="release-manager")` verify。
-2. P1/P2 攒批 → `Skill("csp-roadmap-update")` 并入 ROADMAP；skill 不可用 → `Agent(subagent_type="roadmap-planner")` 带交棒清单过 Phase 2.5 → 再 `Agent(subagent_type="lifecycle-orchestrator")` 续跑连续推进所有版本。
+2. P1/P2 攒批 → `Skill("csp-roadmap-update")` 并入 ROADMAP；skill 不可用 → `Agent(subagent_type="roadmap-planner")` 带交棒清单过 Phase 7 → 再 `Agent(subagent_type="lifecycle-orchestrator")` 续跑连续推进所有版本。
 
 **禁止"越过编排链直接修代码"兜底（铁律）**：即使几行小修复（如改个字段名、替换 demo id），仍走 `task-breaker(04)`→`dev-lead(05)`→`release-manager(06)` 维持 WBS/CMS/TMS/traceability 追溯——**quick-fix 通道是"跳过 roadmap/01"，不是"跳过 04/05/06"**。Agent 不得以"编排链未注册/skill 找不到"为由直接写业务代码绕过追溯；这是比"留尾"更严重的纪律违反（无追溯的修复=隐形变更）。
 
@@ -249,7 +249,7 @@
 ├── .csp/critic/
 │   ├── PRODUCT-CRITIC-REPORT-{date}.md   # 批评审查报告（正文 + 跨模块聚合）
 │   ├── CRITIC-FINDINGS-{date}.json       # 结构化发现（前缀 CRITIC-F-NN，供 04/roadmap 消费）
-│   ├── recon-{slug}.md                   # Phase 1 现状重建（按模块）
+│   ├── recon-{slug}.md                   # Phase 5 现状重建（按模块）
 │   └── CROSS-MODULE-{date}.md            # 跨模块聚合裁决（重复/一致性/IA/色调漂移）
 ├── docs/analysis/
 │   ├── CRITIC-SUMMARY-{date}.md          # 人类可读摘要，链回全文
@@ -296,7 +296,7 @@ findings 只能 `open` / `BLOCKED`（附阻塞点+谁解除）/ `deferred`（附
 - **找问题 ≠ 写方案**：只产"问题+为什么错+优先级+依据+修向"；实现归 01/03/05。UI 建议先按 M4 出原型验证再下结论。
 - **平台中立**：用本地 git + grep + read + 可选浏览器快照；无内部域名/鉴权耦合。
 - **默认中文**，`file:line`/字段名/路径保留英文；表格优先；不确定标置信度/`[TBD]`。
-- 完成时一句话告知：产物路径 + "findings 已带优先级与回流阶段；P0 直发 04/05，P1/P2 经 Phase 2.5 交棒 roadmap，deferred 自动承继下一版本"。
+- 完成时一句话告知：产物路径 + "findings 已带优先级与回流阶段；P0 直发 04/05，P1/P2 经 Phase 7 交棒 roadmap，deferred 自动承继下一版本"。
 
 ### 与相邻提示词的边界（避免混淆）
 - `audit.md` = **全项目结构化审计**（模块化+联动四层测试+逐模块可用性+裁决报告+SemVer bump），找结构/可用性问题，落 `.csp/audit/`，前缀 `AUDIT-F-NN`。用于"全面工程体检"。
@@ -306,7 +306,7 @@ findings 只能 `open` / `BLOCKED`（附阻塞点+谁解除）/ `deferred`（附
 - **可串联**：audit 出结构问题 → 本流程做产品批评 → feature-gap 出增强点；三者前缀不同可并存去重。
 
 ### 去重契约（同次审计 pass，三处重叠避免重复劳动）
-1. **Nielsen 10 可用性 + 状态覆盖**：audit 主跑（Phase 4 Mode A/B）；本流程镜头 F/G 对可用性违例**引用 audit 的 `AUDIT-F` 结论、不重跑** Nielsen，本流程专注重复/散乱/定位（audit 不做的部分）。audit 未跑时本流程自行跑。
+1. **Nielsen 10 可用性 + 状态覆盖**：audit 主跑（Phase 10 Mode A/B）；本流程镜头 F/G 对可用性违例**引用 audit 的 `AUDIT-F` 结论、不重跑** Nielsen，本流程专注重复/散乱/定位（audit 不做的部分）。audit 未跑时本流程自行跑。
 2. **M1–M8 设计清单**：feature-gap 主跑逐模块 M 命中（U1–U7 + M1–M8 细则）；本流程镜头 C/D 对视觉/交互一致性**引用 gap 的 `recon` 命中、不重跑逐模块 M**，只做跨模块一致性批次聚合。gap 未跑时本流程自行跑 M。
 3. **结构审计（孤儿路由/隐藏后端功能/死按钮）**：e2e 主跑实机（L4）；本流程镜头 B（IA/模块组织）引用 e2e 结构 findings，不自行做按钮级/路由级实机审计。
 
@@ -316,7 +316,7 @@ findings 只能 `open` / `BLOCKED`（附阻塞点+谁解除）/ `deferred`（附
 
 自动发现（未指定范围时）：从路由表 + `.csp/product-spec/` 模块清单 + `.csp/code-spec/entry-points.jsonl` + `docs/FEATURES.md` 枚举全部页面/功能模块，输出"审查清单"（模块 / 路由 / 功能原型 / 优先级 / 界面可达性），按"核心路径优先 + 高频反馈模块优先 + 高风险模块优先"排序，写入 `.csp/critic/SCAN-LIST-{date}.md`。清单产出后即开始逐模块审查，不等用户确认。
 
-逐模块深潜：对清单每个对象依次跑 Phase 1-4（现状重建 → 七镜头 → 跨镜头去重 + 优先级），一次一个，保持深潜粒度。每模块产出 `.csp/critic/recon-{slug}.md` + 并入 `CRITIC-FINDINGS-{date}.json`（前缀 `CRITIC-F-NN`）。镜头 A（重复）单模块只记"疑似重复，涉及 MOD-xx"，留跨模块聚合阶段裁决。
+逐模块深潜：对清单每个对象依次跑 Phase 5-4（现状重建 → 七镜头 → 跨镜头去重 + 优先级），一次一个，保持深潜粒度。每模块产出 `.csp/critic/recon-{slug}.md` + 并入 `CRITIC-FINDINGS-{date}.json`（前缀 `CRITIC-F-NN`）。镜头 A（重复）单模块只记"疑似重复，涉及 MOD-xx"，留跨模块聚合阶段裁决。
 
 跨模块聚合（全部模块审完后，barrier）：做一次跨模块分析，专攻单模块视角看不清的问题——功能/配置/实现/入口重复（镜头 A，按 M7 判归属出合并/单一真相源建议）、跨模块一致性违反（C/D）、信息架构/导航口径不一、设计 token 漂移（M5）、宏观定位（E）跨模块复检。产出 `.csp/critic/CROSS-MODULE-{date}.md` + 合并进 `CRITIC-FINDINGS-{date}.json`。
 
@@ -328,4 +328,4 @@ findings 只能 `open` / `BLOCKED`（附阻塞点+谁解除）/ `deferred`（附
 
 gate 即授权，全自动推进，只在：审查清单真模糊且问询后仍不明 / 基线全缺且无法限定降级 / 真破坏操作（改代码删文档）/ 无法 auto-resolve 的报错 这几类才打断我。每完成一个模块按进度条播报：
 📊 进度 [模块 i/N {slug}] [重建✓][A重复✓][B-IA✓][C视觉✓][D习惯✓][E定位✓][F完整性✓][G状态✓]
-全部模块 + 跨模块聚合完成后，先输出总 findings 清单（按 P0 / P1 / P2 + 跨模块重复冗余批次分组），附产物路径；**然后必输出"## 下一步动作"衔接块**（按 §七「完成后衔接执行」四 bucket 给具体可执行指令 + finding ID），明确声明"修复/开发尚未执行，以下是触发执行的指令"；**gate 即授权，默认用 `Agent` 工具 `subagent_type="lifecycle-orchestrator"` 自动 spawn** 消费本批 findings（即查即修直跑 04→05→06，P1/P2 先 spawn roadmap-planner subagent 过 Phase 2.5 再续跑）——注意是 subagent 用 Agent 工具调，**不要去 Skill 注册表找**（见 §七「调用机制」）。不等你确认，仅在你说"只审查不执行"或命中五类打断条件时停。spawn 后由 orchestrator 接力，本审查结束。
+全部模块 + 跨模块聚合完成后，先输出总 findings 清单（按 P0 / P1 / P2 + 跨模块重复冗余批次分组），附产物路径；**然后必输出"## 下一步动作"衔接块**（按 §七「完成后衔接执行」四 bucket 给具体可执行指令 + finding ID），明确声明"修复/开发尚未执行，以下是触发执行的指令"；**gate 即授权，默认用 `Agent` 工具 `subagent_type="lifecycle-orchestrator"` 自动 spawn** 消费本批 findings（即查即修直跑 04→05→06，P1/P2 先 spawn roadmap-planner subagent 过 Phase 7 再续跑）——注意是 subagent 用 Agent 工具调，**不要去 Skill 注册表找**（见 §七「调用机制」）。不等你确认，仅在你说"只审查不执行"或命中五类打断条件时停。spawn 后由 orchestrator 接力，本审查结束。

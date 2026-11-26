@@ -79,12 +79,12 @@
 
 ## 五、执行流程
 
-### Phase 1：需求输入标准化 → `REQUIREMENT-INPUT.md`
+### Phase 5：需求输入标准化 → `REQUIREMENT-INPUT.md`
 接收任意格式输入，标准化为统一结构：原始需求 / 来源类型（一句话想法|功能描述|PRD|用户反馈|竞品参考）/ 完整度评分 1–5 / 模糊点 / 上下文（全新|扩展|重构|已知约束|目标用户）。
 - 完整度 ≤2 → 先建议需求澄清（回 PRD 或头脑风暴），再拆解。
-- 完整度 ≥3 → 直接进入 Phase 2。
+- 完整度 ≥3 → 直接进入 Phase 6。
 
-### Phase 2：功能域识别（Domain Mapping）→ `FEATURE-MAP.md`
+### Phase 6：功能域识别（Domain Mapping）→ `FEATURE-MAP.md`
 将需求空间划分为功能域，每域是一组相关 Feature 的容器。域数通常 3–7。
 **域划分原则**：按业务能力划分，不按技术层划分；每域有清晰职责边界；域间耦合最小化；**域边界对齐 PMS 模块边界**。
 ```
@@ -97,7 +97,7 @@
 └── 域 D: 基础设施
 ```
 
-### Phase 3：原子 Feature 拆解 → `FEATURE-DETAILS/F-{domain}-{seq}.yaml`
+### Phase 8：原子 Feature 拆解 → `FEATURE-DETAILS/F-{domain}-{seq}.yaml`
 对每个域拆解为原子 Feature，每个 Feature 必须含以下维度（yaml）：
 
 ```yaml
@@ -163,13 +163,13 @@ feature:
   assumptions: []
 ```
 
-### Phase 4：非功能性需求补全 → `NFR.md`
+### Phase 10：非功能性需求补全 → `NFR.md`
 Feature 拆解后补全系统级 NFR（来自 PRD Section 4，不重写，只补全隐藏项）：性能（并发/响应/数据量）、安全（认证/加密/合规）、可用性（SLA/容灾/降级）、可观测性（日志/监控/告警）、国际化（多语言/多时区/本地化）。
 
-### Phase 5：依赖图与实施路径 → `DEPENDENCY-GRAPH.md`
+### Phase 11：依赖图与实施路径 → `DEPENDENCY-GRAPH.md`
 构建 Feature 间依赖 DAG（Mermaid）；输出实施波次（Wave 1 基础层可并行 / Wave 2 核心业务 / Wave 3 增强）、关键路径、并行机会。**DAG 必须无环，有环报错停步。**
 
-### Phase 6：输出产物 → `.csp/decomposition/`
+### Phase 13：输出产物 → `.csp/decomposition/`
 ```
 .csp/decomposition/
 ├── REQUIREMENT-INPUT.md          # 标准化需求输入
@@ -234,7 +234,7 @@ Feature 拆解后补全系统级 NFR（来自 PRD Section 4，不重写，只补
 
 ## 九、元数据与一致性（关键：与 PRD/PMS/Spec 三方对齐）
 
-每个 Feature yaml 头必含 front-matter 字段（见 Phase 3），其中 `prd_ref` 与 `pms_module` 是双向追溯锚点。
+每个 Feature yaml 头必含 front-matter 字段（见 Phase 8），其中 `prd_ref` 与 `pms_module` 是双向追溯锚点。
 
 ### 一致性链（正确关系）
 

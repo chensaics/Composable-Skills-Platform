@@ -133,12 +133,12 @@ python3 prompts/scripts/validate_gates.py --config .csp/gates.config.json --root
 
 | 提示词 Phase | 调用的门禁 | 用途 |
 |-------------|-----------|------|
-| **convergence Phase 0**（定位基线） | G-POS | 定位漂移预警，drift>30% → roadmap 回炉 |
+| **convergence Phase 1**（定位基线） | G-POS | 定位漂移预警，drift>30% → roadmap 回炉 |
 | **convergence D3**（IA+导航准入） | G-NAV, G-DUAL-NAV | 导航预算检查，超预算冻结新增顶级导航 |
 | **convergence D5**（定位对齐与前提挑战） | G-POS, G-FLAG | 前提挑战的机器证据（冲突 flag/关键词） |
 | **convergence D6.2**（Flag 卫生） | G-FLAG | default-off 死代码 + 定位冲突 flag |
 | **convergence D6.3**（文档权威） | G-DOC | DOC-STATUS 过期 → 禁止新增功能 |
-| **convergence Phase 3**（五类 Pattern） | 全部 | A→G-POS, B→G-NAV/G-DUAL-NAV, C→G-PLACEHOLDER/G-CONTRACT/G-BUTTON, D→G-FLAG/G-LAYER, E→G-DOC |
+| **convergence Phase 8**（五类 Pattern） | 全部 | A→G-POS, B→G-NAV/G-DUAL-NAV, C→G-PLACEHOLDER/G-CONTRACT/G-BUTTON, D→G-FLAG/G-LAYER, E→G-DOC |
 | **audit-pipeline Step 0.5**（环境自检后） | 全部 | 既有 findings 基线 + 门禁快照 |
 | **audit Step 1** | G-CONTRACT, G-LAYER | 工程结构体检的机器证据 |
 | **e2e L3/L4** | G-BUTTON, G-CONTRACT | 按钮审计 + 孤儿路由 |

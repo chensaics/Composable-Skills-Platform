@@ -4,7 +4,7 @@
 
 ---
 
-## Phase GB：棕地项目适配（既有项目治理初始化）
+## Phase 12B：棕地项目适配（既有项目治理初始化）
 
 > **触发**：项目已存在（非全新初始化），`.csp/AGENTS.md` 或 `CLAUDE.md` 可能缺失或过期时执行。**不推倒重来，按版本迭代逐步对齐**。
 
@@ -39,7 +39,7 @@
 
 ---
 
-## Phase GK：知识中枢初始化与三基线管理
+## Phase 12K：知识中枢初始化与三基线管理
 
 > 知识中枢是整条交付链路的基座。本 Phase 不重复方法论细节、通过 `[[skill:csp-knowledge-hub]]` 承载完整初始化流程，此处只定义治理层的约定。
 
@@ -51,7 +51,7 @@
 - **manifest.json**：唯一产物索引（`source_id`/`content_hash`/`build_status`/`raw_path`/`output_path`），所有阶段产出即回写
 - **lifecycle-state.json**：运行态索引；先识别当前驱动器实际使用的阶段 schema（提示词 00–07 或 SDK S-stage），按它读写，不混用数组与对象、不把长 `dev_log` 和测试输出塞进去。
 - **既有文档整改**：只给出冲突清单和受影响读者；路径/版本/frontmatter 的更改先确定权威与回滚，不自动移动活跃原文。
-- **棕地 CMS 蒸馏**（Phase 1.7）：代码已存在时自动蒸馏入口点→调用链→模块边界→生成 CMS baseline
+- **棕地 CMS 蒸馏**（Phase 5.7）：代码已存在时自动蒸馏入口点→调用链→模块边界→生成 CMS baseline
 
 > 数据字典是项目的**统一表字段文档**——所有表/字段/类型/约束/所属 feature 的唯一真相源。Spec 定义单个 feature 的数据模型，数据字典聚合全项目视角。
 
@@ -59,10 +59,10 @@
 
 | 基线 | 全称 | 目录 | 生产者 | 消费者 |
 |------|------|------|--------|--------|
-| **PMS** | Product Module Spec | `.csp/product-spec/` | Planning Phase 5 + 01 PRD | 02 拆解 / 03 技术方案 / 07 复盘 |
+| **PMS** | Product Module Spec | `.csp/product-spec/` | Planning Phase 11 + 01 PRD | 02 拆解 / 03 技术方案 / 07 复盘 |
 | **CMS** | Code Module Spec | `.csp/code-spec/{app}/` | 00 棕地蒸馏 / 05 增量对齐 | 03 技术方案 ground / 05 开发 / CR |
-| **TMS** | Test Module Spec | `.csp/test-spec/{module}/` | product-planning Phase 6 Spec | TU/TI/TE 测试实施 / 门控 |
-| **DDS** | Data Dictionary Spec | `docs/architecture/DATA-SCHEMA.md` | product-planning Phase 6 Spec 产出时同步更新 / 05 开发新字段时增量更新 | 全阶段——字段名唯一真相源 |
+| **TMS** | Test Module Spec | `.csp/test-spec/{module}/` | product-planning Phase 13 Spec | TU/TI/TE 测试实施 / 门控 |
+| **DDS** | Data Dictionary Spec | `docs/architecture/DATA-SCHEMA.md` | product-planning Phase 13 Spec 产出时同步更新 / 05 开发新字段时增量更新 | 全阶段——字段名唯一真相源 |
 
 **DDS 表命名规则**：表名按业务域命名，禁版本前缀（`v329_` `v328_` 等属于 migration chain，不属于表名）。已有违规表名记录技术债，下一轮架构迭代重命名。
 
@@ -74,7 +74,7 @@
 # 数据字典 — {project}
 
 > 所有表/字段/类型/约束的唯一真相源。Spec 定义单 feature 数据模型，本文档聚合全项目视角。
-> 更新触发：product-planning Phase 6 Spec 产出时 + 05 开发新增字段时 + DB migration 变更时。
+> 更新触发：product-planning Phase 13 Spec 产出时 + 05 开发新增字段时 + DB migration 变更时。
 
 ## 枚举与常量
 | 名称 | 值 | 含义 | 所属 feature |
@@ -92,7 +92,7 @@
 ```
 
 **更新规则**：
-- product-planning Phase 6 Spec 产出时，新增 entity → 在 DDS 中建表/加字段行，标注所属 feature
+- product-planning Phase 13 Spec 产出时，新增 entity → 在 DDS 中建表/加字段行，标注所属 feature
 - 05 开发中新发现需要字段 → **先改 DDS，再改 Spec，再写代码**（DDS 驱动 Spec 驱动代码，不要反过来）
 - DB migration 变更时 → 同步更新 DDS 对应字段行
 - 字段重命名/删字段 → DDS 中标记 `→ renamed to xxx` / `DEPRECATED vX.Y.Z`，保留历史记录
@@ -143,7 +143,7 @@ updated: "YYYY-MM-DD"
 
 ---
 
-## Phase G0：项目结构初始化与维护
+## Phase 120：项目结构初始化与维护
 
 > 适用于新项目初始化或既有项目结构整理。
 
@@ -326,7 +326,7 @@ updated: "YYYY-MM-DD"
 
 ---
 
-## Phase G1：版本与变更管理
+## Phase 121：版本与变更管理
 
 ### G1.1 版本号管理
 
@@ -391,7 +391,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 ---
 
-## Phase G2：全阶段产物路径约定
+## Phase 122：全阶段产物路径约定
 
 > 下表是 CSP 默认路径与角色的**示例映射**，目标项目已有可用路径先记录在 `.csp/AGENTS.md`，不得按表强制搬迁。表中“✅”仅表示人读/可能对外，**不表示自动公开或发布**；实际发布范围由 G0.2 与访问控制决定。
 
@@ -399,17 +399,17 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 | 阶段 | 所属文档 | 产物路径 | 对外 |
 |------|---------|---------|------|
-| **战略规划** | Planning Phase 0–1 | `docs/strategy/STRATEGY.md` + `ROADMAP.md` | ✅ |
-| **现状评估** | Planning Phase A | `docs/analysis/CURRENT-STATE-{date}.md` | ✅ |
-| **市场调研** | Planning Phase R | `docs/analysis/MARKET-RESEARCH-{date}.md` | ✅ |
-| **竞品借鉴** | Planning Phase 0.5 | `docs/analysis/COMPETITIVE-REFERENCE.md` | ✅ |
-| **版本序列** | Planning Phase 2 | `docs/strategy/ROADMAP.md`(更新) + `docs/FEATURES.md` | ✅ |
-| **集成审视** | Planning Phase 2.5 | `docs/analysis/INTEGRATION-NECESSITY-{date}.md` | ✅ |
-| **架构收敛** | Planning Phase 3 | `.csp/convergence/CONVERGED-FEATURE-PLAN.md` | ❌ |
-| **设计衔接** | Planning Phase 4 | `.csp/spark/` 工程设计链；需人读的成品在项目现有 docs 目录 | 按项目发布设置 |
-| **PRD SPEC** | product-planning Phase 5 | `docs/prd/PRD-{version-slug}.md` + `PRD-INDEX.md` | ✅ |
-| **增长规划** | product-planning Phase G | `docs/analysis/GROWTH-PLAN-{date}.md` | ✅ |
-| **任务拆解** | product-planning Phase 7 | `.csp/tasks/` | ❌ |
+| **战略规划** | Planning Phase 1–1 | `docs/strategy/STRATEGY.md` + `ROADMAP.md` | ✅ |
+| **现状评估** | Planning Phase 2 | `docs/analysis/CURRENT-STATE-{date}.md` | ✅ |
+| **市场调研** | Planning Phase 3 | `docs/analysis/MARKET-RESEARCH-{date}.md` | ✅ |
+| **竞品借鉴** | Planning Phase 4 | `docs/analysis/COMPETITIVE-REFERENCE.md` | ✅ |
+| **版本序列** | Planning Phase 6 | `docs/strategy/ROADMAP.md`(更新) + `docs/FEATURES.md` | ✅ |
+| **集成审视** | Planning Phase 7 | `docs/analysis/INTEGRATION-NECESSITY-{date}.md` | ✅ |
+| **架构收敛** | Planning Phase 8 | `.csp/convergence/CONVERGED-FEATURE-PLAN.md` | ❌ |
+| **设计衔接** | Planning Phase 10 | `.csp/spark/` 工程设计链；需人读的成品在项目现有 docs 目录 | 按项目发布设置 |
+| **PRD SPEC** | product-planning Phase 11 | `docs/prd/PRD-{version-slug}.md` + `PRD-INDEX.md` | ✅ |
+| **增长规划** | product-planning Phase 12 | `docs/analysis/GROWTH-PLAN-{date}.md` | ✅ |
+| **任务拆解** | product-planning Phase 14 | `.csp/tasks/` | ❌ |
 | **开发实施** | Development 05 | 项目实际源码根（`src/`、`apps/*`、`backend/`）与既有测试/迁移目录 | 代码依项目策略 |
 | **数据模型 Spec** | Development S3 | `.csp/specs/`（DDL 设计与数据契约） | 内部 |
 | **数据库迁移** | Development 05 | 项目实际的 Alembic/Flyway/Prisma 迁移目录 | 代码依项目策略 |
@@ -426,8 +426,8 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 | **系统审计** | Testing TA | `.csp/audit/AUDIT-FINDINGS.json` + `.csp/gap-analysis/` | 内部 |
 | **UI 对齐审查** | Testing TV | `.csp/design-qa/` | 内部 |
 | **H5 视觉测试** | Testing TV | `.csp/artifacts/verify/h5-test/` | 内部 |
-| **市场调研（深度）** | Planning Phase R | `docs/market-research/{topic-slug}/` | ✅ |
-| **深度市场报告** | Planning Phase R | `docs/market-reports/{topic-slug}/` | ✅ |
+| **市场调研（深度）** | Planning Phase 3 | `docs/market-research/{topic-slug}/` | ✅ |
+| **深度市场报告** | Planning Phase 3 | `docs/market-reports/{topic-slug}/` | ✅ |
 
 ### G2.2 测试产物分层约定
 
@@ -460,7 +460,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 ---
 
-## Phase G3：文档生命周期维护
+## Phase 123：文档生命周期维护
 
 调用 `[[skill:csp-doc-lifecycle-manager]]`（分类/归档/索引/清理）：
 
@@ -475,7 +475,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 ### G3.2 定期维护
 
-每个版本发布后（06 done）或规划启动前（Planning Phase 0）：
+每个版本发布后（06 done）或规划启动前（Planning Phase 1）：
 
 - 检查上一版 specs/tasks/decomposition 是否已被取代且无人引用；有读者或下版仍依赖则继续保留，符合项目留存条件后才提出归档并更新索引。
 - 检查 analysis 报告权威和入站引用；新版本不等于旧报告无价值，不按最新一份自动清理。
@@ -487,7 +487,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 ---
 
-## Phase G4：项目生产要素管理
+## Phase 124：项目生产要素管理
 
 > 项目不止代码和文档——还有协作者、安全策略、环境配置、CI/CD、依赖管理等生产要素。
 
@@ -537,7 +537,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 ---
 
-## Phase G5：项目根目录卫生
+## Phase 125：项目根目录卫生
 
 > 根目录是项目的门面。散落的临时产物、遗留的旧路径、未清理的缓存——这些不只是"不好看"，会导致新成员困惑、agent 误判项目结构、CI 误读配置。
 
@@ -591,7 +591,7 @@ Conventional Commits 格式（遵循 `[[pattern:csp-git-conventions]]` §3）：
 
 ---
 
-## Phase G6：产物大小治理
+## Phase 126：产物大小治理
 
 > 持续迭代的项目会积累大量产物——日志、changelog、ROADMAP、PRD、验证基线——这些文件天然持续增长，不加管理会导致 Agent 上下文超限、构建变慢、仓库体积膨胀。
 
@@ -657,7 +657,7 @@ Agent 依功能审阅：根指令/路由卡应便于快速装载；长 PRD/CHANG
 | 项目标准审查 | `[[skill:csp-project-standards-reviewer]]`（CLAUDE.md/AGENTS.md 合规/frontmatter 规则） |
 | 发布辅助 | `[[skill:csp-release]]`（分析 release 规则/生成 release notes） |
 
-### 项目生产要素（Phase G4）
+### 项目生产要素（Phase 124）
 
 | 阶段 | CSP Skill |
 |------|-----------|
@@ -669,14 +669,14 @@ Agent 依功能审阅：根指令/路由卡应便于快速装载；长 PRD/CHANG
 | Monorepo 工具链 | `[[skill:csp-monorepo-tooling]]`（workspace/pipeline/版本策略/跨 package 治理） |
 | 文件整理 | `[[skill:csp-file-organizer]]`（.gitignore/.npmignore 清理/根目录卫生检查/过期文件归档/verify 清理） |
 
-### 全阶段产物路径（Phase G2）
+### 全阶段产物路径（Phase 122）
 
 | 阶段 | CSP Skill |
 |------|-----------|
 | 产物路径约定 | 本文件 G2.1-G2.3 规则表——所有阶段产物落盘统一 |
 | 测试产物分层 | G2.2 测试产物分层表（代码/文档/证据/审计 findings 各有归属） |
 
-### 项目根目录卫生（Phase G5）
+### 项目根目录卫生（Phase 125）
 
 | 阶段 | CSP Skill |
 |------|-----------|
@@ -704,7 +704,7 @@ Agent 依功能审阅：根指令/路由卡应便于快速装载；长 PRD/CHANG
 
 ```
 000-product-planning_csp.md
-  │  规划全链路: Phase 0→7（调研→战略→ROADMAP→审视→收敛→PRD→Spec→任务拆解）
+  │  规划全链路: Phase 1→7（调研→战略→ROADMAP→审视→收敛→PRD→Spec→任务拆解）
   │  产出: Layer 1-4 全部 + 任务清单 DAG
   │
   ├──→ 000-develop_pipeline_csp.md

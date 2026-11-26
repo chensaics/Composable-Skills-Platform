@@ -12,7 +12,7 @@
 
 ## 一、使命与硬边界（红线）
 
-1. **Anchor, not plan**：战略 = 产品是什么/为什么/为谁（Rumelt kernel：诊断→指导方针→连贯行动）。**不是 feature list、不是排期**——功能细节归 01 PRD/spec。Agent 开发下不做估时/排期——人日估算无意义（人可能 3 天但 Agent 几分钟完成），版本顺序由依赖 DAG + 优先级 + 攒批决定，不按日历排。`ROADMAP.md` 只给"方向 + 版本主题 + 关键价值"；**PRD SPEC 是独立文件**（`docs/prd/`，Phase 4.5 产出，规划级深度），不写进 ROADMAP.md 正文。
+1. **Anchor, not plan**：战略 = 产品是什么/为什么/为谁（Rumelt kernel：诊断→指导方针→连贯行动）。**不是 feature list、不是排期**——功能细节归 01 PRD/spec。Agent 开发下不做估时/排期——人日估算无意义（人可能 3 天但 Agent 几分钟完成），版本顺序由依赖 DAG + 优先级 + 攒批决定，不按日历排。`ROADMAP.md` 只给"方向 + 版本主题 + 关键价值"；**PRD SPEC 是独立文件**（`docs/prd/`，Phase 10.5 产出，规划级深度），不写进 ROADMAP.md 正文。
 2. **版本号规则权威**：SemVer/CalVer 机制、对齐检查的权威定义在 `version-management.md`（独立参考文件）；本提示词产出物定义本项目的**版本-主题序列**；06 发布执行时 reference `version-management.md` 的规则，不另立。
 3. **短是特性**：模板受限，加节成本高；push back 扩张。ROADMAP 每版本只给关键信息 + 价值描述；规划级 PRD SPEC 也只写大纲级要点，工程级细节（业务规则穷举/异常矩阵/完整 AC/埋点明细）留到内环 01/03 升级补全。
 4. **Durable rerunnable**：可重跑——二次运行 in-place 更新，保留有效部分，只挑战 stale/weak 段；不推倒重来。
@@ -21,16 +21,16 @@
 7. **`.csp/` 走主干、不越 PMS**：产物落 `docs/strategy/`（人读）+ 回写 `.csp/manifest.json`（agent 索引）；不建 side branch。
 8. **精简聚焦，不发散**：产品迭代路径只围绕**核心业务场景**做功能——业务聚焦、场景聚焦。能不做就不做、可合并就合并、非核心场景/边缘需求一律 defer 或摒弃。宁可少而准，不可多而散；**发散是规划失败，不是丰富**。
 9. **PRD SPEC 深度边界**：外环产出的是**规划级 SPEC**（WHAT 大纲：功能模块/用户故事/优先级/关键规则要点/AC 骨架），不是工程级 PRD——业务规则穷举、异常流矩阵、埋点明细、完整 Given-When-Then 归内环 01 升级时补；SPEC 绝不写 HOW（技术选型/数据库/框架一律禁止，同 01 红线）。
-10. **SPEC 与净版同源**：PRD SPEC 只为 Phase 2.5 审视后**纳入/合并留存**的版本与功能产出（剔除/降级的不进 SPEC）；收敛闸门、07 回流或增量更新改变净版后，对应 SPEC 必须 delta 同步——ROADMAP 版本-主题表、`docs/FEATURES.md`、PRD SPEC 三者功能清单一致。
+10. **SPEC 与净版同源**：PRD SPEC 只为 Phase 7 审视后**纳入/合并留存**的版本与功能产出（剔除/降级的不进 SPEC）；收敛闸门、07 回流或增量更新改变净版后，对应 SPEC 必须 delta 同步——ROADMAP 版本-主题表、`docs/FEATURES.md`、PRD SPEC 三者功能清单一致。
 
 ## 二、触发与路由
 
 当用户表达"长期规划""路线图""产品规划""版本规划""版本序列""迭代路径""product roadmap""strategy""产品方向"等意图，或新项目启动需要战略锚点时进入本流程。
 
-- 无 `docs/strategy/ROADMAP.md` → **首次规划**（Phase 0 锚点访谈 → 版本路径）。
+- 无 `docs/strategy/ROADMAP.md` → **首次规划**（Phase 1 锚点访谈 → 版本路径）。
 - 已存在 → **增量更新**（读现状，diff delta，只改 stale/weak 段；07 复盘 findings 回流时触发）。
 - 仅某节（如版本号规则/某版本主题）→ 定点更新该节。
-- 版本序列已定但缺 PRD SPEC（或既有 SPEC 与净版脱节 stale）→ 定点跑 Phase 4.5 补齐/同步对应版本。
+- 版本序列已定但缺 PRD SPEC（或既有 SPEC 与净版脱节 stale）→ 定点跑 Phase 10.5 补齐/同步对应版本。
 
 ## 三、项目上下文探测（强制前置）
 
@@ -41,7 +41,7 @@
 4. **07 复盘 findings**：`.csp/review/REVIEW-FINDINGS-*.json`（status=open/deferred）→ 回流为下一版本主题输入。
 5. **项目级 docs**：`README.md`/`CLAUDE.md`/`docs/ARCHITECTURE.md` → 产品定位/架构现状。
 6. **lifecycle-state**：`.csp/lifecycle-state.json` → 当前迭代到哪步，规划与在跑版本对齐。
-7. **参考/竞品文件夹**：扫 `开源项目参考/`、`references/`、`竞品/`、`vendor/`、`inspire/` 等（项目特征命名）→ 若有，列参考项目，Phase 0.5 提炼借鉴输入。
+7. **参考/竞品文件夹**：扫 `开源项目参考/`、`references/`、`竞品/`、`vendor/`、`inspire/` 等（项目特征命名）→ 若有，列参考项目，Phase 4 提炼借鉴输入。
 
 ### 探测后输出"规划就绪卡"
 ```markdown
@@ -50,13 +50,13 @@
 - 已发布版本：{git tag 列表，或"无"}
 - 07 回流 findings：{open/deferred 数，或"无"}
 - 产品定位来源：{README/ARCHITECTURE，或 [TBD]}
-- 参考项目文件夹：{列出，或"无"} → {跑 Phase 0.5 借鉴 / 跳过}
+- 参考项目文件夹：{列出，或"无"} → {跑 Phase 4 借鉴 / 跳过}
 - 本次定位：{首次规划 / 增量更新 / 定点更新}
 ```
 
 ## 四、执行流程
 
-### Phase R：产品与商业方向调研（首次规划强制前置）
+### Phase 3：产品与商业方向调研（首次规划强制前置）
 **触发**：首次规划必跑；增量更新时仅在战略基础动摇（赛道格局/竞品/用户结构发生重大变化）时补跑 delta——既有报告 6 个月内且无重大变化可直接复用，不重跑。
 
 **调研五面**（AI 自主完成全部桌面调研，多路并行搜索——按容器/按内容/按时间各一路；证据带出处，不臆造数据，数据缺口标 `[TBD]`）：
@@ -68,10 +68,10 @@
 
 **产出**：`docs/analysis/MARKET-RESEARCH-{date}.md`（五面各一节，每条关键结论带来源出处；增量更新只写 delta 节 + 更新日期，不推倒重写）。
 
-**下游消费**：Phase 0 战略锚点基于调研结论提炼（诊断/指导方针有事实输入，不拍脑袋）；Phase 0.5 本地参考借鉴与竞品深潜互补（Phase R 重外网面，Phase 0.5 重本地文件夹逐项目提炼）；Phase 2 版本主题标注对应解决的**用户场景/竞品差距**（引调研节）；Phase 4.5 PRD SPEC 的背景/价值段引调研结论。
+**下游消费**：Phase 1 战略锚点基于调研结论提炼（诊断/指导方针有事实输入，不拍脑袋）；Phase 4 本地参考借鉴与竞品深潜互补（Phase 3 重外网面，Phase 4 重本地文件夹逐项目提炼）；Phase 6 版本主题标注对应解决的**用户场景/竞品差距**（引调研节）；Phase 10.5 PRD SPEC 的背景/价值段引调研结论。
 
-### Phase 0：战略锚点（产出 STRATEGY.md）
-按 Rumelt kernel 提炼（以 Phase R 调研结论为事实输入），每节问 + pushback（≤2 轮，捕获用户原话）：
+### Phase 1：战略锚点（产出 STRATEGY.md）
+按 Rumelt kernel 提炼（以 Phase 3 调研结论为事实输入），每节问 + pushback（≤2 轮，捕获用户原话）：
 1. **Target problem（诊断）**：产品解决什么核心问题？现状的痛点/不对称在哪？
 2. **Our approach（指导方针）**：我们的解法/差异化选择是什么？为什么是现在做？
 3. **Who it's for（为谁）**：目标用户/角色/场景；不是"所有用户"。
@@ -81,16 +81,16 @@
 
 > STRATEGY.md 短而硬：anchor，不扩成 feature list。下游 01 PRD 读它 ground。
 
-### Phase 0.5：参考/竞品借鉴（条件：探测发现参考项目文件夹）
-若探测发现参考项目文件夹（`开源项目参考/`/`竞品/`/`references/`/`vendor/`/`inspire/` 等）→ 提炼借鉴输入（与 Phase R 竞品深潜互补：本 Phase 逐本地项目深挖 feature/做法，Phase R 覆盖外网面）：
+### Phase 4：参考/竞品借鉴（条件：探测发现参考项目文件夹）
+若探测发现参考项目文件夹（`开源项目参考/`/`竞品/`/`references/`/`vendor/`/`inspire/` 等）→ 提炼借鉴输入（与 Phase 3 竞品深潜互补：本 Phase 逐本地项目深挖 feature/做法，Phase 3 覆盖外网面）：
 1. **feature 借鉴**：扫参考项目的 features/README/skills/PRD/CHANGELOG，提炼可借鉴的功能/能力模式；标注来源项目+路径。
 2. **竞品差异化**：对比参考项目定位/做法，识别本产品差异化机会（填入 STRATEGY 的 approach/tracks）。
 3. **版本主题输入**：借鉴的 feature/themes 映射到 ROADMAP 版本主题（哪些版本做、如何差异化落地，不照抄）。
 产出 `docs/analysis/COMPETITIVE-REFERENCE.md`（借鉴清单：`来源项目 | feature/做法 | 借鉴点 | 差异化判断 | 拟纳入版本`）。
 
-**红线**：①**借鉴非复制**——竞品 feature 必须判断"是否适合本产品定位 + 差异化"，不照抄；②标来源路径，可追溯；③**开源协议兼容**（MIT/Apache 可借鉴，GPL 审慎避免传染）；④参考只是输入，战略选择仍归 Phase 0。
+**红线**：①**借鉴非复制**——竞品 feature 必须判断"是否适合本产品定位 + 差异化"，不照抄；②标来源路径，可追溯；③**开源协议兼容**（MIT/Apache 可借鉴，GPL 审慎避免传染）；④参考只是输入，战略选择仍归 Phase 1。
 
-### Phase 1：版本号规则（产出 ROADMAP.md 的"版本号规则"节）
+### Phase 5：版本号规则（产出 ROADMAP.md 的"版本号规则"节）
 **默认 SemVer**（X.Y.Z 语义化版本，本体系标准）：
 - `MAJOR.MINOR.PATCH[-pre.N]`
 - **MAJOR**（X）：不兼容的 API/架构变更、移除已弃用能力、范式跃迁。**仅在 06 发布时验证到实际 breaking API 变更才 bump MAJOR**——新增模块/新端点/新功能是 additive（MINOR），不是 MAJOR，无论战略愿景多宏大。
@@ -108,7 +108,7 @@
 **版本号来源（战略主题号 ≠ SemVer 发布号）**：
 - roadmap 的 **战略主题**（如"平台化""生态开放"）是**叙事性愿景**，**不是 SemVer 发布号**——不能用战略主题号打版本的发布 tag。
 - **实际发布号**按 SemVer 从上一个已发 tag **增量续编**：additive（新模块/新端点/无 breaking API 变更）→ **MINOR+1**；breaking（移除 deprecated/改变响应语义/不兼容 API）→ **MAJOR+1**；bug fix → **PATCH+1**。
-- 06 发布时**验证实际交付量**决定 bump 级别，**不从 roadmap 战略号取版本号**——即使 roadmap Phase 3 写了"v2.0 = 平台化"，单版本只做了起步（additive）→ 实际 tag 是 `v1.4.0`（MINOR），不是 `v2.0.0`（MAJOR）。
+- 06 发布时**验证实际交付量**决定 bump 级别，**不从 roadmap 战略号取版本号**——即使 roadmap Phase 8 写了"v2.0 = 平台化"，单版本只做了起步（additive）→ 实际 tag 是 `v1.4.0`（MINOR），不是 `v2.0.0`（MAJOR）。
 - roadmap 的 v2.0/v3.0 战略号只在**实际 breaking/范式跃迁真正发生时**才作为 SemVer 号使用；在那之前，版本号按 SemVer 增量续编（v1.4/v1.5/...），逐步逼近战略号。
 - **提前/延后交付不改 tag**：tag 跟随 SemVer 增量，不跟随今日日期。
 
@@ -120,8 +120,8 @@
 
 > 版本号规则（SemVer 机制、对齐检查）的权威定义见 `version-management.md`；本节定义本项目的版本-主题序列与 bump 策略。06 发布执行 reference `version-management.md`，不另立方案。
 
-### Phase 2：版本序列路径（版本 + 主题）
-列接下来若干版本序列（纯 SemVer 增量续编 `v1.0 → v1.1 → v1.2 → v1.3 → ...`，**不用日期/CalVer**——AI 产出节奏与日历无关，时间形式版本号无意义）。**每版本只给摘要级**（规划级 SPEC 由 Phase 4.5 单独落 `docs/prd/`，工程级细节留到内环 01/03）：
+### Phase 6：版本序列路径（版本 + 主题）
+列接下来若干版本序列（纯 SemVer 增量续编 `v1.0 → v1.1 → v1.2 → v1.3 → ...`，**不用日期/CalVer**——AI 产出节奏与日历无关，时间形式版本号无意义）。**每版本只给摘要级**（规划级 SPEC 由 Phase 10.5 单独落 `docs/prd/`，工程级细节留到内环 01/03）：
 
 ```
 ### 战略主题：{名称}（SemVer 逼近：v2.0 附近）— status: planned|in-progress|shipped|deferred
@@ -129,10 +129,10 @@
 - 目标：一句话
 - 关键功能（摘要级，3-5 条）：…（不写详细 PRD，只点明做什么；同步落入 `docs/FEATURES.md` 对应版本行，状态 `📋规划中`）
 - 价值描述：用户价值 + 业务价值
-- 场景/竞品差距：本版本对应用户场景或竞品差距（引 Phase R 调研节 / COMPETITIVE-REFERENCE 行）
+- 场景/竞品差距：本版本对应用户场景或竞品差距（引 Phase 3 调研节 / COMPETITIVE-REFERENCE 行）
 - 成功指标：北极星/子指标目标值（未定标 [TBD]）
 - 前置依赖：依赖版本/外部能力
-- PRD SPEC：docs/prd/PRD-{version-slug}.md（Phase 4.5 产出，规划级 Draft；内环 01 升级为工程级）
+- PRD SPEC：docs/prd/PRD-{version-slug}.md（Phase 10.5 产出，规划级 Draft；内环 01 升级为工程级）
 - 07 回流：源自哪些复盘 findings（如有，引 finding id）
 - **实际交付（release 后回填）**：从 commits/CHANGELOG 回填，标 planned vs delivered 差异；status 从 registry 取（planned→released→deployed→prod-verified→rolled-back）
 ```
@@ -141,10 +141,10 @@
 
 **v1.0 = MVP**：聚焦 3-5 核心功能验证问题假设；后续版本按 Tracks 推进。
 
-### Phase 2.5：版本功能集成必要性审视（self-critique gate，强制）
-**触发**：Phase 2 产出版本序列后**强制执行**（首次规划与 07 回流/战略调整的增量更新都跑）。这是规划者**自己挑战自己刚出的规划**——已规划 ≠ 必要，审视只为过滤"功能层是否有必要集成进项目系统"，不推倒 Phase 0 锚点、不重排版本号规则。
+### Phase 7：版本功能集成必要性审视（self-critique gate，强制）
+**触发**：Phase 6 产出版本序列后**强制执行**（首次规划与 07 回流/战略调整的增量更新都跑）。这是规划者**自己挑战自己刚出的规划**——已规划 ≠ 必要，审视只为过滤"功能层是否有必要集成进项目系统"，不推倒 Phase 1 锚点、不重排版本号规则。
 
-**审视对象**：Phase 2 每个版本的"关键功能（摘要级 3-5 条）"，逐条过。
+**审视对象**：Phase 6 每个版本的"关键功能（摘要级 3-5 条）"，逐条过。
 
 **审视维度**（每功能逐一过，能 auto-resolve 的直接裁决不问人）：
 
@@ -169,23 +169,23 @@
 - 回写 `.csp/manifest.json`：integration-necessity analysis item `source_type=doc`、`build_status=built` + `content_hash`；被剔除/降级的功能行 manifest item 标 `degraded`/移除。
 
 **红线**：
-- ① **已规划不等于必要**——审视可剔除/降级已写进 ROADMAP 的功能，"Phase 2 已列"不是保留的理由。
+- ① **已规划不等于必要**——审视可剔除/降级已写进 ROADMAP 的功能，"Phase 6 已列"不是保留的理由。
 - ② **剔除/降级必须记原因**（可追溯），不静默删功能行——读者要能看懂"为什么不做"。
-- ③ **self-critique 不重规划**——只过滤功能层，不动 Phase 0 锚点、不重定版本号规则、不重排 SemVer 号；战略边界争议才人工澄清。
+- ③ **self-critique 不重规划**——只过滤功能层，不动 Phase 1 锚点、不重定版本号规则、不重排 SemVer 号；战略边界争议才人工澄清。
 - ④ **默认优先仍适用**：明显重叠 / 明显偏离锚点 / 依赖悬空 → 直接裁决，不打断；仅在"功能去留牵动战略根本方向、无法 auto-resolve"时人工澄清（≤2 轮）。
 
-### Phase 3：远期版本路径（战略主题——非 SemVer 发布号）
+### Phase 8：远期版本路径（战略主题——非 SemVer 发布号）
 战略主题演进与里程碑（如"平台化与生态"、"生态开放+全球金融"），每节点：方向性主题 + 关键能力跃迁 + 预期市场位置 + **逼近的 SemVer 号**（如"v2.0 附近"，不是确定 tag）。
 
-> ⚠️ **战略主题号 ≠ SemVer 发布号**：Phase 3 的 v2.0/v3.0 是**战略愿景叙事**，不是确定 tag。实际发布号按 SemVer 从 Phase 2 续编增量（v1.4/v1.5/...），只在**实际 breaking API 变更/范式跃迁真正发生**时才到达 v2.0/v3.0。单版本只做了战略起步（additive）→ tag 是 MINOR 增量，不是战略 MAJOR 号。
+> ⚠️ **战略主题号 ≠ SemVer 发布号**：Phase 8 的 v2.0/v3.0 是**战略愿景叙事**，不是确定 tag。实际发布号按 SemVer 从 Phase 6 续编增量（v1.4/v1.5/...），只在**实际 breaking API 变更/范式跃迁真正发生**时才到达 v2.0/v3.0。单版本只做了战略起步（additive）→ tag 是 MINOR 增量，不是战略 MAJOR 号。
 
-### Phase 4：远期愿景
+### Phase 10：远期愿景
 方向性叙事：产品终局、护城河、可持续性。一段话，不细化。
 
-### Phase 4.5：每版本 PRD SPEC 产出（规划级，强制）
-**触发**：Phase 2.5 净版定稿后**强制执行**——规划不止步于 ROADMAP，每个留存版本都要有可直接被内环 01 消费的 PRD SPEC。这是"调研 → 规划功能版本 → 去除不必要功能 → PRD SPECs"链的收口步骤。
+### Phase 10.5：每版本 PRD SPEC 产出（规划级，强制）
+**触发**：Phase 7 净版定稿后**强制执行**——规划不止步于 ROADMAP，每个留存版本都要有可直接被内环 01 消费的 PRD SPEC。这是"调研 → 规划功能版本 → 去除不必要功能 → PRD SPECs"链的收口步骤。
 
-**覆盖范围**：Phase 2 版本序列（净版）中全部 status=`planned`/`in-progress` 的版本，**每版本一份**；剔除/降级的功能不进 SPEC。远期战略主题（Phase 3，无确定版本号）不产 SPEC。
+**覆盖范围**：Phase 6 版本序列（净版）中全部 status=`planned`/`in-progress` 的版本，**每版本一份**；剔除/降级的功能不进 SPEC。远期战略主题（Phase 8，无确定版本号）不产 SPEC。
 
 **产物与路径**（遵循 01 PRD 文档约定，与其共用目录和索引）：
 - `docs/prd/PRD-{version-slug}.md`：version-slug = `v{X.Y}-{theme-slug}`（如 `PRD-v0.23-batch-publish.md`）；幂等覆盖（重跑同 slug 覆盖更新，不留 `-v2`）。
@@ -193,8 +193,8 @@
 
 **结构**：复用 01「输出 PRD」8 段骨架，按**规划级深度**填写：
 - **front-matter**：01「元数据与一致性」节全字段 + `status: Draft` + `prd_depth: planning` + `upstream_source: docs/strategy/ROADMAP.md#vX.Y.Z` + `roadmap_ref` + `target_version`。
-- **§1 背景与目标**：对齐 ROADMAP 该版本主题的目标/价值描述/场景-竞品差距（引 Phase R 调研结论）；指标未定标 `[TBD]`。
-- **§3 详细功能设计**：每功能模块一小节——描述 + 用户故事 + 优先级（P0/P1/P2）+ **关键业务规则要点（3-5 条大纲级，不穷举展开）** + 主流程一句话；功能清单 = 净版该版本功能行（含 Phase 2.5 合并进来的）。
+- **§1 背景与目标**：对齐 ROADMAP 该版本主题的目标/价值描述/场景-竞品差距（引 Phase 3 调研结论）；指标未定标 `[TBD]`。
+- **§3 详细功能设计**：每功能模块一小节——描述 + 用户故事 + 优先级（P0/P1/P2）+ **关键业务规则要点（3-5 条大纲级，不穷举展开）** + 主流程一句话；功能清单 = 净版该版本功能行（含 Phase 7 合并进来的）。
 - **§6 验收标准**：**AC 骨架**——每模块 1-2 条 Given-When-Then 锚点（01 升级时补全至 ≥3）。
 - **§8 风险与依赖**：前置依赖版本/外部能力（承 ROADMAP 前置依赖行）。
 - 其余节（非功能/埋点/异常矩阵）按规划所知填大纲，缺口标 `thin_sections`——这些正是内环 01 升级时要补的。
@@ -207,10 +207,10 @@
 
 **红线**：① 只为净版留存功能产 SPEC（剔除/降级的不进）；② 规划级深度边界——不写工程级细节、绝不写 HOW（技术选型/DB/框架禁止出现）；③ SPEC 与 ROADMAP/FEATURES 三者功能清单同源一致；④ 不臆造——业务规则/指标不确定处标 `[TBD]` 留给 01 升级时确认。
 
-### Phase 5：产出 + 回写 + 衔接
-- 写 `docs/strategy/STRATEGY.md`（锚点）+ `docs/strategy/ROADMAP.md`（版本号规则 + **Phase 2.5 审视后的净版**版本序列路径 + 版本-主题表）+ `docs/FEATURES.md`（功能列表：版本×模块×功能×集成状态矩阵；Phase 2 每版本的功能行落入此文件，状态初始 `📋规划中`，Phase 2.5 剔除/降级/合并后同步）；Phase R 写 `docs/analysis/MARKET-RESEARCH-{date}.md`（调研报告）；若有参考文件夹，另写 `docs/analysis/COMPETITIVE-REFERENCE.md`（借鉴清单）；Phase 2.5 写 `docs/analysis/INTEGRATION-NECESSITY-{date}.md`（审视表）；Phase 4.5 写 `docs/prd/PRD-{version-slug}.md`（每净版版本一份规划级 SPEC）+ 登记 `docs/prd/PRD-INDEX.md`。
-- 回写 `.csp/manifest.json`：strategy/roadmap/market-research/competitive-reference/integration-necessity/prd-spec item `source_type=doc`、`build_status=built` + `content_hash`；被 Phase 2.5 剔除/降级的功能行 item 标 `degraded`/移除。
-- 衔接声明：收敛闸门读 ROADMAP 版本-主题表做收敛审查，结论改变功能清单 → Phase 4.5 的 SPEC delta 同步；01 PRD 读 ROADMAP（已过 Phase 2.5 净版）定位本版本主题，**并在探测到同 `target_version` 的规划级 SPEC（`prd_depth: planning`、Draft）时进入升级模式**——在原文件上补全为工程级 PRD，不新建；**但 01 PRD 的功能清单必须基于 `.csp/convergence/CONVERGED-FEATURE-PLAN.md`（收敛闸门产物），不能用 ROADMAP 原始清单**；06 release 用版本号规则 + 标记 `docs/FEATURES.md` 已交付功能 `✅`；07 复盘 findings 回流更新 ROADMAP 下一版本主题 + 校准 FEATURES.md planned-vs-delivered 漂移；**07 回流触发增量更新时 Phase 2.5 重跑**（对新主题候选再过一遍集成必要性审视），净版变化后受影响版本的 PRD SPEC 同步（新版本补 SPEC、功能行变更的改 SPEC、剔除功能的 SPEC 段落移除）。
+### Phase 11：产出 + 回写 + 衔接
+- 写 `docs/strategy/STRATEGY.md`（锚点）+ `docs/strategy/ROADMAP.md`（版本号规则 + **Phase 7 审视后的净版**版本序列路径 + 版本-主题表）+ `docs/FEATURES.md`（功能列表：版本×模块×功能×集成状态矩阵；Phase 6 每版本的功能行落入此文件，状态初始 `📋规划中`，Phase 7 剔除/降级/合并后同步）；Phase 3 写 `docs/analysis/MARKET-RESEARCH-{date}.md`（调研报告）；若有参考文件夹，另写 `docs/analysis/COMPETITIVE-REFERENCE.md`（借鉴清单）；Phase 7 写 `docs/analysis/INTEGRATION-NECESSITY-{date}.md`（审视表）；Phase 10.5 写 `docs/prd/PRD-{version-slug}.md`（每净版版本一份规划级 SPEC）+ 登记 `docs/prd/PRD-INDEX.md`。
+- 回写 `.csp/manifest.json`：strategy/roadmap/market-research/competitive-reference/integration-necessity/prd-spec item `source_type=doc`、`build_status=built` + `content_hash`；被 Phase 7 剔除/降级的功能行 item 标 `degraded`/移除。
+- 衔接声明：收敛闸门读 ROADMAP 版本-主题表做收敛审查，结论改变功能清单 → Phase 10.5 的 SPEC delta 同步；01 PRD 读 ROADMAP（已过 Phase 7 净版）定位本版本主题，**并在探测到同 `target_version` 的规划级 SPEC（`prd_depth: planning`、Draft）时进入升级模式**——在原文件上补全为工程级 PRD，不新建；**但 01 PRD 的功能清单必须基于 `.csp/convergence/CONVERGED-FEATURE-PLAN.md`（收敛闸门产物），不能用 ROADMAP 原始清单**；06 release 用版本号规则 + 标记 `docs/FEATURES.md` 已交付功能 `✅`；07 复盘 findings 回流更新 ROADMAP 下一版本主题 + 校准 FEATURES.md planned-vs-delivered 漂移；**07 回流触发增量更新时 Phase 7 重跑**（对新主题候选再过一遍集成必要性审视），净版变化后受影响版本的 PRD SPEC 同步（新版本补 SPEC、功能行变更的改 SPEC、剔除功能的 SPEC 段落移除）。
 
 ## 五、产物路径规范（与 00-07 同构）
 
@@ -221,12 +221,12 @@
 │   ├── STRATEGY.md          # 战略锚点（target problem/approach/who/metrics/tracks/not-doing）
 │   └── ROADMAP.md           # 版本号规则 + 1y/3y/长期路径 + 版本-主题表
 ├── docs/prd/
-│   ├── PRD-{version-slug}.md   # 每净版版本一份规划级 PRD SPEC（Phase 4.5 产出，status: Draft + prd_depth: planning；内环 01 升级为工程级）
+│   ├── PRD-{version-slug}.md   # 每净版版本一份规划级 PRD SPEC（Phase 10.5 产出，status: Draft + prd_depth: planning；内环 01 升级为工程级）
 │   └── PRD-INDEX.md            # PRD 索引（与 01 共用）
 ├── docs/analysis/
-│   ├── MARKET-RESEARCH-{date}.md      # 产品与商业方向调研（Phase R 产出，五面+出处）
-│   ├── COMPETITIVE-REFERENCE.md  # 参考/竞品借鉴清单（若有参考文件夹，Phase 0.5 产出）
-│   └── INTEGRATION-NECESSITY-{date}.md  # 版本功能集成必要性审视表（Phase 2.5 产出，每次规划/更新都产出）
+│   ├── MARKET-RESEARCH-{date}.md      # 产品与商业方向调研（Phase 3 产出，五面+出处）
+│   ├── COMPETITIVE-REFERENCE.md  # 参考/竞品借鉴清单（若有参考文件夹，Phase 4 产出）
+│   └── INTEGRATION-NECESSITY-{date}.md  # 版本功能集成必要性审视表（Phase 7 产出，每次规划/更新都产出）
 └── .csp/manifest.json       # 回写 strategy/roadmap/market-research/competitive-reference/integration-necessity/prd-spec item
 ```
 
@@ -249,7 +249,7 @@ see_also: docs/prd/PRD-INDEX.md | .csp/review/REVIEW-FINDINGS-*.json
 
 | 衔接点 | 方向 | 内容 |
 |---|---|---|
-| **roadmap → 收敛闸门** | 下游 | `product-design-convergence` 读取 ROADMAP 的版本-主题表，做功能架构收敛+核心取舍+IA 方向+迭代优先级审查，产出收敛后功能清单；收敛结论改变功能清单 → roadmap Phase 4.5 的规划级 PRD SPEC delta 同步 |
+| **roadmap → 收敛闸门** | 下游 | `product-design-convergence` 读取 ROADMAP 的版本-主题表，做功能架构收敛+核心取舍+IA 方向+迭代优先级审查，产出收敛后功能清单；收敛结论改变功能清单 → roadmap Phase 10.5 的规划级 PRD SPEC delta 同步 |
 | **roadmap PRD SPEC → 01 PRD** | 下游 | 01 探测 `docs/prd/` 发现同 `target_version`、`prd_depth: planning` 的 Draft SPEC → **升级模式**：原文件上 delta 补全为工程级（业务规则穷举/异常流/AC≥3/埋点），`prd_depth: engineering` + version 自增 + 走 01 评审 gate，不新建文件 |
 | **收敛闸门 → 01 PRD** | 下游 | 01 探测读 ROADMAP 的版本/主题定位，读 `.csp/convergence/CONVERGED-FEATURE-PLAN.md` 的收敛后功能清单（PRD 功能以此为唯一事实源）；PRD front-matter `roadmap_ref` + `target_version` 标注本 PRD 实现哪个版本/主题；PRD 正文背景/价值对齐 ROADMAP 主题，IA 对齐 `IA-DIRECTION.md` |
 | **roadmap → 01 PRD** | 间接 | 01 仍读 ROADMAP 定位版本/主题，但功能清单不直接从 ROADMAP 取——必经收敛闸门
@@ -263,20 +263,20 @@ see_also: docs/prd/PRD-INDEX.md | .csp/review/REVIEW-FINDINGS-*.json
 |---|---|---|
 | 规划=feature list | 列一堆功能无战略 | Anchor not plan；战略是 what/why，功能归 01 |
 | 规划=排期 | Gantt 化、堆日期、估人日、设截止 | 路线图示方向不示日期；Agent 开发下估时无意义（人 3 天的活 Agent 几分钟完成），版本序列按依赖+优先级排序，不做排期 |
-| 详细 PRD 写进 roadmap | 每版本写全 AC/字段 | ROADMAP 只给关键信息+价值；规划级 SPEC 落 `docs/prd/` 独立文件（Phase 4.5），工程级细节留 01/03 升级 |
+| 详细 PRD 写进 roadmap | 每版本写全 AC/字段 | ROADMAP 只给关键信息+价值；规划级 SPEC 落 `docs/prd/` 独立文件（Phase 10.5），工程级细节留 01/03 升级 |
 | 版本号规则散落 | 06 另立方案、与 roadmap 不一致 | 版本号规则权威在 `version-management.md`（06 reference）；ROADMAP 记版本-主题序列 |
 | 不回写 manifest | 规划产物无索引 | 产出即回写 manifest |
 | 推倒重写 | 每次更新全重写 | durable rerunnable，in-place 增量更新 |
 | 臆造指标 | 编 DAU/收入目标 | 未定标 [TBD] |
 | 07 findings 不回流 | 复盘发现不进下一版本主题 | 07 open/deferred findings → ROADMAP 下版本主题 |
 | 战略主题号当 SemVer 打 tag | 版本做了起步标 v2.0.0（MAJOR）但无 breaking | 战略号≠SemVer 号；additive→MINOR 增量；MAJOR 只在真实 breaking |
-| 忽略参考文件夹 | 有开源参考却没借鉴 | 探测参考文件夹，Phase 0.5 提炼 feature/差异化输入 |
-| 规划完不审视集成必要性 | Phase 2 列完功能就定稿，已规划即保留，堆功能不过滤 | Phase 2.5 强制 self-critique：7 维审视每功能（含核心场景聚焦度），精简优先，剔除/降级/合并后回写净版 ROADMAP |
+| 忽略参考文件夹 | 有开源参考却没借鉴 | 探测参考文件夹，Phase 4 提炼 feature/差异化输入 |
+| 规划完不审视集成必要性 | Phase 6 列完功能就定稿，已规划即保留，堆功能不过滤 | Phase 7 强制 self-critique：7 维审视每功能（含核心场景聚焦度），精简优先，剔除/降级/合并后回写净版 ROADMAP |
 | 审视静默删功能 | 剔除/降级功能不留原因 | 剔除/降级必须记依据可追溯（INTEGRATION-NECESSITY 表 + Backlog 摒弃项） |
-| 功能发散堆砌 | 为「完整感」堆功能、边缘场景也做、越做越散 | 精简聚焦核心业务场景；Phase 2.5 默认砍，非核心 defer/剔除 |
-| 跳过调研拍脑袋 | 版本主题/竞品差距无事实输入 | Phase R 先调研（五面+出处），锚点与版本主题基于调研结论 |
-| 规划止步于 ROADMAP | 只有版本-主题表，无每版本 PRD SPEC | Phase 4.5 强制：净版每版本一份规划级 SPEC，供 01 升级接管 |
-| 为剔除/降级功能产 SPEC | SPEC 与 Phase 2.5 净版脱节 | SPEC 只收净版留存功能；净版变更 delta 同步 SPEC |
+| 功能发散堆砌 | 为「完整感」堆功能、边缘场景也做、越做越散 | 精简聚焦核心业务场景；Phase 7 默认砍，非核心 defer/剔除 |
+| 跳过调研拍脑袋 | 版本主题/竞品差距无事实输入 | Phase 3 先调研（五面+出处），锚点与版本主题基于调研结论 |
+| 规划止步于 ROADMAP | 只有版本-主题表，无每版本 PRD SPEC | Phase 10.5 强制：净版每版本一份规划级 SPEC，供 01 升级接管 |
+| 为剔除/降级功能产 SPEC | SPEC 与 Phase 7 净版脱节 | SPEC 只收净版留存功能；净版变更 delta 同步 SPEC |
 | 规划级 SPEC 越界 | 外环 SPEC 写穷举规则/异常矩阵/技术选型 | SPEC 大纲级（规则要点 3-5 条 + AC 骨架）；工程级归 01 升级；绝不写 HOW |
 | 过度问人 | 每节反复确认 | 默认优先，只在战略根本模糊时人工澄清 |
 
@@ -292,7 +292,7 @@ see_also: docs/prd/PRD-INDEX.md | .csp/review/REVIEW-FINDINGS-*.json
 
 按四步链执行（**调研 → 规划功能版本 → 去除不必要功能 → 产出 PRD SPECs**），AI 自主完成，不打断我：
 
-**Step 1 调研（Phase R）**：先做一轮科学、全面、深度的产品与商业方向调研，AI 自主完成全部桌面调研：
+**Step 1 调研（Phase 3）**：先做一轮科学、全面、深度的产品与商业方向调研，AI 自主完成全部桌面调研：
  - **行业扫描**：赛道规模、增长、政策、技术拐点；
  - **竞品深潜**：抓本地参考文件夹（如 `开源项目参考/`/`references/`/`竞品/`，按项目实际命名）+ GitHub/网络开源项目，逐一分析类似项目的功能矩阵，不遗漏；
  - **客户洞察**：典型用户、核心场景、未被满足需求；
@@ -300,10 +300,10 @@ see_also: docs/prd/PRD-INDEX.md | .csp/review/REVIEW-FINDINGS-*.json
  - **方向可行性**：回答"能不能做""有没有人在做""市场多大""机会窗口"。
  多模态并行搜索（按容器/按内容/按时间各一路），证据带出处，不臆造数据，产出 `docs/analysis/MARKET-RESEARCH-{date}.md`。可结合目标领域的实际工作流与既有工具/skills：思考其执行的具体任务是什么、需要怎样的平台支持任务高效执行、具体需要怎样的功能，由此提炼产品迭代能力路径输入。
 
-**Step 2 规划功能版本（Phase 1-4）**：调研收敛后 spawn `roadmap-planner`，基于调研结论 + 既有 `docs/strategy/ROADMAP.md`，规划**长周期、多版本结构化产品路线**：从当前最新版本号往后推演 vX.Y.0 序列（如 v0.22、v0.23 … 一直到 v1.50+），每个版本明确**版本号 + 主题 + 简要功能模块清单**、对应解决的用户场景/竞品差距、优先级与依赖。不要局限在一两个版本，深入挖掘到功能饱和为止，相似功能模块可以放到一个版本，不是一个功能一个版本的。路线写回 `docs/strategy/ROADMAP.md`。
+**Step 2 规划功能版本（Phase 5-4）**：调研收敛后 spawn `roadmap-planner`，基于调研结论 + 既有 `docs/strategy/ROADMAP.md`，规划**长周期、多版本结构化产品路线**：从当前最新版本号往后推演 vX.Y.0 序列（如 v0.22、v0.23 … 一直到 v1.50+），每个版本明确**版本号 + 主题 + 简要功能模块清单**、对应解决的用户场景/竞品差距、优先级与依赖。不要局限在一两个版本，深入挖掘到功能饱和为止，相似功能模块可以放到一个版本，不是一个功能一个版本的。路线写回 `docs/strategy/ROADMAP.md`。
 
-**Step 3 去除不必要功能（Phase 2.5）**：**强制跑「版本功能集成必要性审视」**：以**精简优先**为默认姿态（砍不是留、聚焦核心业务场景），对每个版本的关键功能过 7 维 self-critique（定位契合/场景必要/现有重叠/集成成本vs价值/依赖可行/攒批合理/**核心场景聚焦度**），裁决纳入/降级/剔除/合并，剔除/降级必记原因（和产品定位不符合或其他维度的删减均可追溯），产出 `docs/analysis/INTEGRATION-NECESSITY-{date}.md` 并把净版（剔除/降级/合并后）回写 `ROADMAP.md` + `FEATURES.md`——已规划不等于必要，过滤完才算定稿。
+**Step 3 去除不必要功能（Phase 7）**：**强制跑「版本功能集成必要性审视」**：以**精简优先**为默认姿态（砍不是留、聚焦核心业务场景），对每个版本的关键功能过 7 维 self-critique（定位契合/场景必要/现有重叠/集成成本vs价值/依赖可行/攒批合理/**核心场景聚焦度**），裁决纳入/降级/剔除/合并，剔除/降级必记原因（和产品定位不符合或其他维度的删减均可追溯），产出 `docs/analysis/INTEGRATION-NECESSITY-{date}.md` 并把净版（剔除/降级/合并后）回写 `ROADMAP.md` + `FEATURES.md`——已规划不等于必要，过滤完才算定稿。
 
-**Step 4 产出 PRD SPECs（Phase 4.5）**：结合 01 PRD 步骤的文档约定（8 段结构/front-matter/`docs/prd/` 路径/PRD-INDEX），为净版序列**每个版本产出一份规划级 PRD SPEC**（`PRD-{version-slug}.md`，`status: Draft` + `prd_depth: planning`），登记 PRD-INDEX + manifest。不仅仅停在 roadmap——SPECs 产出、内环 01 可按升级模式逐版本接管，才算规划闭环。
+**Step 4 产出 PRD SPECs（Phase 10.5）**：结合 01 PRD 步骤的文档约定（8 段结构/front-matter/`docs/prd/` 路径/PRD-INDEX），为净版序列**每个版本产出一份规划级 PRD SPEC**（`PRD-{version-slug}.md`，`status: Draft` + `prd_depth: planning`），登记 PRD-INDEX + manifest。不仅仅停在 roadmap——SPECs 产出、内环 01 可按升级模式逐版本接管，才算规划闭环。
 
-自决策授权：调研方向、竞品取舍、版本主题与 Feature 拆分、优先级排序、跨版本依赖排布、**Phase 2.5 集成必要性裁决**、**PRD SPEC 结构取舍**——你自己拍板，记入 DEV-LOG/ROADMAP，不打断我。gate 即授权，只在战略根本模糊/无法 auto-resolve 的报错才打断我。每个版本按进度条格式播报，全部版本清空后输出总调研+规划+SPEC 摘要再停。
+自决策授权：调研方向、竞品取舍、版本主题与 Feature 拆分、优先级排序、跨版本依赖排布、**Phase 7 集成必要性裁决**、**PRD SPEC 结构取舍**——你自己拍板，记入 DEV-LOG/ROADMAP，不打断我。gate 即授权，只在战略根本模糊/无法 auto-resolve 的报错才打断我。每个版本按进度条格式播报，全部版本清空后输出总调研+规划+SPEC 摘要再停。

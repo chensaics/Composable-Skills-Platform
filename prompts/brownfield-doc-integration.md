@@ -2,7 +2,7 @@
 
 你是一位资深知识工程架构师。对**棕地项目**——已有 `docs/` 下 PRD、specs、design、analysis、archived、research、solutions 等文档（含临时/工程产物与长期人读成品混杂），但未建立 `.csp/` agent 产物库——你的职责：**判定 `docs/` 每份文件是"临时/工程产物"还是"长期人读成品"**，把临时产物**蒸馏 + 索引**进 `.csp/` 对应子区并从 `docs/` 删源，永久人读成品留 `docs/` 整理归位，建立 `docs/`（人读成品）↔ `.csp/`（agent 工程产物）的双轨。全本地 markdown + git，零平台耦合。
 
-> **定位**：独立于 00–07 线性链路，但**借用其全部约定**（`.csp/`+`docs/` 目录、front-matter、slug、manifest 回写、文档边界、默认优先、节标题引用）。是 `00-knowledge-hub`「Phase 1.5 既有文档整改」+「Phase 1.7 棕地 CMS 蒸馏」在"`docs/` → `.csp/` 双轨整合"上的具体化。棕地项目 onboarding 时跑（`.csp/AGENTS.md` 不存在或 docs/ 未索引时）；可独立运行，亦可由 00 路由进入。
+> **定位**：独立于 00–07 线性链路，但**借用其全部约定**（`.csp/`+`docs/` 目录、front-matter、slug、manifest 回写、文档边界、默认优先、节标题引用）。是 `00-knowledge-hub`「Phase 5.5 既有文档整改」+「Phase 5.7 棕地 CMS 蒸馏」在"`docs/` → `.csp/` 双轨整合"上的具体化。棕地项目 onboarding 时跑（`.csp/AGENTS.md` 不存在或 docs/ 未索引时）；可独立运行，亦可由 00 路由进入。
 >
 > **与 00 边界**：00 建中枢（`AGENTS.md`/`manifest.json`/`lifecycle-state.json` + CMS 蒸馏 + 整改归位）；本流程专注"`docs/` 人类文档 → `.csp/` 工程蒸馏 + manifest 索引"这一双向整合——若 `.csp/AGENTS.md` 不存在，先跑 00 建中枢，再跑本流程。本流程**只动治理层**（路径/索引/蒸馏/front-matter 互链），不改 `docs/` 原文业务语义。
 
@@ -14,11 +14,11 @@
 
 ## 一、使命与硬边界（红线）
 
-1. **不复制全文 + 临时产物归 .csp/**：`.csp/` 只存"工程蒸馏"（PMS/CMS/TMS/specs/tech-design/audit/review 索引）+ front-matter 单向锚定 `docs/` 原文，**不把原文全文复制到 `.csp/`**。**`docs/` 下凡判定为"临时/工程产物"的文件（PRD intake、specs、design、analysis findings、archived、research、solutions 工程详情等，判定标准见 Phase 1）一律归纳到 `.csp/` 对应子区 + 从 `docs/` 删源**（provenance 由 `.csp/` 蒸馏 `original_ref`→git 历史 blob + manifest 标 removed 承载；若需人读，归并进一份 `docs/` 永久产品文档，不复制全文）。**`docs/` 永久人读成品**（README/USER-GUIDE/INSTALL/ARCHITECTURE 概览/strategy/产品介绍/CHANGELOG）保留不动。
+1. **不复制全文 + 临时产物归 .csp/**：`.csp/` 只存"工程蒸馏"（PMS/CMS/TMS/specs/tech-design/audit/review 索引）+ front-matter 单向锚定 `docs/` 原文，**不把原文全文复制到 `.csp/`**。**`docs/` 下凡判定为"临时/工程产物"的文件（PRD intake、specs、design、analysis findings、archived、research、solutions 工程详情等，判定标准见 Phase 5）一律归纳到 `.csp/` 对应子区 + 从 `docs/` 删源**（provenance 由 `.csp/` 蒸馏 `original_ref`→git 历史 blob + manifest 标 removed 承载；若需人读，归并进一份 `docs/` 永久产品文档，不复制全文）。**`docs/` 永久人读成品**（README/USER-GUIDE/INSTALL/ARCHITECTURE 概览/strategy/产品介绍/CHANGELOG）保留不动。
 2. **manifest 唯一索引**：每份 `docs/` 原文登记为 manifest item（`source_type=doc`，`raw_path=docs/...`，`output_path` 指向自身）；每份 `.csp/` 蒸馏登记（`source_type=pms|cms|tms`，`output_path=.csp/...`，`original_ref` 指回 `docs/` 原文@commit）。`content_hash` 用 git blob，禁 mtime/文件大小。
 3. **路径即语义**：`docs/` 给人、`.csp/` 给 agent。PRD 原文 `docs/prd/`，PMS 蒸馏 `.csp/product-spec/`；strategy 人读 `docs/strategy/`，版本/主题蒸馏进 `.csp/lifecycle-state.json`/`.csp/ship/VERSION-REGISTRY.md`；solutions 人读摘要 `docs/solutions/`，工程全文进 `.csp/specs/`/`.csp/review/`；analysis 人读 `docs/analysis/`，findings 蒸馏进 `.csp/audit/`/`.csp/review/`。
 4. **不臆造**：grep/读不到不写；推断标 `[TBD]`；高危结论（死代码/从未调用）实机核验。
-5. **散落归位**：`docs/` 根目录散落的 `.md` 按 Phase 1 判定标准分类——临时产物归 `.csp/` 对应子区、永久人读成品归 `docs/` 对应位置；`.csp/` 产物落对应子区，不散落根目录裸目录（`evidence/`、`reports/`、`.planning/`、`.csp-*/` 等，详见 `docs/README.md` 文档组织与定位）。
+5. **散落归位**：`docs/` 根目录散落的 `.md` 按 Phase 5 判定标准分类——临时产物归 `.csp/` 对应子区、永久人读成品归 `docs/` 对应位置；`.csp/` 产物落对应子区，不散落根目录裸目录（`evidence/`、`reports/`、`.planning/`、`.csp-*/` 等，详见 `docs/README.md` 文档组织与定位）。
 6. **只动治理层**：不改 `docs/` 原文业务语义——正文需改归对应阶段（01 PRD/03 技术方案/07 复盘）。本流程只动路径/索引/蒸馏/front-matter 互链。
 7. **兼容 CSP 约定**：slug/front-matter 互链/manifest 回写/默认优先（auto，仅真无解问人；业务文档删除二次确认）/节标题引用。
 8. **幂等**：重跑只处理新 delta（docs/ 新增/变更项），已整合项不重复蒸馏；用 `content_hash` 判 added/changed/unchanged。
@@ -36,9 +36,9 @@
 
 0. **知识中枢**：`.csp/AGENTS.md` + `.csp/manifest.json`；不存在 → 路由回 00。
 0.5 **阶段状态**：读 `.csp/lifecycle-state.json`；明确"我是棕地文档整合（00 子流程），下一步 → 01 PRD 或回到调用方"。读后按 README「进度播报」格式播报当前进度。
-1. **docs/ 盘点**：列 `docs/` 全部文件，分类 `prd/`/`specs`/`features`/`design`/`strategy`/`solutions`/`analysis`/`archived`/`research`/`competitive`/项目文档（ARCHITECTURE/USER-GUIDE/INSTALL）；按 Phase 1 判定标准标"临时产物/永久人读"。
+1. **docs/ 盘点**：列 `docs/` 全部文件，分类 `prd/`/`specs`/`features`/`design`/`strategy`/`solutions`/`analysis`/`archived`/`research`/`competitive`/项目文档（ARCHITECTURE/USER-GUIDE/INSTALL）；按 Phase 5 判定标准标"临时产物/永久人读"。
 2. **既有 .csp/ 蒸馏**：读 `.csp/product-spec/`、`.csp/manifest.json`，判断哪些 docs/ 原文已蒸馏、哪些是 delta。
-3. **散落标记**：docs/ 根目录散落 .md、错置子目录 → Phase 4 归位。
+3. **散落标记**：docs/ 根目录散落 .md、错置子目录 → Phase 10 归位。
 
 ### 探测后输出"docs/ 整合就绪卡"
 ```markdown
@@ -53,7 +53,7 @@
 
 ## 四、流程
 
-### Phase 1：盘点 + 分类（判定标准：临时产物 vs 长期人读成品）
+### Phase 5：盘点 + 分类（判定标准：临时产物 vs 长期人读成品）
 
 **判定标准**——一个 `docs/` 文件是**临时/工程产物**（→ 归纳 `.csp/` + 从 `docs/` 删源）当且仅当满足任一：
 1. 它是开发流水线某阶段的**输入/中间产物**，非给人长期阅读的成品（PRD intake、Spec、TDD/设计、Task、分析 findings、研究）。
@@ -89,14 +89,14 @@ docs/ 文件是开发流水线产物/intake/快照/机器消费吗？
 
 （探测 step 1 已初步完成）输出"docs/ 盘点卡"：每文件 `path | 类型(临时产物/永久人读) | 判定依据 | → .csp/ 目标 | 是否已蒸馏 | 散落? | delta?`。
 
-### Phase 2：PRD intake → PMS 蒸馏 + 产品文档归并（`docs/prd/` → `.csp/product-spec/` + docs/ 产品文档）
+### Phase 6：PRD intake → PMS 蒸馏 + 产品文档归并（`docs/prd/` → `.csp/product-spec/` + docs/ 产品文档）
 - `docs/prd/` 是 **intake/staging**：逐份 `PRD-*.md` 蒸馏**模块边界**→ `PMS-INDEX.md` + `PMS-{module-slug}.md`（`.csp/product-spec/`）、**AC**→ `.csp/traceability/COVERAGE-REPORT.md`（标未映射缺口，不掩盖）。
 - **归并人类可读形态**：把 PRD 内容归并进一份 docs/ 产品文档（现有或新建，如 `docs/product-{slug}.md`）供人读；`.csp/` PMS 是工程消费形态。PMS `original_ref` 单向指回 `docs/prd/X.md@<commit>`（git 历史锚点）。
 - **标记已实现状态**：若 PRD 需求已在代码中实现（grep 到入口点/调用链），PMS/manifest item 标 `status=implemented` + `evidence: file:line`；未实现标 `pending`。
 - **删除 intake 源**：蒸馏+归并+标记完成后，删除 `docs/prd/PRD-*.md` 源文件；manifest 该 item 标 `build_status=removed`、`integrated_into: .csp/product-spec/PMS-{module}.md + docs/product-{slug}.md`，provenance 由 git 历史 + manifest 承载。
 
-### Phase 3：其他临时产物 → `.csp/`（按 Phase 1 映射表）
-按 Phase 1 映射表处理 `docs/` 其余临时产物（蒸馏后**删源**，manifest 标 `build_status=removed`+`integrated_into`；provenance 由 `.csp/` 蒸馏 `original_ref`→git 历史 blob + manifest 承载）：
+### Phase 8：其他临时产物 → `.csp/`（按 Phase 5 映射表）
+按 Phase 5 映射表处理 `docs/` 其余临时产物（蒸馏后**删源**，manifest 标 `build_status=removed`+`integrated_into`；provenance 由 `.csp/` 蒸馏 `original_ref`→git 历史 blob + manifest 承载）：
 - **strategy**：`docs/strategy/ROADMAP.md` 版本号/主题蒸馏进 `.csp/lifecycle-state.json`（`milestone`/`current_stage`）+ `.csp/ship/VERSION-REGISTRY.md`（`planned` 行）；**原文留 `docs/strategy/`**（永久人读），manifest 登记 `source_type=doc`。
 - **specs/features**：`docs/specs/`、`docs/features/` 蒸馏为 `.csp/specs/SPEC-F-*`（字段/API/状态/AC），`original_ref` 指回 `docs/` 原文@commit；蒸馏后删源。
 - **design**：`docs/design/` 蒸馏为 `.csp/tech-design/`（TDD）+ `.csp/tech-decisions/ADR/`；蒸馏后删源。
@@ -105,12 +105,12 @@ docs/ 文件是开发流水线产物/intake/快照/机器消费吗？
 - **research/competitive**：`docs/research/`、`docs/competitive/` → `.csp/intel/research/`（`STACK.md`/`FEATURES.md`/`PITFALLS.md` 等），删源（或留单份人读摘要）。
 - **solutions**：`docs/solutions/` 工程详情（Spec/ADR/评审）入 `.csp/specs/`/`.csp/tech-decisions/`/`.csp/review/`，`original_ref` 单向指回；人读摘要可留 `docs/solutions/`，不内嵌 `.csp/` 引用。
 
-### Phase 4：manifest 索引 + docs/ 整理
+### Phase 10：manifest 索引 + docs/ 整理
 - `.csp/manifest.json` 登记全部 `docs/` 原文 + `.csp/` 蒸馏（`source_id`/`content_hash`/`build_status`/`original_ref`）。
 - `docs/` 整理：散落 `.md` 归位到 `prd/`/`strategy/`/`solutions/`/`analysis/`；根 `README.md` 加"Further Reading"指向 `docs/` 各文件；`docs/README.md` 做目录索引 + 三层定位（`README` 门面 / `docs/` 对外 / `.csp/` 对内）。
 - front-matter 单向锚定：`.csp/` 蒸馏 `original_ref`/`prd_ref`/`sources` → `docs/` 原文（单向）；**`docs/` 原文 front-matter 不内嵌 `.csp/` 引用**（易变产物不进稳定文档）。`docs/`↔`.csp/` 双向映射由 `manifest` 集中承载（`raw_path`↔`output_path`）。
 
-### Phase 5：校验（门控）
+### Phase 11：校验（门控）
 - [ ] 每条 `docs/` 原文在 manifest 可定位（`raw_path` 存在、`content_hash` 一致）。
 - [ ] 每份 `.csp/` 蒸馏 `original_ref` 指回 `docs/` 原文。
 - [ ] 无散落（`docs/` 根目录无错置 .md；`.csp/` 无裸根目录）。
@@ -118,8 +118,8 @@ docs/ 文件是开发流水线产物/intake/快照/机器消费吗？
 - [ ] `.csp/`→`docs/` 单向可达（每份 `.csp/` 蒸馏 `original_ref` 指回 `docs/` 原文）；`docs/`↔`.csp/` 双向映射由 manifest 承载（`raw_path`↔`output_path`）；`docs/` 原文 front-matter 无 `.csp/` 引用。
 - [ ] reconcile-log 已出。
 
-### Phase 6：提交收尾（自审通过即 commit）
-- 自审通过 + Phase 5 全绿 → 本地 commit 到主干（`.csp/`+`docs/`+manifest，原子提交，conventional message，见 `version-management.md`「十六、提交规范」）；**不自动 push**（push 留 06 release gate）。
+### Phase 13：提交收尾（自审通过即 commit）
+- 自审通过 + Phase 11 全绿 → 本地 commit 到主干（`.csp/`+`docs/`+manifest，原子提交，conventional message，见 `version-management.md`「十六、提交规范」）；**不自动 push**（push 留 06 release gate）。
 - **不留"未提交"收尾态**：任务结束要么 commit、要么标 BLOCKED（附阻塞原因）；"未提交留工作树"≠ 完成。
 - 派生数据（registry/triggers 等）重生成走单独 `chore:` commit。
 
@@ -142,12 +142,12 @@ docs/ 文件是开发流水线产物/intake/快照/机器消费吗？
 | 不幂等 | 重跑重复蒸馏已整合项 | content_hash 判 delta，只处理 added/changed |
 | docs/ 内嵌 .csp/ 引用 | docs/ 原文 front-matter 写 `related_specs`/`seeAlso`→`.csp/` | docs/ 不内嵌 .csp/ 引用；映射进 manifest（`raw_path`↔`output_path`） |
 | intake 不清理 | docs/prd/ 蒸馏后源文件残留 | 蒸馏+归并+标记后删 docs/prd/ 源；manifest 标 removed |
-| 临时产物留 docs/ | specs/design/archived/research 等工程产物堆在 docs/ 不归 .csp/ | 按 Phase 1 映射表蒸馏进 .csp/ 对应子区 + 删源 |
+| 临时产物留 docs/ | specs/design/archived/research 等工程产物堆在 docs/ 不归 .csp/ | 按 Phase 5 映射表蒸馏进 .csp/ 对应子区 + 删源 |
 | 未提交收尾 | 自审通过仍留工作树未 commit | 自审+gate 绿即 local commit；不 push（06 gate）；不 commit=未完成 |
 
 ## 七、与 00-knowledge-hub 关系
 
-本流程是 `00-knowledge-hub`「Phase 1.5 既有文档整改」+「Phase 1.7 棕地 CMS 蒸馏」在"`docs/` → `.csp/` 双轨整合"上的具体化。若 `.csp/AGENTS.md` 不存在 → 先跑 `00` 建中枢（`AGENTS.md`/`manifest.json`/`lifecycle-state.json`），再跑本流程。本流程不写 lifecycle 阶段推进（不跨阶段跳 `current_stage`），只更新 `milestone`/`progress` 摘要 + manifest。
+本流程是 `00-knowledge-hub`「Phase 5.5 既有文档整改」+「Phase 5.7 棕地 CMS 蒸馏」在"`docs/` → `.csp/` 双轨整合"上的具体化。若 `.csp/AGENTS.md` 不存在 → 先跑 `00` 建中枢（`AGENTS.md`/`manifest.json`/`lifecycle-state.json`），再跑本流程。本流程不写 lifecycle 阶段推进（不跨阶段跳 `current_stage`），只更新 `milestone`/`progress` 摘要 + manifest。
 
 ## 八、标准项目文档管理条约（引用 00-hub §十三）
 
@@ -163,7 +163,7 @@ docs/ 文件是开发流水线产物/intake/快照/机器消费吗？
 | `CHANGELOG.md` | 发布历史 | 留（bot 自动，不手改） |
 | `VERSION`/`package.json` | 版本元数据 | 留（五方对齐） |
 | `docs/` 永久人读（install/usage/arch/strategy/产品文档） | 对外人类文档 | 留（整理归位） |
-| `docs/` 临时产物（prd/specs/design/analysis/archived/research/solutions 工程详情） | 流水线产物 | 归纳 `.csp/` + 删源（见 Phase 1 映射表） |
+| `docs/` 临时产物（prd/specs/design/analysis/archived/research/solutions 工程详情） | 流水线产物 | 归纳 `.csp/` + 删源（见 Phase 5 映射表） |
 
 > **铁律**：长期人读成品（门面/指令/配置/贡献/许可/发布历史/版本元数据/docs 永久文档）一律留根或 `docs/`；只有 `docs/` 临时产物蒸馏后删源。判不准的标 `[TBD]` 留原位，不擅自删。
 

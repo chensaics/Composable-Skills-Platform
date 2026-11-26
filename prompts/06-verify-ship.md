@@ -77,7 +77,7 @@
 
 ## 五、S6 质量门控（管道式，任一失败即停）
 
-### Phase 0.5：工具链健康检查（S6 前置，不过禁止跑门控）
+### Phase 4：工具链健康检查（S6 前置，不过禁止跑门控）
 验证工具链可用——**工具链坏 = BLOCKED = 不降级、不发布**：
 - [ ] 依赖安装：`pnpm install` / `npm ci` / `pip install` / `uv sync` 成功？失败 → `BLOCKED: pnpm install failed at link stage`，不继续。
 - [ ] 类型检查器可用：`tsc`/`mypy`/`pyright` 在 PATH？不在 → BLOCKED。
@@ -87,7 +87,7 @@
 
 > **工具链故障 = 环境 BLOCKER，不是代码 bug**——不路由 05 fix（Fix Loop 的"基础设施/环境"路由仅限代码内配置问题；工具链本身不可用需人工/infra 修，标 BLOCKED 报用户）。**禁止用 grep/code review 替代动态验证。** 若 pnpm install 死在 link：尝试 `pnpm store prune` + 升 pnpm + `pnpm --filter <单包> install` 隔离诊断，但不降级门控。
 
-### Phase 0.6：发布复发性格栅（release recurrence check，S6 前置）
+### Phase 1.6：发布复发性格栅（release recurrence check，S6 前置）
 
 在 S6 入口处运行，检测累积未发布变更的风险：
 

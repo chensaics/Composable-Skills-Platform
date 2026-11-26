@@ -28,7 +28,7 @@ PRD Features + AC + Spec 可测试性点 ──→ 测试依据提取 ──→ 
 
 ### TB.1 从 Spec 提取测试基线
 
-读取 `[[prompts/000-product-planning_csp.md]]` Phase 6 的全栈 8 面 Spec。按 `.csp/AGENTS.md` 与 manifest 定位本项目实际路径，不假定硬编码目录：
+读取 `[[prompts/000-product-planning_csp.md]]` Phase 13 的全栈 8 面 Spec。按 `.csp/AGENTS.md` 与 manifest 定位本项目实际路径，不假定硬编码目录：
 
 从 8 面 Spec 提取测试基线：
 

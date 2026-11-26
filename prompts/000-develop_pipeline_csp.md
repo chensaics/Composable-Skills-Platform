@@ -1,7 +1,7 @@
 使用 [[workflow:csp-lifecycle-orchestrator]] 从当前 .csp/lifecycle-state.json 续跑，连续推进所有待交付版本（待交付 = ROADMAP 中 status planned/in-progress；deferred 版本不并入活跃队列）。每个版本 06 done 后自动读 `docs/strategy/ROADMAP.md` 取下一个未交付版本，直接进 05 实施，直到队列清空。
 
-**前置条件**：ROADMAP 须已通过 `[[prompts/000-product-planning_csp.md]]` 的完整规划流程（Phase 0→7）——
-ROADMAP 含功能-模块-描述-边界-测试维度-任务路径全部详情，PRD SPEC 已完成，技术 Spec (Layer 4) 已完成，任务拆解 (Phase 7) 已完成，`.csp/tasks/TASK-INDEX.md` 含依赖 DAG。
+**前置条件**：ROADMAP 须已通过 `[[prompts/000-product-planning_csp.md]]` 的完整规划流程（Phase 1→7）——
+ROADMAP 含功能-模块-描述-边界-测试维度-任务路径全部详情，PRD SPEC 已完成，技术 Spec (Layer 4) 已完成，任务拆解 (Phase 14) 已完成，`.csp/tasks/TASK-INDEX.md` 含依赖 DAG。
 
 仅当我说"只做某个版本"时才单版本停。
 
@@ -17,14 +17,14 @@ python3 prompts/scripts/lifecycle_tag_reconcile.py --check
 # 不一致 → raise, 不写入。禁止静默漂移。
 ```
 
-**输入校验**：任务清单 `.csp/tasks/TASK-INDEX.md` 必须存在——这是 `000-product-planning_csp.md` Phase 7 的产出。缺失说明规划未完成，回 `000-product-planning_csp.md` 补，不进 05。
+**输入校验**：任务清单 `.csp/tasks/TASK-INDEX.md` 必须存在——这是 `000-product-planning_csp.md` Phase 14 的产出。缺失说明规划未完成，回 `000-product-planning_csp.md` 补，不进 05。
 
 **PRD 深度门控**（05 入口强制检查）：
 ```bash
 # 每个版本必须有 engineering 级 PRD，不能是 planning 骨架
 grep "prd_depth: engineering" docs/prd/PRD-{version-slug}.md
 ```
-不匹配 → **BLOCKED**，回 `000-product-planning_csp.md` Phase 5→6 升级 PRD。原因：planning 级 PRD 只有大纲——缺少完整 AC（≥3 条/模块）、错误场景矩阵、埋点定义。不能拿大纲当开发规格。
+不匹配 → **BLOCKED**，回 `000-product-planning_csp.md` Phase 11→6 升级 PRD。原因：planning 级 PRD 只有大纲——缺少完整 AC（≥3 条/模块）、错误场景矩阵、埋点定义。不能拿大纲当开发规格。
 
 **Spec 到位检查**（每个 task 开始前）：
 - 对应 Spec（`.csp/planning/spec.md` + `.csp/tech-design/`）必须存在且 `build_status: built`
@@ -175,7 +175,7 @@ python3 scripts/router_registry_check.py
 - 归档完成 → [[workflow:csp-ship]] + 里程碑归档
 - 文档结构维护 → [[workflow:csp-documentation-governance]]（对外/对内文档分界 + 更新触发规则）
 - C-01 批量交付 S6 完整性格栅：batch_evidence_map 不得缺失
-- Phase 0.6 发布复发检测：WARNING/BLOCKED 按阈值处理
+- Phase 1.6 发布复发检测：WARNING/BLOCKED 按阈值处理
 - deferred 审视 gate：06 done 前逐条审视 deferred 列表——不可 deferred 的升为 done/BLOCKED，可 deferred 的确认解除条件有效，超 3 条或跨版本 deferred 减速报用户
 
 留尾纪律：剩余项只能 done / BLOCKED（附阻塞+谁解除）/ deferred（附解除条件并计入 Release notes），禁止"下轮再补/gate 全绿就交差"。deferred 项不阻塞当前版本发布，但要自动并入下一版本 01 的入口清单。
@@ -272,7 +272,7 @@ gate 即授权，全自动推进。打断条件（仅 6 类）：战略根本模
 ```
 000-product-planning_csp.md
   │  产出: ROADMAP (Layer 1+2: 功能/模块/边界/测试/任务) + PRD SPEC + 技术 Spec (Layer 4) + 任务拆解
-  │  门控: Phase 2.5 集成审视 + Phase 3 收敛审查 + 规划完成门控
+  │  门控: Phase 7 集成审视 + Phase 8 收敛审查 + 规划完成门控
   │
   └──→ 000-develop_pipeline_csp.md（本文件）
           │  开发 Pipeline: 读任务清单 → 05(实施) → 06(质量门控+发布) → 07(复盘)

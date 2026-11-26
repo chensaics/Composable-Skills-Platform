@@ -16,7 +16,7 @@
     │                   │                   │                    │                   │                   │
     ├─ 模块化           ├─ 全路由 sweep     ├─ 视觉层级/布局      ├─ 重复冗余(A)       ├─ F1-F12 通用面    ├─ 四角度审查
     ├─ Nielsen 10       ├─ 按钮点击审计     ├─ 交互模式/反馈      ├─ 信息架构(B)       ├─ U1-U7 UI维度     ├─ 主题候选提炼
-    ├─ 四层联动测试     ├─ 孤儿路由确认     ├─ IA/导航(M7引用)    ├─ 视觉交互一致(C)    ├─ 领域增强目录      ├─ Phase 2.5审视
+    ├─ 四层联动测试     ├─ 孤儿路由确认     ├─ IA/导航(M7引用)    ├─ 视觉交互一致(C)    ├─ 领域增强目录      ├─ Phase 7审视
     └─ 裁决报告         └─ 结构健康核查     └─ 版本迭代路线图      └─ (D-G七镜头)       └─ 联动检查          └─ 交棒清单
 ```
 
@@ -142,7 +142,7 @@ python scripts/validate_gates.py   # 人类可读摘要
 
 | 项 | 值 |
 |----|-----|
-| **调用** | `prompts/audit.md`（Phase 0–7 全量） |
+| **调用** | `prompts/audit.md`（Phase 1–7 全量） |
 | **角色** | 模块化审计 + Nielsen 10 可用性 + 四层联动测试 + 裁决报告 |
 | **产出** | `.csp/audit/MODULE-LIST-{milestone-slug}.md` / `USABILITY-REPORT-{module}.md`（逐模块） / `AUDIT-VERDICT-{milestone-slug}.md` / `AUDIT-FINDINGS-{milestone-slug}.json` / `docs/analysis/AUDIT-SUMMARY-{milestone-slug}.md` |
 | **前缀** | `AUDIT-F-NN` |
@@ -201,7 +201,7 @@ python scripts/validate_gates.py   # 人类可读摘要
 | **产出** | `.csp/gap-analysis/SCAN-LIST-{date}.md` / `.csp/gap-analysis/GAP-REPORT-{slug}.md`（逐模块） / `GAP-FINDINGS-{slug}.json`（逐模块） / `.csp/gap-analysis/recon-{slug}.md`（逐模块现状重建） / `.csp/gap-analysis/CROSS-MODULE-UI-{date}.md` / `.csp/gap-analysis/GAP-FINDINGS-_aggregate.json`（统一 findings） / `docs/analysis/GAP-SUMMARY-{slug}.md` / `docs/analysis/GAP-TO-ROADMAP-{slug}-{date}.md` |
 | **前缀** | `GAP-F-NN` |
 
-**主跑项**：F1–F12 通用面（功能缺口部分）、领域增强目录、Phase 4 联动
+**主跑项**：F1–F12 通用面（功能缺口部分）、领域增强目录、Phase 10 联动
 
 **引用项**（不重跑）：U1–U7 UI 维度 → 引用 Step 3 UI-F；F2/F5 状态覆盖/a11y → 引用 Step 1 AUDIT-F + Step 3 UI-F
 
@@ -224,8 +224,8 @@ python scripts/validate_gates.py   # 人类可读摘要
 
 | 审查维度 | 主跑方 | 引用方（不重跑） |
 |---------|--------|-----------------|
-| **Nielsen 10 可用性 + 状态覆盖** | Step 1 audit（Phase 4 Mode A/B） | Step 3 镜头 7/8、Step 4 镜头 F/G |
-| **结构审计（孤儿/隐藏/死按钮）** | Step 2 e2e（L4 实机确认） | Step 1 只标疑似、Step 3 镜头 3、Step 4 镜头 B、Step 5 Phase 4 |
+| **Nielsen 10 可用性 + 状态覆盖** | Step 1 audit（Phase 10 Mode A/B） | Step 3 镜头 7/8、Step 4 镜头 F/G |
+| **结构审计（孤儿/隐藏/死按钮）** | Step 2 e2e（L4 实机确认） | Step 1 只标疑似、Step 3 镜头 3、Step 4 镜头 B、Step 5 Phase 10 |
 | **视觉层级与布局（M1）** | Step 3 ui-review 镜头 1 | Step 4 镜头 C、Step 5 U3/U5 |
 | **交互模式与反馈（M2）** | Step 3 ui-review 镜头 2 | Step 4 镜头 C/D、Step 5 U4 |
 | **Token 漂移对照（M5）** | Step 3 ui-review 镜头 4 | Step 4 镜头 C、Step 5 U3 |

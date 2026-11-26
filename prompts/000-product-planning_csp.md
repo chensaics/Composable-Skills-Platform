@@ -2,16 +2,16 @@
 
 ## 规划流程
 
-### Phase 0：项目上下文探测（强制前置）
+### Phase 1：项目上下文探测（强制前置）
 先按 `[[workflow:csp-knowledge-hub]]` 的四层入口读取根指令→当前阶段→`.csp/AGENTS.md` 路由→本任务的 PRD/PMS；不把 manifest/历史门禁或大日志全文装入上下文。先读清现状：
 1. 既有规划：`docs/strategy/STRATEGY.md` + `ROADMAP.md` 是否存在 → 决定首次/增量更新
 2. 已发布版本：`git tag --list 'v*'` → 基线，规划续编
 3. 07 复盘 findings：`.csp/review/REVIEW-FINDINGS-*.json`（open/deferred）→ 回流输入
-4. 参考文件夹：`开源项目参考/`/`references/`/`竞品/` 等 → 若有，做竞品借鉴（Phase 0.5）
+4. 参考文件夹：`开源项目参考/`/`references/`/`竞品/` 等 → 若有，做竞品借鉴（Phase 4）
 
 输出"规划就绪卡"：既有规划（有/无）→ 已发布版本列表 → 07 回流 finding 数 → 参考项目 → 本次定位（首次/增量）。
 
-### Phase A：项目现状评估（非首次规划强制前置）
+### Phase 2：项目现状评估（非首次规划强制前置）
 
 > 非全新项目（已有已发布版本/线上用户）**必须执行**；纯新项目（MVP 未上线）跳过。
 
@@ -38,7 +38,7 @@
 
 - **高频功能**（采用率 >X%）：是否稳定可靠？有无进一步优化空间？
 - **低频功能**（采用率 <Y%）：是入口不显眼（→ UX 问题）？是用户不需要（→ 考虑砍掉）？还是功能刚上尚未推广（→ 运营问题）？
-- **死功能**（零采用率持续 N 个版本）：建议 deprecate 或砍，记入 Phase 2.5 审视候选项
+- **死功能**（零采用率持续 N 个版本）：建议 deprecate 或砍，记入 Phase 7 审视候选项
 - **功能使用路径**：核心任务的实际用户路径（是否与设计意图一致？有无绕路/卡住/放弃？）
 
 #### A.3 用户痛点与反馈聚类
@@ -99,9 +99,9 @@
 - 可作为长期投资主线的方向（技术债清偿/性能基线/无障碍）
 ```
 
-> 现状评估的 findings **直接流入 Phase 2 版本序列规划**——痛点 → 优化主题 → 纳入版本功能行；死功能 → Phase 2.5 剔除候选项；技术债 → 版本投入预算。
+> 现状评估的 findings **直接流入 Phase 6 版本序列规划**——痛点 → 优化主题 → 纳入版本功能行；死功能 → Phase 7 剔除候选项；技术债 → 版本投入预算。
 
-### Phase R：市场调研与竞品分析
+### Phase 3：市场调研与竞品分析
 AI 自主完成全部桌面调研（多路并行搜索，证据带出处，缺口标 `[TBD]`），调用 `[[skill:csp-product-research]]`（创业方向/行业扫描/竞品深潜/经济模型）+ `[[skill:csp-competitive-analysis]]`（功能差距/差异化）：
 
 **调研五面**：
@@ -127,7 +127,7 @@ AI 自主完成全部桌面调研（多路并行搜索，证据带出处，缺�
 
 产物：`docs/analysis/MARKET-RESEARCH-{date}.md`（五面 + 七视角结论，每面独立成节）。
 
-### Phase 0.5：竞品深度提取（有参考文件夹时触发）
+### Phase 4：竞品深度提取（有参考文件夹时触发）
 
 > **复盘教训**：之前只从 Orca 100+ 模块中提炼了 12 条借鉴——实际可复用资产远超此数。深度提取 = 逐文件扫描 + Tier 分类 + 适配路径。
 
@@ -222,11 +222,11 @@ AI 自主完成全部桌面调研（多路并行搜索，证据带出处，缺�
 - 借鉴非复制、标来源可追溯（`来源文件:行号`）
 - 开源协议兼容（MIT/Apache 可借鉴，GPL 审慎确保不传染）
 - 不被参考项目的架构"带着走"——提取的是模式，不是目录结构
-- **Tier 1 项必须在 Phase 6 产出具体的文件级适配方案，Tier 2 项必须在 Phase 6 产出等价实现伪代码**——不做完就是浪费了这次深度提取
+- **Tier 1 项必须在 Phase 13 产出具体的文件级适配方案，Tier 2 项必须在 Phase 13 产出等价实现伪代码**——不做完就是浪费了这次深度提取
 
 产物：`docs/analysis/COMPETITIVE-REFERENCE.md`（`来源文件 | Tier | 提取内容 | 映射到功能 | 拟纳入版本 | 适配路径`）。
 
-### Phase 1：战略锚点
+### Phase 5：战略锚点
 基于调研结论，调用 `[[agent:csp-pm]]`（用户故事/验收标准/优先级/RICE）+ `[[agent:csp-analyst]]`（SWOT/五力/商业模型画布/成本收益），按 Rumelt kernel 提炼 `docs/strategy/STRATEGY.md`：
 
 1. **诊断**：产品解决什么核心问题？现状的痛点/不对称在哪？
@@ -238,7 +238,7 @@ AI 自主完成全部桌面调研（多路并行搜索，证据带出处，缺�
 
 STRATEGY.md 短而硬——anchor，不扩成 feature list。下游 PRD 读它 ground。
 
-### Phase 2：路线图 + 版本序列
+### Phase 6：路线图 + 版本序列
 调用 `[[workflow:csp-roadmap-planner]]` 生成长周期多版本结构化路线，产出 `docs/strategy/ROADMAP.md`。
 
 **版本号规则（默认 SemVer X.Y.Z）**：
@@ -288,7 +288,7 @@ vX.Y.Z — {主题名} — status: planned
 - MOD-AUTH-1 依赖：无
 - 被依赖：MOD-WORKSPACE-1（需验证登录状态）
 
-### 细节 Specs（8 面大纲级——接口/数据/规则/错误/状态/前端交互/安全/运维，详细 Spec 归 Phase 6 的八面展开）
+### 细节 Specs（8 面大纲级——接口/数据/规则/错误/状态/前端交互/安全/运维，详细 Spec 归 Phase 13 的八面展开）
 #### 数据实体
 | 实体 | 核心字段 | 约束 | 所属 feature |
 |------|---------|------|-------------|
@@ -328,7 +328,7 @@ vX.Y.Z — {主题名} — status: planned
 
 v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资主线推进。
 
-### Phase 2.5：集成必要性审视（强制 self-critique gate）
+### Phase 7：集成必要性审视（强制 self-critique gate）
 **强制**：版本序列产出后立即审视——已规划 ≠ 必要。默认姿态是「砍」不是「留」。
 
 调用 `[[skill:csp-integration-necessity-review]]` 做 7 维逐功能裁决（定位/场景/重叠/成本/依赖/攒批/聚焦→纳入/降级/剔除/合并）
@@ -353,7 +353,7 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 
 红线：已规划不等于必要（审视可剔除已列功能），剔除/降级必须记原因，self-critique 只过滤功能层不动战略锚点，明显重叠/偏离锚点直接裁决不打断。
 
-### Phase 3：产品架构收敛审查
+### Phase 8：产品架构收敛审查
 调用 `[[csp-product-design-convergence]]` 做收敛审查：
 - 定位对齐：功能清单是否服务同一产品定位
 - 导航准入：信息架构/模块边界是否合理
@@ -362,15 +362,15 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 
 产物：`.csp/convergence/CONVERGED-FEATURE-PLAN.md`（收敛后功能清单，下游 PRD 功能以此为唯一事实源）。
 
-### Phase I：迭代优化与体验提升（现状评估结论并入版本规划）
+### Phase 9：迭代优化与体验提升（现状评估结论并入版本规划）
 
-> **触发**：Phase A 产出 `CURRENT-STATE` 后**强制执行**，非首次规划的每次迭代都跑。纯新项目跳过。
+> **触发**：Phase 2 产出 `CURRENT-STATE` 后**强制执行**，非首次规划的每次迭代都跑。纯新项目跳过。
 
-**目的**：将 Phase A 发现的"现有产品的可操作问题"系统性地转化为版本优化主题，确保每一轮迭代不仅有新功能，还有对既有体验的持续改进。避免"只建不修，越建越乱"。
+**目的**：将 Phase 2 发现的"现有产品的可操作问题"系统性地转化为版本优化主题，确保每一轮迭代不仅有新功能，还有对既有体验的持续改进。避免"只建不修，越建越乱"。
 
 #### I.1 优化机会提炼
 
-从 Phase A 的评估结论中提炼三类优化机会：
+从 Phase 2 的评估结论中提炼三类优化机会：
 
 **UX 体验优化**（来源：A.4 体验与设计债审计 + A.3 用户痛点）：
 - 关键路径摩擦 → 简化步骤/优化信息架构/减少点击/提供默认值
@@ -401,16 +401,16 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 
 #### I.3 优化项并入版本序列
 
-将 P0/P1 优化项**直接并入 Phase 2 的版本序列**：
+将 P0/P1 优化项**直接并入 Phase 6 的版本序列**：
 
 - 每个版本不仅有"新增功能"行，也有"优化项"行——优化是版本主题的一部分，不是"有空再顺手做"
 - 优化项与同模块的新功能打包进同一版本（攒批原则同样适用）
 - 纯优化版本（无新功能）用 PATCH 号（如 `v1.4.1`）；优化+新功能用 MINOR 号
-- 优化项的来源在版本行标注（`来源: Phase A-I, finding CURRENT-NN`）
+- 优化项的来源在版本行标注（`来源: Phase 2-9, finding CURRENT-NN`）
 
 产出：优化项直接回写进 `ROADMAP.md` 的对应版本功能行（标 `优化` 标签），不单独落文件。ROADMAP 版本行格式追加 `优化项: [清单，标优先级和来源]`。
 
-### Phase 4：设计衔接（规划→设计过渡）
+### Phase 10：设计衔接（规划→设计过渡）
 规划产出后，调用以下 CSP 设计技能为后续 Spec 阶段铺路：
 
 | 阶段 | 技能 | 产出 |
@@ -420,27 +420,27 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 | Web 多屏流程 | `[[skill:csp-flow-web]]` | 16 场景多屏 IA + 产出代码 |
 | 信息架构 | `[[skill:csp-sitemap]]` | 站点地图/导航结构 |
 
-### Phase 5：每版本规划级 PRD SPEC
+### Phase 11：每版本规划级 PRD SPEC
 
-> ⚠️ **Phase 5 是快速检查点，不是终点。** Phase 5 产出 planning 级大纲后，必须立即进入 Phase 6（8 面 Spec）和 Phase 7（任务拆解）。planning 级骨架的价值是快速锁定方向，不是降低深度——**10 个版本的 shallow 大纲不如 1 个版本的完整 8 面 Spec + DAG。**
+> ⚠️ **Phase 11 是快速检查点，不是终点。** Phase 11 产出 planning 级大纲后，必须立即进入 Phase 13（8 面 Spec）和 Phase 14（任务拆解）。planning 级骨架的价值是快速锁定方向，不是降低深度——**10 个版本的 shallow 大纲不如 1 个版本的完整 8 面 Spec + DAG。**
 
 调用 `[[workflow:csp-prd-generation]]`（PM 视角）或 `[[pattern:csp-prd]]`（设计师视角）为净版序列每个版本产出规划级 PRD 骨架：
 
 - 路径：`docs/prd/PRD-{version-slug}.md`，`status: Draft`
-- 结构：8 段 rapid pass——背景/目标/功能清单/用户故事一句话/优先级(P0/P1/P2)/关键业务规则要点/AC 骨架（每模块 ≥1 条 Given-When-Then 锚点）/风险与依赖。**此阶段不追求完整——快速的目的是尽快进 Phase 6 展开，不是停在这里。**
-- 目的：快速校阅方向——模块边界对不对、功能归属对不对、优先级对不对。确认后立刻进 Phase 6 展开
+- 结构：8 段 rapid pass——背景/目标/功能清单/用户故事一句话/优先级(P0/P1/P2)/关键业务规则要点/AC 骨架（每模块 ≥1 条 Given-When-Then 锚点）/风险与依赖。**此阶段不追求完整——快速的目的是尽快进 Phase 13 展开，不是停在这里。**
+- 目的：快速校阅方向——模块边界对不对、功能归属对不对、优先级对不对。确认后立刻进 Phase 13 展开
 
 **红线**（防滑坡——复盘发现执行者会停在大纲阶段）：
-- **Planning 级骨架 ≠ 可交付。** Phase 5 做完不代表这一版"规划完成"——Phase 6（8 面 Spec）+ Phase 7（任务 DAG）必须立即跟随
+- **Planning 级骨架 ≠ 可交付。** Phase 11 做完不代表这一版"规划完成"——Phase 13（8 面 Spec）+ Phase 14（任务 DAG）必须立即跟随
 - **每个 planned 版本独立满足相同的深度门控。** 做 1 个版本要 8 面 Spec，做 10 个版本也要 8 面 Spec——版本数量不是降低深度的理由
-- Phase 5 产出后马上接力 Phase 6——不做"先做十个版本大纲、以后有空再展开"的滑
-- 如果在 Phase 2.5 审视阶段砍了功能——被砍的越浅越好（planning 骨架就够了），留下的越深越好（必须展开到 8 面 + DAG）
+- Phase 11 产出后马上接力 Phase 13——不做"先做十个版本大纲、以后有空再展开"的滑
+- 如果在 Phase 7 审视阶段砍了功能——被砍的越浅越好（planning 骨架就够了），留下的越深越好（必须展开到 8 面 + DAG）
 
 产物：每版本一份 SPEC + 登记 `docs/prd/PRD-INDEX.md`。
 
 ---
 
-### Phase G：增长与实验规划（可选，有线上用户时触发）
+### Phase 12：增长与实验规划（可选，有线上用户时触发）
 
 > 已有线上用户/指标的迭代**建议执行**；纯新项目/MVP 阶段跳过。
 
@@ -488,9 +488,9 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 
 ---
 
-### Phase 6：技术 Spec 生成（原 03，Layer 4）
+### Phase 13：技术 Spec 生成（原 03，Layer 4）
 
-> PRD SPEC（Phase 5）定义了 WHAT——本 Phase 产出技术级的 HOW。这是从产品到代码的最后一步翻译桥。
+> PRD SPEC（Phase 11）定义了 WHAT——本 Phase 产出技术级的 HOW。这是从产品到代码的最后一步翻译桥。
 > **Spec 不是"后端接口文档"——是全链路的工程契约，覆盖 8 个面。**
 
 #### 6.0 全栈 Spec 八面体系
@@ -696,7 +696,7 @@ alembic downgrade -1
 
 ---
 
-### Phase 7：任务拆解（原 04）
+### Phase 14：任务拆解（原 04）
 
 > 从 Spec 拆解为可独立开发、可验证的原子任务。**每个任务 = 一个 Agent 可独立完成的开发单元。**
 
@@ -770,9 +770,9 @@ graph TD
 
 - [ ] `docs/strategy/STRATEGY.md` 已产出（6 要素齐全）
 - [ ] `docs/strategy/ROADMAP.md` 已产出（版本序列完整，含功能-模块-描述-边界-测试-任务）
-- [ ] Phase 2.5 集成审视已完成（`INTEGRATION-NECESSITY-{date}.md` 已产出）
-- [ ] Phase 3 收敛审查已完成（`CONVERGED-FEATURE-PLAN.md` 已产出）
-- [ ] Phase 0.5 竞品深度提取已完成（Tier 1/2/3 分类 + 文件级适配方案）
+- [ ] Phase 7 集成审视已完成（`INTEGRATION-NECESSITY-{date}.md` 已产出）
+- [ ] Phase 8 收敛审查已完成（`CONVERGED-FEATURE-PLAN.md` 已产出）
+- [ ] Phase 4 竞品深度提取已完成（Tier 1/2/3 分类 + 文件级适配方案）
 - [ ] **每版本 PRD SPEC 已产出**（`docs/prd/PRD-{slug}.md`）— 所有 planned 版本
 - [ ] **每版本 8 面技术 Spec 已产出**（`.csp/planning/spec.md`）— 所有 planned 版本，缺必写面不得标记完成
 - [ ] **每版本任务拆解已产出**（`.csp/tasks/TASK-INDEX.md` 含 DAG）— 所有 planned 版本
@@ -807,26 +807,26 @@ echo "planned: $planned_count, specs: $spec_count, tasks: $task_count"
 ```
 产品规划（本文件）                         开发 Pipeline
 ─────────────                            ──────────────
-Phase 0 上下文探测
-  └→ Phase A 现状评估
-      └→ Phase R 调研
-          └→ Phase 1 战略锚点
-              └→ Phase 2 路线图+版本序列
+Phase 1 上下文探测
+  └→ Phase 2 现状评估
+      └→ Phase 3 调研
+          └→ Phase 5 战略锚点
+              └→ Phase 6 路线图+版本序列
               │   （功能-模块-描述-边界-测试-任务 全部落实）
-                  └→ Phase 2.5 集成审视
-                      └→ Phase 3 收敛审查
-                          └→ Phase I 迭代优化
-                              └→ Phase 4 设计衔接
-                                  └→ Phase 5 PRD SPEC (Layer 1+2)
-                                      └→ Phase 6 技术 Spec (Layer 4)
-                                          └→ Phase 7 任务拆解
+                  └→ Phase 7 集成审视
+                      └→ Phase 8 收敛审查
+                          └→ Phase 9 迭代优化
+                              └→ Phase 10 设计衔接
+                                  └→ Phase 11 PRD SPEC (Layer 1+2)
+                                      └→ Phase 13 技术 Spec (Layer 4)
+                                          └→ Phase 14 任务拆解
                                               │                    交棒
                                               ├──────────→ 05 实施（直接开发）
                                               ├──────────→ 06 质量门控+发布
                                               └──────────→ 07 复盘
 ```
 
-> **关键变化**：规划文档现在是完整的预开发中心。ROADMAP 产出时路径-功能-模块-边界-测试维度-任务拆解全部落实，Phase 6 产出可执行 Spec，Phase 7 产出带依赖 DAG 的任务清单。开发 Pipeline **不再做 01→04**，直接拿任务清单进 05 写代码。
+> **关键变化**：规划文档现在是完整的预开发中心。ROADMAP 产出时路径-功能-模块-边界-测试维度-任务拆解全部落实，Phase 13 产出可执行 Spec，Phase 14 产出带依赖 DAG 的任务清单。开发 Pipeline **不再做 01→04**，直接拿任务清单进 05 写代码。
 
 ---
 
@@ -848,7 +848,7 @@ Phase 0 上下文探测
 | 阶段 | CSP Skill |
 |------|-----------|
 | 产品透镜审查 | `[[agent:csp-product-lens-reviewer]]`（前提挑战/战略后果/目标-需求对齐，战略级审视） |
-| 集成必要性审视 | `[[skill:csp-integration-necessity-review]]`（Phase 2.5 强制 gate：7 维逐功能裁决，纳入/降级/剔除/合并，默认砍） |
+| 集成必要性审视 | `[[skill:csp-integration-necessity-review]]`（Phase 7 强制 gate：7 维逐功能裁决，纳入/降级/剔除/合并，默认砍） |
 | Roadmap 规划 | `[[workflow:csp-roadmap-planner]]`（版本序列/战略锚点/版本号规则/SemVer 增量续编） |
 | 产品架构收敛 | `[[csp-product-design-convergence]]`（定位对齐/导航准入/系统卫生/迭代优先级） |
 | 需求优先级 | `[[workflow:csp-requirement-prioritization]]`（RICE/卡诺/用户故事映射） |
@@ -857,11 +857,11 @@ Phase 0 上下文探测
 
 | 阶段 | CSP Skill |
 |------|-----------|
-| PRD 生成（PM 视角） | `[[workflow:csp-prd-generation]]`（8 段结构/背景/目标/功能/AC/风险，Phase 5 规划级 SPEC） |
+| PRD 生成（PM 视角） | `[[workflow:csp-prd-generation]]`（8 段结构/背景/目标/功能/AC/风险，Phase 11 规划级 SPEC） |
 | PRD（设计师视角） | `[[pattern:csp-prd]]`（设计资产整合/8 段工程交底） |
 | 产品能力翻译 | `[[skill:csp-product-capability]]`（PRD→SRS，约束/不变量/接口） |
 
-### 技术 Spec 与任务拆解（Phase 6 + Phase 7）
+### 技术 Spec 与任务拆解（Phase 13 + Phase 14）
 
 | 阶段 | CSP Skill |
 |------|-----------|
@@ -879,21 +879,21 @@ Phase 0 上下文探测
 | Web 多屏流程 | `[[skill:csp-flow-web]]`（16 场景/Spark-Ant-shadcn 三路径/IA 骨架） |
 | 信息架构 | `[[skill:csp-sitemap]]`（站点地图/导航结构/页面层级） |
 
-### 现状评估与持续优化（Phase A + Phase I）
+### 现状评估与持续优化（Phase 2 + Phase 9）
 
 | 阶段 | CSP Skill |
 |------|-----------|
-| 产品体验脉冲 | `[[skill:csp-product-pulse]]`（时间窗口体验脉冲报告，Phase A 产品健康度快照） |
-| 用户行为分析 | `[[skill:csp-user-analytics]]`（功能采用率/用户路径/转化漏斗，Phase A 功能盘点 + Phase G 增长识别） |
-| 用户反馈分析 | `[[skill:csp-user-feedback-analysis]]`（反馈聚类/痛点排序，Phase A 痛点识别） |
-| 产品指标审查 | `[[skill:csp-product-metrics-review]]`（北极星拆解/健康度/异常检测，Phase A 诊断 + Phase G 漏斗分析） |
+| 产品体验脉冲 | `[[skill:csp-product-pulse]]`（时间窗口体验脉冲报告，Phase 2 产品健康度快照） |
+| 用户行为分析 | `[[skill:csp-user-analytics]]`（功能采用率/用户路径/转化漏斗，Phase 2 功能盘点 + Phase 12 增长识别） |
+| 用户反馈分析 | `[[skill:csp-user-feedback-analysis]]`（反馈聚类/痛点排序，Phase 2 痛点识别） |
+| 产品指标审查 | `[[skill:csp-product-metrics-review]]`（北极星拆解/健康度/异常检测，Phase 2 诊断 + Phase 12 漏斗分析） |
 | 数据分析 | `[[skill:csp-data-analysis]]`（Python 分析/可视化，辅助指标深挖） |
 
-### 增长与实验（Phase G）
+### 增长与实验（Phase 12）
 
 | 阶段 | CSP Skill |
 |------|-----------|
-| 增长实验设计 | Phase G 任务指示（ICE 评分/假设-验证闭环/A/B 实验设计） + `[[skill:csp-user-analytics]]`（行为洞察） |
+| 增长实验设计 | Phase 12 任务指示（ICE 评分/假设-验证闭环/A/B 实验设计） + `[[skill:csp-user-analytics]]`（行为洞察） |
 | 产品指标审查 | `[[skill:csp-product-metrics-review]]`（转化漏斗/留存拐点/高价值行为识别） |
 
 ---
@@ -919,10 +919,10 @@ Phase 0 上下文探测
 │   ├── convergence/
 │   │   └── CONVERGED-FEATURE-PLAN.md     # 收敛后功能清单
 │   ├── planning/
-│   │   ├── spec.md                        # Phase 6 全栈 Spec
-│   │   └── implementation-plan.md         # Phase 7 实施计划
-│   ├── tech-design/                       # Phase 6 技术方案
-│   ├── tasks/                             # Phase 7 任务拆解
+│   │   ├── spec.md                        # Phase 13 全栈 Spec
+│   │   └── implementation-plan.md         # Phase 14 实施计划
+│   ├── tech-design/                       # Phase 13 技术方案
+│   ├── tasks/                             # Phase 14 任务拆解
 │   │   ├── TASK-INDEX.md                  #   任务清单 + DAG
 │   │   └── T-{NNN}-{slug}.md              #   逐任务详情
 │   └── manifest.json                      # 产物回写索引
@@ -936,29 +936,29 @@ Phase 0 上下文探测
 |---|---|---|
 | 规划=feature list | 列功能无战略锚点 | Anchor not plan；战略是 what/why |
 | 战略主题号当 SemVer 打 tag | 起步标 v2.0.0（MAJOR）但无 breaking | 战略号≠SemVer；additive→MINOR 增量 |
-| 规划完不审视 | 已规划即保留，堆功能不过滤 | Phase 2.5 强制 7 维 self-critique，默认砍 |
+| 规划完不审视 | 已规划即保留，堆功能不过滤 | Phase 7 强制 7 维 self-critique，默认砍 |
 | 审视静默删 | 剔除/降级不留原因 | 剔除必记依据，可追溯 |
 | 功能发散堆砌 | 为"完整感"堆边缘场景 | 精简聚焦核心业务场景 |
-| 跳过调研拍脑袋 | 版本主题无事实输入 | Phase R 先调研，锚点基于结论 |
-| 规划止步 ROADMAP | 有版本表无 PRD SPEC | Phase 5→6→7 每个 planned 版本强制产出完整 8 面 Spec + DAG |
-| 竞品浅扫 | 只看 README/features，不逐文件扫描 | Phase 0.5 逐子目录遍历 + Tier 分类 + 文件级适配方案 |
+| 跳过调研拍脑袋 | 版本主题无事实输入 | Phase 3 先调研，锚点基于结论 |
+| 规划止步 ROADMAP | 有版本表无 PRD SPEC | Phase 11→6→7 每个 planned 版本强制产出完整 8 面 Spec + DAG |
+| 竞品浅扫 | 只看 README/features，不逐文件扫描 | Phase 4 逐子目录遍历 + Tier 分类 + 文件级适配方案 |
 | 版本越多深度越薄 | 做了 10 个版本但只有 1 个有完整 Spec | 每个版本独立满足深度门控——做 1 个要全深度，做 10 个也要全深度 |
-| Planning 骨架当终点 | Phase 5 产出大纲就标记"规划完成" | Phase 5 是检查点不是终点——Phase 6+7 必须立即跟随 |
+| Planning 骨架当终点 | Phase 11 产出大纲就标记"规划完成" | Phase 11 是检查点不是终点——Phase 13+7 必须立即跟随 |
 | 臆造指标 | 编 DAU/收入目标 | 未定标 `[TBD]`，留给 01 确认 |
 | 规划=排期 | Gantt 化堆日期/估人日/设截止 | Agent 开发下估时无意义（人 3 天的活 Agent 几分钟完成），路线图示方向不示日期；版本号 SemVer 增量续编，版本序列按依赖+优先级排序 |
 | 过度问人 | 每节反复确认 | 默认优先，仅战略模糊时人工澄清 |
-| 只建不修 | 只规划新功能，不优化既有体验 | Phase A+I 强制：每轮迭代必审现状，优化项与功能同权纳入版本 |
-| 数据盲飞 | 无指标依据靠感觉排优先级 | Phase A 先做健康度快照 + 痛点排序，用数据驱动"该做什么" |
-| 用旧报告做规划 | CURRENT-STATE 来自上个版本但直接当本轮输入 | Phase A 强制新鲜度检查：commit 不同/超 1 个 MINOR → 重跑评估 |
-| 增长靠猜 | 做功能但不知道是否有效 | Phase G 实验假设-验证闭环，每个增长动作可衡量 |
+| 只建不修 | 只规划新功能，不优化既有体验 | Phase 2+I 强制：每轮迭代必审现状，优化项与功能同权纳入版本 |
+| 数据盲飞 | 无指标依据靠感觉排优先级 | Phase 2 先做健康度快照 + 痛点排序，用数据驱动"该做什么" |
+| 用旧报告做规划 | CURRENT-STATE 来自上个版本但直接当本轮输入 | Phase 2 强制新鲜度检查：commit 不同/超 1 个 MINOR → 重跑评估 |
+| 增长靠猜 | 做功能但不知道是否有效 | Phase 12 实验假设-验证闭环，每个增长动作可衡量 |
 
 ---
 
 按现状评估 → 调研 → 战略 → 路线图 → 审视 → 收敛 → 迭代优化 → 设计衔接 → PRD SPEC → 增长实验十步链执行，AI 自主完成，不打断我。
 
-**非全新项目（已有线上用户/已发布版本）**：Phase A（现状评估）必跑 → Phase I（迭代优化）必跑 → Phase G（增长实验）建议跑。优化项与新增功能同权纳入版本序列，不"只建不修"。
+**非全新项目（已有线上用户/已发布版本）**：Phase 2（现状评估）必跑 → Phase 9（迭代优化）必跑 → Phase 12（增长实验）建议跑。优化项与新增功能同权纳入版本序列，不"只建不修"。
 
-**纯新项目（MVP 未上线）**：跳过 Phase A/I/G，从 Phase R 调研开始。
+**纯新项目（MVP 未上线）**：跳过 Phase 2/I/G，从 Phase 3 调研开始。
 
 每个阶段按进度条播报，全部完成后输出总摘要，交棒 pipeline 启动交付。
 
@@ -970,10 +970,10 @@ Phase 0 上下文探测
 
 | 层 | 产物 | 归属 | 深度边界 |
 |----|------|------|---------|
-| Layer 1 | `docs/strategy/ROADMAP.md` | **本文件** Phase 2 | 功能-模块-描述-边界-测试维度-任务路径拆解，全部落实 |
-| Layer 2→4 | PRD + 8 面 Spec + 任务 DAG | **本文件** Phase 5→6→7 | 一次性完成：rapid pass 确认方向 → 8 面展开（接口/数据/DDL/规则/错误/状态/前端交互/安全/运维）→ 任务 DAG。**缺任一层不得标记版本完成。** |
+| Layer 1 | `docs/strategy/ROADMAP.md` | **本文件** Phase 6 | 功能-模块-描述-边界-测试维度-任务路径拆解，全部落实 |
+| Layer 2→4 | PRD + 8 面 Spec + 任务 DAG | **本文件** Phase 11→6→7 | 一次性完成：rapid pass 确认方向 → 8 面展开（接口/数据/DDL/规则/错误/状态/前端交互/安全/运维）→ 任务 DAG。**缺任一层不得标记版本完成。** |
 
-**任务拆解**（Phase 7）为 Spec 的自然产出——Spec 中每个功能已标注涉及文件和复杂度，任务拆解是形式化。
+**任务拆解**（Phase 14）为 Spec 的自然产出——Spec 中每个功能已标注涉及文件和复杂度，任务拆解是形式化。
 
 **分工红线（v2）**：全部在规划阶段完成。开发 Pipeline 直接消费 ROADMAP + Spec + 任务 DAG。
 **上下文完备性**：交棒时所有机器可独立执行——不依赖规划机器的内存。8 面 Spec + 任务 DAG 就是开发的完整上下文。
@@ -984,8 +984,8 @@ Phase 0 上下文探测
 000-product-planning_csp.md（本文件）
   │  产出: ROADMAP (Layer 1+详情: 功能/模块/边界/测试/任务)
   │       + PRD SPECs (Layer 2+3, planning→engineering)
-  │       + 技术 Spec (Layer 4) + 任务拆解 (Phase 7)
-  │  门控: Phase 2.5 集成审视 + Phase 3 收敛审查 + 规划完成门控
+  │       + 技术 Spec (Layer 4) + 任务拆解 (Phase 14)
+  │  门控: Phase 7 集成审视 + Phase 8 收敛审查 + 规划完成门控
   │
   ├──→ 交棒 000-develop_pipeline_csp.md
   │      Pipeline 读任务清单 → 直接进 05 实施

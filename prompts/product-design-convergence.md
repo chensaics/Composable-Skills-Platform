@@ -13,18 +13,18 @@
   │
   ├─→ ★ 本流程（产品架构收敛闸门）★
   │     │
-  │     │ Phase 0: 定位与支柱基线（AGENTS.md/STRATEGY.md 读取）
-  │     │ Phase 1: 功能全景重建 + 定位对齐 + 支柱映射
-  │     │ Phase 2: 六维度收敛审查
+  │     │ Phase 1: 定位与支柱基线（AGENTS.md/STRATEGY.md 读取）
+  │     │ Phase 5: 功能全景重建 + 定位对齐 + 支柱映射
+  │     │ Phase 6: 六维度收敛审查
   │     │   ├─ D1 功能架构收敛（合/拆/迁/砍）
   │     │   ├─ D2 核心/次要取舍（Must/Should/Nice/Wrong）
   │     │   ├─ D3 IA/交互方向 + 导航准入门禁
   │     │   ├─ D4 迭代优先级
   │     │   ├─ D5 定位对齐与前提挑战（产品说的 vs 产品做的）
   │     │   └─ D6 系统级卫生（后端膨胀/Feature Flag/文档权威）
-  │     │ Phase 3: 五类根因 Pattern 检测（A-E）
-  │     │ Phase 4: 输出收敛后功能清单
-  │     │ Phase 5: 裁决记录与交棒
+  │     │ Phase 8: 五类根因 Pattern 检测（A-E）
+  │     │ Phase 10: 输出收敛后功能清单
+  │     │ Phase 11: 裁决记录与交棒
   │     │
   │     产出：CONVERGENCE-REPORT + CONVERGED-FEATURE-PLAN + IA-DIRECTION + SYSTEM-HYGIENE
   │
@@ -43,7 +43,7 @@
 
 1. **定位对齐优先于功能收敛**：先检查"产品说的"（AGENTS.md/STRATEGY.md 定位）和"产品做的"（roadmap 功能清单）是否一致。定位漂移是功能散乱的根因——不先对齐定位，功能收敛无锚点。
 2. **支柱收敛原则**：每个功能必须映射到 N 个核心支柱之一（如"四支柱"）。不属于任何支柱的功能 = 定位漂移候选，必须裁决（砍/归并/新支柱需战略论证）。
-3. **导航准入是门禁不是建议**："新增一级导航"不是新功能的默认解法。每个需要顶级导航入口的功能必须通过**导航准入三问**（见 Phase 2 D3）。
+3. **导航准入是门禁不是建议**："新增一级导航"不是新功能的默认解法。每个需要顶级导航入口的功能必须通过**导航准入三问**（见 Phase 6 D3）。
 4. **系统级卫生纳入闸门**：后端能力膨胀（代码存在但 UI 不可见）、Feature Flag 卫生（default-off 但代码全量）、文档权威（ADR 冲突/版本口径矛盾/DOC-STATUS 过期）——这些不是"技术债"，是**治理失败**，必须在开发前拦截。
 5. **裁决而非建议**：每条结论是"砍/合/拆/降权/重组/拦截"的明确裁决，带 product sense rationale（论证对用户/产品定位的具体伤害）。
 6. **gate 即授权**：不通过本审查，不进 01 PRD。roadmap 产出不能被当作"已批准的功能清单"直接消费。
@@ -77,11 +77,11 @@
 |------|------|
 | **R1 权威层级** | AGENTS.md 信任模型是**硬约束**（工程事实），STRATEGY.md 是**产品愿景**（可演进）。冲突时 AGENTS.md 优先。 |
 | **R2 修订前置** | STRATEGY track 若违反 AGENTS.md 信任模型（如 single-operator 下做 team/enterprise），必须**先正式修订 AGENTS.md**（走 ADR + 用户确认），再排期该 track。不能默默漂移。 |
-| **R3 漂移检测** | Phase 0 用 `validate_gates.py --gate G-POS` 机器检测漂移；drift 关键词命中 nav/flags = 🔴 ERROR。 |
+| **R3 漂移检测** | Phase 1 用 `validate_gates.py --gate G-POS` 机器检测漂移；drift 关键词命中 nav/flags = 🔴 ERROR。 |
 | **R4 回炉阈值** | roadmap 中 >30% 功能与 AGENTS.md 定位冲突 → **整个 roadmap 回炉重做**，不是逐个砍功能。 |
 | **R5 裁决记录** | 每个定位冲突功能必须裁决：砍 / 归并到合规支柱 / 触发 AGENTS.md 修订（走 R2）。不允许"保留但标 TBD"。 |
 
-## 三、Phase 0：定位与支柱基线（强制前置——收敛的锚点）
+## 三、Phase 1：定位与支柱基线（强制前置——收敛的锚点）
 
 > **没有定位基线，功能收敛就是无锚点的漂流。** 本 Phase 读取"产品说的"，作为后续所有裁决的对照基准。
 
@@ -98,7 +98,7 @@ python scripts/validate_gates.py
 
 **消费规则**：
 - `verdict == "BLOCKED"` → 收敛闸门**默认不通过**，必须先处理 blocking_errors
-- `G-POS` ERROR → 定位漂移，触发 Phase 0.2 漂移预警 + R4 回炉判定
+- `G-POS` ERROR → 定位漂移，触发 Phase 1.2 漂移预警 + R4 回炉判定
 - `G-NAV` ERROR → 导航超预算，D3 冻结新增顶级导航
 - `G-DOC` ERROR → 文档过期 >60d，**禁止新增功能**，先修文档
 - `G-FLAG` ERROR → 定位冲突 flag，D6.2 裁决（删 flag+code 或修订 AGENTS.md）
@@ -151,7 +151,7 @@ grep -riE "SSO|多租户|multi.?tenant|SLA|白标|white.?label|CRM|广告主|adv
 
 > ⚠️ **定位漂移是 P0 级问题**：如果 roadmap 中有 >30% 功能与 AGENTS.md 定位冲突，整个 roadmap 需要回炉重做，不是逐个砍功能能解决的。
 
-## 四、Phase 1：功能全景重建（增强版）
+## 四、Phase 5：功能全景重建（增强版）
 
 ### 4.1 从 roadmap 提取待开发功能清单 + 定位对齐 + 支柱映射
 
@@ -178,7 +178,7 @@ grep -riE "SSO|多租户|multi.?tenant|SLA|白标|white.?label|CRM|广告主|adv
 
 同一用户任务跨多少个模块出现，散热指数 ≥3 → 强制收敛建议。
 
-## 五、Phase 2：六维度收敛审查
+## 五、Phase 6：六维度收敛审查
 
 ### 维度 1：功能架构梳理与收敛（D1）
 
@@ -355,7 +355,7 @@ grep -rE "fetch\(|axios\.|api\." frontend/src --include='*.ts*' | wc -l  # 前�
 - DOC-STATUS 过期 >30 天 → 本版本禁止新增功能，先修文档
 - AGENTS.md 与实际代码不一致 → 以 AGENTS.md 为准修代码，或正式修订 AGENTS.md（不能默默漂移）
 
-## 六、Phase 3：五类根因 Pattern 检测
+## 六、Phase 8：五类根因 Pattern 检测
 
 > 基于真实项目审查提炼的五类根因，每类有检测方法和裁决规则。
 
@@ -377,7 +377,7 @@ grep -rE "label:|title:" src/sidebar/ --include='*.ts*'
 
 **症状**：12 组导航边界不排他；phase-k 10 Dashboard 与主域全部重叠。
 
-**检测**：导航预算表（D3）+ 支柱映射（Phase 1）+ 散热矩阵（Phase 1）。
+**检测**：导航预算表（D3）+ 支柱映射（Phase 5）+ 散热矩阵（Phase 5）。
 
 **裁决**：导航超预算 → 禁止新增顶级导航；Dashboard 重叠 → 合并到主域。
 
@@ -405,7 +405,7 @@ grep -rE "label:|title:" src/sidebar/ --include='*.ts*'
 
 **裁决**：ADR 冲突 → 统一编号空间；版本矛盾 → 以 git tag 为准；DOC-STATUS 过期 → 禁止新增功能，先修文档。
 
-## 七、Phase 4：输出收敛后功能清单
+## 七、Phase 10：输出收敛后功能清单
 
 > 这是 01 PRD 的**直接输入**——PRD 不再基于 raw roadmap 功能清单，而是基于此收敛后的版本。
 
@@ -445,7 +445,7 @@ grep -rE "label:|title:" src/sidebar/ --include='*.ts*'
 - 收敛目标：12 → 7（合并/降级 5 个节点）
 ```
 
-## 八、Phase 5：裁决记录与交棒
+## 八、Phase 11：裁决记录与交棒
 
 ### 裁决记录格式
 
@@ -466,7 +466,7 @@ grep -rE "label:|title:" src/sidebar/ --include='*.ts*'
 **收敛后功能清单**: `.csp/convergence/CONVERGED-FEATURE-PLAN.md`
 **IA 优化方向 + 导航预算**: `.csp/convergence/IA-DIRECTION.md`
 **系统级卫生整改**: `.csp/convergence/SYSTEM-HYGIENE-{date}.md`
-**裁决记录**: 见 CONVERGENCE-REPORT Phase 5
+**裁决记录**: 见 CONVERGENCE-REPORT Phase 11
 
 → 01 PRD 基于收敛后功能清单生成，每功能引用裁决 ID
 → IA 方向 + 导航预算作为 03 技术方案前置输入

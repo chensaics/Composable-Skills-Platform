@@ -28,9 +28,9 @@
 
 当用户表达"模块审计""可用性审查""项目体检""codebase audit""联动测试""模块清单""审查并更新 roadmap""系统性测试审查"等意图时进入。
 
-- 全量审计（默认）→ Phase 0→7 全跑。
-- 仅可用性（Mode B 代码审查）→ 跳 Phase 1–3，进 Phase 4。
-- 仅模块清单 → 只跑 Phase 0。
+- 全量审计（默认）→ Phase 1→7 全跑。
+- 仅可用性（Mode B 代码审查）→ 跳 Phase 5–3，进 Phase 10。
+- 仅模块清单 → 只跑 Phase 1。
 - 已跑过 → 增量（读既有 `.csp/audit/` + `.csp/code-understanding/`，只审 delta）。
 - **知识中枢前置**：`.csp/AGENTS.md` 不存在 → 提示先跑 00；CMS 缺失且棕地 → 提示先蒸馏。
 
@@ -43,7 +43,7 @@
 3. **07 复盘 findings**：`.csp/review/REVIEW-FINDINGS-*.json`（open/deferred）→ 避免重复报。
 4. **代码现状**：`git log`/`git status`/规模/`package.json`/技术栈。
 5. **项目级 docs**：`README`/`CLAUDE.md`/`docs/ARCHITECTURE.md`。
-6. **PRD 违规定义对齐（防口径漂移）**：若 PRD/PMS 定义了具体违例口径（如"routing 直穿 ORM 违规""print→logger 违规"），记录其**判定规则 + 检测范围**；与本次 audit/lint 工具的检测范围逐项对齐。**范围不一致 → 报 `口径漂移` finding**（列入缺口，不静默按自己口径报数；见 Phase 1 末「违规定义对账」）。
+6. **PRD 违规定义对齐（防口径漂移）**：若 PRD/PMS 定义了具体违例口径（如"routing 直穿 ORM 违规""print→logger 违规"），记录其**判定规则 + 检测范围**；与本次 audit/lint 工具的检测范围逐项对齐。**范围不一致 → 报 `口径漂移` finding**（列入缺口，不静默按自己口径报数；见 Phase 5 末「违规定义对账」）。
 
 ### 探测后输出"审计就绪卡"
 ```markdown
@@ -60,10 +60,10 @@
 
 ## 四、执行流程
 
-### Phase 0：模块化（产出 MODULE-LIST）
+### Phase 1：模块化（产出 MODULE-LIST）
 按路由/功能域拆 **3–7 模块组**（含 DB 模块），每组派 1 Explore agent 摸清。**必须含 DB 底层模块**：系统参数/配置、表管理（schema/migration/索引）、前后端与数据联动响应（API→service→repository→DB→响应→UI）。消费 `.csp/code-understanding/`（若有）回退手动探索。产出 `.csp/audit/MODULE-LIST-{milestone-slug}.md`（格式见五）。
 
-### Phase 1：并行 fan-out 事实收集（Agent A–G）
+### Phase 5：并行 fan-out 事实收集（Agent A–G）
 每 agent 只负责一块、只回报**结论 + 证据指针**（`file:line`/命令输出/截图/日志片段），不堆砌原文，产出供后续消费。**产出预算**：每 agent **≤15 条发现**，每条 **≤2 行 + 1 证据指针**，超出按严重度截断。
 
 **违规定义对账（口径漂移检测，fan-out 后强制）**：若探测到 PRD 定义了违例口径（探测步骤 6），fan-out 后核对各 agent/lint 工具的检测范围与 PRD 定义是否一致：
@@ -123,7 +123,7 @@
 
 > 并行产出**事实**，不下最终结论。
 
-### Phase 2：需求可追溯缺口（barrier——必须等 A–I 全完成）
+### Phase 6：需求可追溯缺口（barrier——必须等 A–I 全完成）
 **反割裂核心**：A 的每条需求映射 ≥1 测试方法。**无映射 = 没被任何测试覆盖 = 潜在缺失。**
 
 **规模门槛（防矩阵爆炸）**：`P0/P1` 需求**逐条**映射；`P2/P3` 按**功能域分组聚合**映射（一组一行），避免 200 行不可读矩阵。
@@ -140,7 +140,7 @@
 
 产出 `需求→方法 追溯矩阵`+`未覆盖/单层-happy 缺口清单`（带风险分级）。**此矩阵是后续测试设计输入，不得跳过。** 借鉴 `csp-qa-cr-review` 的需求→方法矩阵。
 
-### Phase 3：跨层联动测试设计（按风险分层，UI→API→DB→回路）
+### Phase 8：跨层联动测试设计（按风险分层，UI→API→DB→回路）
 **按风险分层选哪些路径走四层往返**（不要求每个写路径全量）：
 - **P0/资金/安全敏感 写路径**：强制**四层往返** + 每条配一条 **negative**；资金/并发类再补 **property（并发不变量）**。
 - **P1 写路径**：**跨层联动 或 contract(CDC) 二选一** + negative。
@@ -165,25 +165,25 @@
 
 **DB 隔离纪律**：DB 写路径测试须用**独立 session + per-test 事务回滚/清理**，禁用共享库写后不清理（否则 flaky + 脏数据）。
 
-### Phase 4：逐模块可用性审查（Mode A/B，产出 USABILITY-REPORT）
-对 Phase 0 每个模块做可用性审查（所有模块都审，核心系统性问题重点）：
+### Phase 10：逐模块可用性审查（Mode A/B，产出 USABILITY-REPORT）
+对 Phase 1 每个模块做可用性审查（所有模块都审，核心系统性问题重点）：
 - **Mode B（默认，仅需代码）**：按 Nielsen 10 启发式审代码，每条 finding 标 `违反原则编号 + file:line + 严重度 0–4 + 置信度`。可选先跑 `scripts/heuristic-eval-scan.sh` 预扫描作线索（缺失状态处理/表单校验/console.error 无反馈/aria 缺失/键盘事件缺失），**预扫描必须人工深挖确认后才成 finding**。每模块 1 个独立 agent 并行审 → 跨模块去重+严重度校准 → severity × confidence 排序。
 - **Mode A（若有可交互原型+真实用户）**：任务式观察，证据=用户原话+录屏时间戳，5 人发现约 85% 问题。
 - 产出 `.csp/audit/USABILITY-REPORT-{module}.md` 每模块一份。
 
 **Nielsen 10 速查**（详见 `references/usability-heuristics-checklist.md`）：①系统状态可见性 ②系统与现实匹配 ③用户控制权与自由度 ④一致性与标准 ⑤错误预防 ⑥识别而非回忆 ⑦灵活性与效率 ⑧美学与极简 ⑨帮助识别诊断恢复错误 ⑩帮助与文档。每条含定义/代码检查点/常见违反/严重度指引/关联原则。
 
-### Phase 5：评级与优先级
+### Phase 11：评级与优先级
 - **技术问题**：Critical（架构风险/数据损坏/可被利用安全漏洞/功能静默失效）/ High / Medium / Low。
 - **可用性**（Nielsen 0–4）：4 灾难（无法完成核心任务/数据丢失，上线前必修）/ 3 严重 / 2 主要 / 1 次要 / 0 表面。
 - **特殊规则**：严重度优先于频次；CTA 转化路径上的 cosmetic 不简单丢 P3；首次印象问题至少 major；Mode B 用 severity × confidence（high/medium/low × 0–4 → P0–P3）。
 - **优先级矩阵**：P0 Critical/4 上线前必修 / P1 High/3 或高频 2 首版必修 / P2 Medium/2 迭代修 / P3 Low/0–1 排期。
 - **vertical slice 四层**：Foundation（Critical+P0 安全/数据/核心路径）/ Core UI（High+P1 契约/一致性/关键可用性）/ Interactions & States（Medium+P2）/ Polish（Low+P3）。
 
-### Phase 6：裁决报告（AUDIT-VERDICT）
+### Phase 13：裁决报告（AUDIT-VERDICT）
 汇总 `.csp/audit/AUDIT-VERDICT-{milestone-slug}.md`（格式见十一）。
 
-### Phase 7：更新 roadmap + .csp/（版本 bump）
+### Phase 14：更新 roadmap + .csp/（版本 bump）
 - findings 带版本 bump 建议（见十二）→ 写入 `docs/strategy/ROADMAP.md` 版本-主题表：`vX.Y.Z（fix: AUDIT-F-NN,…）` 或 `vX.(Y+1).0（主题：可用性 batch / 技术债）`。
 - 更新 `.csp/audit/` findings JSON 的 `建议版本` 字段；回流 roadmap 触发增量更新。
 - **P0 快速修复路径**（不等下一轮 roadmap）：P0 findings 标 `快速修复=true` → orchestrator 直接 spawn 04 拆 fix task（`fix(audit-F-NN)` conventional）→ 05 fix → 06 verify。P1/P2 走 roadmap 正常路径（下一轮 01→04→05）。
@@ -594,7 +594,7 @@ unit 测试 plateau（加 0 新 bug）？
 2. **技术实现 vs 产品要求对照**：实现是否达标+偏差点+原型。
 3. **技术模块缺陷清单**：致命/严重/一般/提示+复现路径+受影响需求。
 4. **联动测试结果**：每条 P0/资金/安全写路径四层（或三层）证据矩阵+联动是否顺畅的**带证据**结论。
-5. **需求可追溯缺口**：`单层-happy` 与 `缺口` 清单+风险分级（与 Phase 2 矩阵一致）。
+5. **需求可追溯缺口**：`单层-happy` 与 `缺口` 清单+风险分级（与 Phase 6 矩阵一致）。
 6. **测试资产盲点**：缺哪些挖 bug 能力（property/fuzz/mutation/negative/chaos）+补位建议（分"本次可执行/建议补位需基建"两栏）。
 7. **工具链健康度**：build/types/lint/tests/security/diff 六项各一段证据。
 8. **可用性审查汇总**：各模块 finding 数/严重度分布/核心系统性问题。
@@ -657,9 +657,9 @@ docs/analysis/
 
 本审计与 `product-critic-review` / `feature-gap-analysis` / `e2e-deep-audit` 存在三处能力重叠，同次 pass 按下列归属主跑，其余引用结论不重跑：
 
-1. **Nielsen 10 可用性 + 状态覆盖**：**audit 主跑**（Phase 4 Mode A/B，带 `mode` 标注 + severity×confidence）。critic 镜头 F/G 对可用性违例引用 audit 的 `AUDIT-F` 结论、不重跑 Nielsen；critic 专注重复/散乱/定位（audit 不做的部分）。audit 未跑时 critic 自行跑。
+1. **Nielsen 10 可用性 + 状态覆盖**：**audit 主跑**（Phase 10 Mode A/B，带 `mode` 标注 + severity×confidence）。critic 镜头 F/G 对可用性违例引用 audit 的 `AUDIT-F` 结论、不重跑 Nielsen；critic 专注重复/散乱/定位（audit 不做的部分）。audit 未跑时 critic 自行跑。
 2. **M1–M8 设计清单**：**feature-gap 主跑**逐模块 M 命中（U1–U7 + M1–M8 细则）。critic 镜头 C/D 对视觉/交互一致性引用 gap 的 `recon` 命中、不重跑逐模块 M；critic 只做跨模块一致性批次聚合。gap 未跑时 critic 自行跑 M。
-3. **结构审计（孤儿路由 / 隐藏后端功能 / 死按钮）**：**e2e 主跑实机**（L4 真点按钮 + 文件系统交叉）。audit Phase 0 只标"疑似孤儿/隐藏后端/死按钮"为线索，交 e2e L4 实机确认后才成 finding；不静默据静态扫描报数。
+3. **结构审计（孤儿路由 / 隐藏后端功能 / 死按钮）**：**e2e 主跑实机**（L4 真点按钮 + 文件系统交叉）。audit Phase 1 只标"疑似孤儿/隐藏后端/死按钮"为线索，交 e2e L4 实机确认后才成 finding；不静默据静态扫描报数。
 
 > 各自 findings 前缀不同（`AUDIT-F` / `CRITIC-F` / `GAP-F`），可并存去重；下游 roadmap/04 按前缀路由。
 
