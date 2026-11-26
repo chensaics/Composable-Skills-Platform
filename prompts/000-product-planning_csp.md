@@ -127,15 +127,104 @@ AI 自主完成全部桌面调研（多路并行搜索，证据带出处，缺�
 
 产物：`docs/analysis/MARKET-RESEARCH-{date}.md`（五面 + 七视角结论，每面独立成节）。
 
-### Phase 0.5：竞品借鉴（有参考文件夹时触发）
-若探测发现参考文件夹，逐项目提炼：
-- **feature 借鉴**：扫参考项目的 features/README/skills/PRD/CHANGELOG，提炼可借鉴的功能模式，标注来源+路径
-- **差异化判断**：对比参考项目定位，识别本产品差异化机会
-- **版本映射**：借鉴的 feature 映射到 ROADMAP 版本主题，不照抄
+### Phase 0.5：竞品深度提取（有参考文件夹时触发）
 
-红线：借鉴非复制、标来源可追溯、开源协议兼容（MIT/Apache 可借鉴，GPL 审慎避免传染）。
+> **复盘教训**：之前只从 Orca 100+ 模块中提炼了 12 条借鉴——实际可复用资产远超此数。深度提取 = 逐文件扫描 + Tier 分类 + 适配路径。
 
-产物：`docs/analysis/COMPETITIVE-REFERENCE.md`（`来源项目 | feature | 借鉴点 | 差异化 | 拟纳入版本`）。
+#### 0.5a: 模块扫描策略
+
+对参考项目的每个子目录做结构化扫描：
+
+**扫描顺序**：`src/main/`（核心业务） → `src/shared/`（共享基础设施） → `src/plugins/`（扩展点） → 配置文件
+
+**每个模块提取 5 要素**：
+
+| 要素 | 问什么 | 输出 |
+|------|--------|------|
+| 模块功能 | 这个模块解决什么问题？ | 一句话描述 |
+| 输入/输出 | 它消费什么数据、产出什么？ | 接口契约摘要 |
+| 核心逻辑 | 它的关键算法/状态机/规则是什么？ | 业务规则要点（Tier 判定依据） |
+| 依赖关系 | 它依赖哪些其他模块？被哪些模块依赖？ | 依赖图片段 |
+| 适配成本 | 直接复用 / 改写语言 / 概念借鉴？ | Tier 分类 |
+
+#### 0.5b: Tier 分类（三级复用）
+
+| Tier | 定义 | 判定 | 阶段操作 |
+|------|------|------|---------|
+| **Tier 1** | 直接适配 | 逻辑与语言无关、或目标项目同语言 | 逐文件标注适配改动点，产出 `TIER1-ADAPT.md` |
+| **Tier 2** | 改写实现 | 逻辑可借鉴，但需换成目标语言（如 Java→Python） | 产出伪代码 + Python 适配方案，标注等价映射 |
+| **Tier 3** | 概念借鉴 | 架构模式/设计思路/状态机设计值得参考 | 产出模式描述 + 为什么值得借鉴 + 本项目的差异 |
+
+**Tier 1 示例**（直接适配）：
+```markdown
+### Orca src/shared/agent-session/journal.py → Tier 1
+- 功能: Agent 会话日志——记录每轮 prompt/response/tool-use 到 journal
+- 输入: messages[], session_id
+- 输出: journal.jsonl (append-only)
+- 适配: orca/src/shared/agent-session/journal.py → csp/src/agent/journal.py
+  - 改动: 替换 import 路径（orca.utils.* → csp.utils.*），其余逻辑不变
+  - 文件: 约 200 行，20 行需要改动
+```
+
+**Tier 2 示例**（改写实现）：
+```markdown
+### Orca src/main/bots/bot_lifecycle.py → Tier 2
+- 功能: Bot 生命周期管理（init → running → paused → stopped → cleaned）
+- 原语言: TypeScript
+- 适配方案:
+  - BotState enum → Python enum.Enum
+  - BotLifecycle class → Python dataclass + async context manager
+  - 状态机逻辑保持，事件系统换成 asyncio.Queue
+```
+
+**Tier 3 示例**（概念借鉴）：
+```markdown
+### Orca Plugin consent/approval model → Tier 3
+- 模式: 用户在插件安装前看到"插件将访问 X, Y, Z 数据"，需点击"批准"
+- 借鉴: CSP 的 Skill 市场在安装前展示 tool 权限清单，用户确认后安装
+- 差异: CSP 不需要 OAuth 授权流，只需显示 tools: [...] 列表
+```
+
+#### 0.5c: 逐子目录深度提取清单
+
+对参考项目的每个子目录，逐文件遍历：
+
+```
+参考项目/
+├── src/main/bots/          # 逐文件分析: 哪些模式可复用?
+│   ├── bot_lifecycle.ts    → Tier 2, Python dataclass
+│   ├── bot_memory.ts       → Tier 1, 内存管理逻辑语言无关
+│   ├── bot_chat_tree.ts    → Tier 3, 对话树架构
+│   └── ...
+├── src/shared/agent/       # 逐文件分析
+│   ├── journal.py          → Tier 1, 直接适配
+│   ├── rewind.py           → Tier 1, 直接适配
+│   └── ...
+└── src/plugins/            # 逐文件分析
+    ├── consent.py          → Tier 3, 概念借鉴
+    └── ...
+```
+
+#### 0.5d: 提取→功能映射
+
+每条提取不只做技术标注——必须映射到本项目的具体功能（ROADMAP 版本 + Feature ID）：
+
+```markdown
+### 提取汇总表
+| 来源文件 | Tier | 提取内容 | 映射到功能 | 拟纳入版本 |
+|---------|------|---------|-----------|----------|
+| orca: agent-session/journal.py | T1 | Agent会话日志 | F-003 会话管理 | v2.916.0 |
+| orca: bots/bot_lifecycle.ts | T2 | Bot生命周期 | F-007 智能体编排 | v2.917.0 |
+| orca: plugins/consent.py | T3 | 权限可见+审批 | F-011 Skill安装 | v2.921.0 |
+```
+
+**红线**：
+- 借鉴非复制、标来源可追溯（`来源文件:行号`）
+- 开源协议兼容（MIT/Apache 可借鉴，GPL 审慎确保不传染）
+- 不被参考项目的架构"带着走"——提取的是模式，不是目录结构
+- **Tier 1 项必须在 Phase 6 产出具体的文件级适配方案，Tier 2 项必须在 Phase 6 产出等价实现伪代码**——不做完就是浪费了这次深度提取
+
+产物：`docs/analysis/COMPETITIVE-REFERENCE.md`（`来源文件 | Tier | 提取内容 | 映射到功能 | 拟纳入版本 | 适配路径`）。
 
 ### Phase 1：战略锚点
 基于调研结论，调用 `[[agent:csp-pm]]`（用户故事/验收标准/优先级/RICE）+ `[[agent:csp-analyst]]`（SWOT/五力/商业模型画布/成本收益），按 Rumelt kernel 提炼 `docs/strategy/STRATEGY.md`：
@@ -332,16 +421,20 @@ v1.0 = MVP：聚焦 3-5 核心功能验证问题假设；后续版本按投资�
 | 信息架构 | `[[skill:csp-sitemap]]` | 站点地图/导航结构 |
 
 ### Phase 5：每版本规划级 PRD SPEC
-调用 `[[workflow:csp-prd-generation]]`（PM 视角）或 `[[pattern:csp-prd]]`（设计师视角）为净版序列每个版本产出规划级 PRD SPEC：
 
-- 路径：`docs/prd/PRD-{version-slug}.md`，`status: Draft`，`prd_depth: planning`
-- 结构：8 段大纲级填写——背景/目标/功能模块/用户故事/优先级（P0/P1/P2）/关键业务规则要点（规划级只写大纲，不穷举展开）/AC 骨架（每模块至少 1 条 Given-When-Then 锚点，复杂模块可多写）/风险与依赖
-- 深度边界：规划级只写大纲级要点，不写工程级细节；功能清单以 `CONVERGED-FEATURE-PLAN.md` 为唯一事实源，SPEC 与 ROADMAP/FEATURES 三者功能清单一致
-- 红线：只为净版留存功能产 SPEC（剔除/降级不进），不写实现细节（技术选型/DDL/代码禁止），但需标注数据需求（涉及哪些实体/字段的 WHAT）。不确定处标 `[TBD]` 留给内环 01 升级
+> ⚠️ **Phase 5 是快速检查点，不是终点。** Phase 5 产出 planning 级大纲后，必须立即进入 Phase 6（8 面 Spec）和 Phase 7（任务拆解）。planning 级骨架的价值是快速锁定方向，不是降低深度——**10 个版本的 shallow 大纲不如 1 个版本的完整 8 面 Spec + DAG。**
 
-内环 01 跑到该版本时探测到同 `target_version` 的 `prd_depth: planning` Draft → **升级模式**：原文件上 delta 补全为工程级（穷举规则/完整 AC/异常流/埋点），不新建文件。
+调用 `[[workflow:csp-prd-generation]]`（PM 视角）或 `[[pattern:csp-prd]]`（设计师视角）为净版序列每个版本产出规划级 PRD 骨架：
 
-规划级 PRD SPEC 可供 `[[prompts/000-test_pipeline_csp.md]]` 初步列出待验证场景；完整 TB/TD 测试基线须等 01 在原文上升级至 `prd_depth: engineering`，并与 S3 全栈 Spec 对齐后再定稿。交接时记录 `target_version`、PRD 原文路径、PMS/Spec/TMS 入口及缺失项，不能把规划骨架当已批准 AC。
+- 路径：`docs/prd/PRD-{version-slug}.md`，`status: Draft`
+- 结构：8 段简写——背景/目标/功能清单/用户故事一句话/优先级(P0/P1/P2)/关键业务规则要点（只写大纲，不穷举）/AC 骨架（每模块 ≥1 条 Given-When-Then 锚点）/风险与依赖
+- 目的：快速校阅方向——模块边界对不对、功能归属对不对、优先级对不对。确认后立刻进 Phase 6 展开
+
+**红线**（防滑坡——复盘发现执行者会停在大纲阶段）：
+- **Planning 级骨架 ≠ 可交付。** Phase 5 做完不代表这一版"规划完成"——Phase 6（8 面 Spec）+ Phase 7（任务 DAG）必须立即跟随
+- **每个 planned 版本独立满足相同的深度门控。** 做 1 个版本要 8 面 Spec，做 10 个版本也要 8 面 Spec——版本数量不是降低深度的理由
+- Phase 5 产出后马上接力 Phase 6——不做"先做十个版本大纲、以后有空再展开"的滑
+- 如果在 Phase 2.5 审视阶段砍了功能——被砍的越浅越好（planning 骨架就够了），留下的越深越好（必须展开到 8 面 + DAG）
 
 产物：每版本一份 SPEC + 登记 `docs/prd/PRD-INDEX.md`。
 
@@ -671,18 +764,31 @@ graph TD
 
 ## 规划完成门控
 
+> **每个 planned 版本独立满足以下全部条件，才允许交棒。版本数量不是降低深度的理由。**
+
 规划阶段完成检查（全部通过才能交棒开发 Pipeline）：
 
 - [ ] `docs/strategy/STRATEGY.md` 已产出（6 要素齐全）
 - [ ] `docs/strategy/ROADMAP.md` 已产出（版本序列完整，含功能-模块-描述-边界-测试-任务）
-- [ ] Phase 2.5 集成审视已完成（`INTEGRATION-NECESSITY-{date}.md` 已产出，净版功能清单已回写）
+- [ ] Phase 2.5 集成审视已完成（`INTEGRATION-NECESSITY-{date}.md` 已产出）
 - [ ] Phase 3 收敛审查已完成（`CONVERGED-FEATURE-PLAN.md` 已产出）
-- [ ] 每版本 PRD SPEC 已产出（`docs/prd/PRD-{slug}.md`）
-- [ ] 每版本技术 Spec 已产出（8 面：接口/数据/DDL/规则/错误/状态/前端交互/安全权限/运维就绪）
-- [ ] 每版本任务拆解已完成（`.csp/tasks/` 含 DAG + 实施计划）
+- [ ] Phase 0.5 竞品深度提取已完成（Tier 1/2/3 分类 + 文件级适配方案）
+- [ ] **每版本 PRD SPEC 已产出**（`docs/prd/PRD-{slug}.md`）— 所有 planned 版本
+- [ ] **每版本 8 面技术 Spec 已产出**（`.csp/planning/spec.md`）— 所有 planned 版本，缺必写面不得标记完成
+- [ ] **每版本任务拆解已产出**（`.csp/tasks/TASK-INDEX.md` 含 DAG）— 所有 planned 版本
+- [ ] **Tier 1 竞品提取项已有具体文件级适配方案，Tier 2 项已有等价实现伪代码**
 - [ ] 数据字典 `docs/architecture/DATA-SCHEMA.md` 已更新（新增 entity/字段）
 - [ ] 产物路径遵循 `[[prompts/000-project-governance_csp.md]]` G2.1 约定
-- [ ] 所有文档的命名/格式/frontmatter 遵循治理规范
+
+**深度一致性检查**：
+```bash
+# 版本数 vs 完整 Spec 数必须一致。不允许"做了 10 个版本但只有 1 个版本有完整 Spec"
+planned_count=$(grep -c "status: planned" docs/strategy/ROADMAP.md)
+spec_count=$(ls .csp/planning/spec-*.md 2>/dev/null | wc -l)
+task_count=$(ls .csp/tasks/TASK-INDEX.md 2>/dev/null | wc -l)
+echo "planned: $planned_count, specs: $spec_count, tasks: $task_count"
+# spec_count ≠ planned_count → 有版本缺 Spec，未完成
+```
 
 ---
 
@@ -834,7 +940,10 @@ Phase 0 上下文探测
 | 审视静默删 | 剔除/降级不留原因 | 剔除必记依据，可追溯 |
 | 功能发散堆砌 | 为"完整感"堆边缘场景 | 精简聚焦核心业务场景 |
 | 跳过调研拍脑袋 | 版本主题无事实输入 | Phase R 先调研，锚点基于结论 |
-| 规划止步 ROADMAP | 有版本表无 PRD SPEC | Phase 5 每版本一份规划级 SPEC |
+| 规划止步 ROADMAP | 有版本表无 PRD SPEC | Phase 5→6→7 每个 planned 版本强制产出完整 8 面 Spec + DAG |
+| 竞品浅扫 | 只看 README/features，不逐文件扫描 | Phase 0.5 逐子目录遍历 + Tier 分类 + 文件级适配方案 |
+| 版本越多深度越薄 | 做了 10 个版本但只有 1 个有完整 Spec | 每个版本独立满足深度门控——做 1 个要全深度，做 10 个也要全深度 |
+| Planning 骨架当终点 | Phase 5 产出大纲就标记"规划完成" | Phase 5 是检查点不是终点——Phase 6+7 必须立即跟随 |
 | 臆造指标 | 编 DAU/收入目标 | 未定标 `[TBD]`，留给 01 确认 |
 | 规划=排期 | Gantt 化堆日期/估人日/设截止 | Agent 开发下估时无意义（人 3 天的活 Agent 几分钟完成），路线图示方向不示日期；版本号 SemVer 增量续编，版本序列按依赖+优先级排序 |
 | 过度问人 | 每节反复确认 | 默认优先，仅战略模糊时人工澄清 |
