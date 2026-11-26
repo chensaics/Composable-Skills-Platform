@@ -28,8 +28,10 @@ grep "prd_depth: engineering" docs/prd/PRD-{version-slug}.md
 
 **Spec 到位检查**（每个 task 开始前）：
 - 对应 Spec（`.csp/planning/spec.md` + `.csp/tech-design/`）必须存在且 `build_status: built`
-- Spec 含接口契约/数据模型/DDL/错误场景/状态机——缺任一项（quick-fix 除外）不进 05
-- 数据字典 `docs/architecture/DATA-SCHEMA.md` 含本次涉及的 entity/字段
+- Spec 含完整 8 面：接口契约/数据模型+DDL/业务规则/错误场景/状态机/前端交互/安全权限/运维就绪——按项目类型选择必写面，缺必写项不进 05
+- 前端项目 → 面 6（前端交互）必写
+- 有鉴权项目 → 面 7（安全/权限）必写
+- 所有 feature → 面 8（运维就绪）必写
 
 开发阶段（05）使用 [[workflow:csp-implementation-phase]]，遵循 TDD 流程 [[meta:csp-tdd]]，coding agent 遵守 [[pattern:csp-coding-standards]] 的全部命名/安全/跨层对齐规则。
 
